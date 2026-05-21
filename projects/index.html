@@ -793,6 +793,22 @@
       background: #F8F9FA;
     }
 
+    /* 空状态样式 */
+    .empty-state {
+      padding: 60px 0 !important;
+      text-align: center;
+    }
+
+    .empty-icon {
+      color: #D9D9D9;
+      margin-bottom: 16px;
+    }
+
+    .empty-text {
+      font-size: 14px;
+      color: #999;
+    }
+
     /* 翻页组件样式 */
     .pagination-bar {
       display: flex;
@@ -1211,43 +1227,19 @@
               <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
                 <path d="M8 2v12M2 8h12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
               </svg>
-              创建云主机
-            </button>
-            <button class="btn btn-default">启动</button>
-            <button class="btn btn-default">停止</button>
-            <button class="btn btn-default">
-              更多
-              <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-                <path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
+              创建沙箱
             </button>
           </div>
           <div class="toolbar-right">
             <div class="search-box">
-              <input type="text" placeholder="主机名称/实例ID/IP">
-              <span class="search-icon">
+              <input type="text" id="sandbox-search" placeholder="请输入沙箱ID">
+              <button class="search-btn">
                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
                   <circle cx="7" cy="7" r="5" stroke="currentColor" stroke-width="1.5" fill="none"/>
                   <path d="M11 11l3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
                 </svg>
-              </span>
-            </div>
-            <div class="icon-btn" title="刷新">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
-                <path d="M3 3v5h5"/>
-                <path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"/>
-                <path d="M16 16h5v5"/>
-              </svg>
-            </div>
-            <div class="pagination-info">
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                <rect x="2" y="2" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.5" fill="none"/>
-                <rect x="9" y="2" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.5" fill="none"/>
-                <rect x="2" y="9" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.5" fill="none"/>
-                <rect x="9" y="9" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.5" fill="none"/>
-              </svg>
-              <span>8/10</span>
+              </button>
+              <button class="clear-btn">C</button>
             </div>
           </div>
         </div>
@@ -1259,135 +1251,26 @@
             <thead>
               <tr>
                 <th style="width: 40px;"><input type="checkbox" class="product-checkbox"></th>
-                <th>名称/ID</th>
-                <th>状态 <span class="filter-icon"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 4h8L6 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span></th>
-                <th>资源标签</th>
-                <th>可用区</th>
-                <th>主机组</th>
-                <th>镜像</th>
-                <th>私网IP(公网IP)</th>
+                <th>沙箱ID</th>
+                <th>模板</th>
+                <th>CPU</th>
+                <th>内存</th>
+                <th>MetaData</th>
+                <th>启动时间</th>
               </tr>
             </thead>
             <tbody>
               <tr>
-                <td><input type="checkbox" class="product-checkbox"></td>
-                <td>
-                  <div class="product-name">
-                    <span class="product-name-text">云主机名称</span>
+                <td colspan="7" class="empty-state">
+                  <div class="empty-icon">
+                    <svg width="64" height="64" viewBox="0 0 64 64" fill="none">
+                      <rect x="12" y="20" width="40" height="28" rx="4" stroke="currentColor" stroke-width="2" fill="none"/>
+                      <path d="M12 28h40" stroke="currentColor" stroke-width="2"/>
+                      <path d="M20 20V16a4 4 0 014-4h16a4 4 0 014 4v4" stroke="currentColor" stroke-width="2" fill="none"/>
+                    </svg>
                   </div>
-                  <div class="product-id">ins-xxxxxxxx</div>
+                  <div class="empty-text">暂无数据</div>
                 </td>
-                <td><span class="status-badge status-normal"><span class="status-dot"></span>正常</span></td>
-                <td><span class="tag">标签名称</span></td>
-                <td>北京一区</td>
-                <td>主机组名称</td>
-                <td>镜像名称</td>
-                <td>192.189.190.255</td>
-              </tr>
-              <tr>
-                <td><input type="checkbox" class="product-checkbox"></td>
-                <td>
-                  <div class="product-name">
-                    <span class="product-name-text">云主机名称</span>
-                  </div>
-                  <div class="product-id">ins-xxxxxxxx</div>
-                </td>
-                <td><span class="status-badge status-error"><span class="status-dot"></span>异常</span></td>
-                <td><span class="tag">标签名称</span></td>
-                <td>北京一区</td>
-                <td>主机组名称</td>
-                <td>镜像名称</td>
-                <td>192.189.190.255</td>
-              </tr>
-              <tr>
-                <td><input type="checkbox" class="product-checkbox"></td>
-                <td>
-                  <div class="product-name">
-                    <span class="product-name-text">云主机名称</span>
-                  </div>
-                  <div class="product-id">ins-xxxxxxxx</div>
-                </td>
-                <td><span class="status-badge status-normal"><span class="status-dot"></span>正常</span></td>
-                <td><span class="tag">标签名称</span></td>
-                <td>北京一区</td>
-                <td>主机组名称</td>
-                <td>镜像名称</td>
-                <td>192.189.190.255</td>
-              </tr>
-              <tr>
-                <td><input type="checkbox" class="product-checkbox"></td>
-                <td>
-                  <div class="product-name">
-                    <span class="product-name-text">云主机名称</span>
-                  </div>
-                  <div class="product-id">ins-xxxxxxxx</div>
-                </td>
-                <td><span class="status-badge status-error"><span class="status-dot"></span>异常</span></td>
-                <td><span class="tag">标签名称</span></td>
-                <td>北京一区</td>
-                <td>主机组名称</td>
-                <td>镜像名称</td>
-                <td>192.189.190.255</td>
-              </tr>
-              <tr>
-                <td><input type="checkbox" class="product-checkbox"></td>
-                <td>
-                  <div class="product-name">
-                    <span class="product-name-text">云主机名称</span>
-                  </div>
-                  <div class="product-id">ins-xxxxxxxx</div>
-                </td>
-                <td><span class="status-badge status-normal"><span class="status-dot"></span>正常</span></td>
-                <td><span class="tag">标签名称</span></td>
-                <td>北京一区</td>
-                <td>主机组名称</td>
-                <td>镜像名称</td>
-                <td>192.189.190.255</td>
-              </tr>
-              <tr>
-                <td><input type="checkbox" class="product-checkbox"></td>
-                <td>
-                  <div class="product-name">
-                    <span class="product-name-text">云主机名称</span>
-                  </div>
-                  <div class="product-id">ins-xxxxxxxx</div>
-                </td>
-                <td><span class="status-badge status-error"><span class="status-dot"></span>异常</span></td>
-                <td><span class="tag">标签名称</span></td>
-                <td class="text-muted">-</td>
-                <td>主机组名称</td>
-                <td class="text-muted">-</td>
-                <td class="text-muted">-</td>
-              </tr>
-              <tr>
-                <td><input type="checkbox" class="product-checkbox"></td>
-                <td>
-                  <div class="product-name">
-                    <span class="product-name-text">云主机名称</span>
-                  </div>
-                  <div class="product-id">ins-xxxxxxxx</div>
-                </td>
-                <td><span class="status-badge status-normal"><span class="status-dot"></span>正常</span></td>
-                <td class="text-muted">-</td>
-                <td class="text-muted">-</td>
-                <td class="text-muted">-</td>
-                <td class="text-muted">-</td>
-                <td class="text-muted">-</td>
-              </tr>
-              <tr>
-                <td><input type="checkbox" class="product-checkbox"></td>
-                <td>
-                  <div class="product-name">
-                    <span class="product-name-text">云主机名称</span>
-                  </div>
-                  <div class="product-id">ins-xxxxxxxx</div>
-                </td>
-                <td><span class="status-badge status-error"><span class="status-dot"></span>异常</span></td>
-                <td class="text-muted">-</td>
-                <td class="text-muted">-</td>
-                <td class="text-muted">-</td>
-                <td class="text-muted">-</td>
-                <td class="text-muted">-</td>
               </tr>
             </tbody>
           </table>
