@@ -1,0 +1,1614 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>云数仓概览 - 360智汇云</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    a {
+      text-decoration: none;
+    }
+    
+    body {
+      font-family: "Microsoft YaHei", "PingFang SC", -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #F0F5F7;
+      font-size: 14px;
+      color: #202020;
+      line-height: 1.5;
+      overflow: hidden;
+    }
+
+    /* ========== 顶部导航栏 ========== */
+    .header {
+      height: 50px;
+      background: #fff;
+      box-shadow: 0 2px 6px rgba(49, 49, 71, 0.26);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 20px;
+      position: relative;
+      z-index: 100;
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+    }
+
+    .logo-icon {
+      width: 177px;
+      height: 28px;
+    }
+
+    .header-btn {
+      padding: 6px 12px;
+      border-radius: 4px;
+      background: #F8F9FA;
+      font-size: 14px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s;
+      color: #202020;
+      border: 1px #F8F9FA solid;
+    }
+
+    .header-btn:hover {
+      background: #F8F9FA;
+      color: #202020;
+    }
+
+    .header-btn.group {
+      background: #fff;
+      border-color: #D8E0E8;
+      color: #202020;
+      padding: 6px 10px;
+    }
+
+    .header-btn.group:hover {
+      background: #F8F9FA;
+    }
+
+    .tag {
+      background: #EEF6FF;
+      color: #0066FF;
+      padding: 2px 6px;
+      border-radius: 2px;
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .dropdown-arrow {
+      margin-left: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .header-divider {
+      width: 1px;
+      height: 50px;
+      background: #F5F5F5;
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .header-link {
+      color: #666;
+      text-decoration: none;
+      font-size: 14px;
+      position: relative;
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+
+    .header-link:hover {
+      color: #0066FF;
+    }
+
+    .header-link .dot {
+      position: absolute;
+      top: -2px;
+      right: -6px;
+      width: 6px;
+      height: 6px;
+      background: #FF4D4F;
+      border-radius: 50%;
+    }
+
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      padding: 4px 0px;
+      border-radius: 4px;
+      transition: background 0.2s;
+    }
+
+    .user-info:hover {
+      background: #F5F7FA;
+    }
+
+    .user-avatar {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: #0066FF;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 14px;
+    }
+
+    .user-detail {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .user-name {
+      font-size: 14px;
+      color: #333;
+      line-height: 1.3;
+    }
+
+    .user-sub {
+      font-size: 12px;
+      color: #8C9AAE;
+      line-height: 1.3;
+    }
+
+    /* ========== 主体容器（三栏布局） ========== */
+    .container {
+      display: flex;
+      height: calc(100vh - 56px);
+    }
+
+    /* ========== 第一栏：左侧图标栏 ========== */
+    .icon-bar {
+      width: 50px;
+      background: #2e8cff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+      flex-shrink: 0;
+    }
+
+    .icon-item {
+      width: 50px;
+      height: 40px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      color: #E5EAF3;
+      transition: all 0.2s;
+      background: transparent;
+      position: relative;
+      flex-direction: column;
+    }
+
+    .icon-item:nth-child(1),
+    .icon-item:nth-child(2),
+    .icon-item:nth-child(3) {
+      height: 50px;
+    }
+
+    .icon-item:hover {
+      background: #0066FF;
+      color: #fff;
+    }
+
+    .icon-item.active {
+      background: #0066FF;
+      color: #fff;
+    }
+
+    .icon-item .icon-svg {
+      width: 18px;
+      height: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .icon-item:nth-child(1) .icon-svg,
+    .icon-item:nth-child(2) .icon-svg,
+    .icon-item:nth-child(3) .icon-svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    .icon-item .icon-label {
+      display: block;
+      font-size: 10px;
+      font-weight: 400;
+      margin-top: 2px;
+    }
+
+    /* ========== 第二栏：中间菜单栏 ========== */
+    .sidebar {
+      width: 200px;
+      background: #ffffff;
+      flex-direction: column;
+      overflow: hidden;
+      flex-shrink: 0;
+      border-right: 1px solid #E6E6e6;
+      color: #202020;
+    }
+
+    .sidebar-menu {
+      flex: 1;
+      overflow-y: auto;
+      overflow-x: hidden;
+    }
+
+    .sidebar-menu::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    .sidebar-menu::-webkit-scrollbar-thumb {
+      background: rgba(0, 0, 0, 0.2);
+      border-radius: 2px;
+    }
+
+    .sidebar-menu::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .menu-level-1 {
+      color: #202020;
+      font-size: 14px;
+    }
+
+    .menu-level-1 > .menu-item {
+      border-bottom: 1px solid #E6E6e6;
+    }
+
+    .menu-level-1 > .menu-item .menu-icon {
+      display: none;
+    }
+
+    .menu-level-1 > .menu-item .menu-arrow .star-icon {
+      width: 18px;
+      height: 18px;
+      color: #999999;
+      fill: transparent;
+      transition: all 0.2s ease;
+    }
+
+    .menu-level-1 > .menu-item.selected .menu-arrow .star-icon {
+      color: #0066FF;
+      fill: #0066FF;
+    }
+
+    .menu-item {
+      display: flex;
+      align-items: center;
+      padding: 0 16px;
+      height: 50px;
+      line-height: 50px;
+      color: #202020;
+      font-size: 16px;
+      font-weight: 500;
+      cursor: pointer;
+      gap: 8px;
+      transition: all 0.2s;
+      position: relative;
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .menu-item:hover {
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .menu-item.active {
+      background: #0066FF;
+      color: #fff;
+    }
+
+    .menu-item.active::after {
+      content: '';
+      position: absolute;
+      right: 0;
+      top: 4px;
+      bottom: 4px;
+      width: 2px;
+      background: #fff;
+      border-radius: 1px 0 0 1px;
+    }
+
+    .menu-icon {
+      width: 16px;
+      height: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      opacity: 0.8;
+    }
+
+    .menu-item.active .menu-icon {
+      opacity: 1;
+    }
+
+    .menu-text {
+      flex: 1;
+      font-size: inherit;
+    }
+
+    .menu-arrow {
+      width: 16px;
+      height: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #202020;
+      transition: transform 0.2s ease;
+    }
+
+    .menu-item.collapsed .menu-arrow {
+      transform: rotate(-90deg);
+    }
+
+    /* 二级菜单 */
+    .menu-level-2 {
+      background: #ffffff;
+      max-height: 2000px;
+      overflow: hidden;
+      transition: max-height 0.3s ease-out;
+    }
+
+    .menu-level-2.collapsed {
+      max-height: 0;
+    }
+
+    .menu-level-2 .menu-item {
+      font-size: 14px;
+      color: #202020;
+      padding-left: 16px;
+    }
+
+    .menu-level-2 > .menu-item .menu-icon {
+      display: none;
+    }
+
+    .menu-level-2 .menu-item:hover {
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    /* 展开的子菜单 */
+    .submenu-expanded {
+      background: #ffffff;
+      max-height: 1000px;
+      overflow: hidden;
+      transition: max-height 0.3s ease-out;
+    }
+
+    .submenu-expanded.collapsed {
+      max-height: 0;
+    }
+
+    .menu-level-2.collapsed .submenu-expanded {
+      max-height: 0;
+    }
+
+    .submenu-expanded .menu-item {
+      color: #202020;
+      height: 40px;
+      line-height: 40px;
+      padding: 0 16px 0 16px;
+      font-size: 14px;
+    }
+
+    .submenu-expanded .menu-item:hover {
+      background: #f5f5f5;
+    }
+
+    .submenu-expanded .menu-item.active {
+      background: #006bff;
+      color: #ffffff;
+    }
+
+    .submenu-expanded .menu-item.active::after {
+      display: none;
+    }
+
+    .submenu-expanded .menu-item.active::before {
+      display: none;
+    }
+
+    .submenu-expanded .menu-icon {
+      opacity: 1;
+      color: #202020;
+      width: 16px;
+      height: 16px;
+    }
+
+    .submenu-expanded .menu-icon svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    .submenu-expanded .menu-item.active .menu-icon {
+      color: #ffffff;
+    }
+
+    /* ========== 第三栏：右侧主内容区 ========== */
+    .main-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      min-width: 0;
+    }
+
+    .breadcrumb {
+      padding: 0px 20px;
+      border-bottom: 1px solid #E6E6e6;
+      font-size: 14px;
+      display: flex;
+      height: 50px;
+      line-height: 50px;
+      justify-content: space-between;
+      align-items: center;
+      background: #ffffff;
+    }
+
+    .breadcrumb-left {
+      color: #202020;
+    }
+
+    .breadcrumb-link {
+      color: #0066FF;
+      text-decoration: none;
+      cursor: pointer;
+      font-size: 12px;
+    }
+
+    .breadcrumb-link:hover {
+      text-decoration: underline;
+    }
+
+    .content-body {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      background: #F0F5F7;
+      padding: 20px;
+      gap: 20px;
+    }
+
+    .overview-main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      overflow-y: auto;
+    }
+
+    .content-bottom {
+      display: flex;
+      gap: 20px;
+      flex: 1;
+      overflow: hidden;
+    }
+
+    .overview-sidebar {
+      width: 280px;
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      overflow-y: auto;
+    }
+
+    /* 欢迎卡片 */
+    .welcome-card {
+      background: linear-gradient(135deg, #E8F4FF 0%, #F0F7FF 100%);
+      border-radius: 8px;
+      padding: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: relative;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+
+    .welcome-content {
+      flex: 1;
+      z-index: 1;
+    }
+
+    .welcome-title {
+      font-size: 20px;
+      font-weight: 600;
+      color: #202020;
+      margin-bottom: 8px;
+    }
+
+    .welcome-desc {
+      font-size: 14px;
+      color: #666;
+      line-height: 1.6;
+      max-width: 600px;
+    }
+
+    .welcome-close {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: rgba(0, 0, 0, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: #666;
+      transition: all 0.2s;
+    }
+
+    .welcome-close:hover {
+      background: rgba(0, 0, 0, 0.2);
+    }
+
+    .welcome-illustration {
+      width: 180px;
+      height: 120px;
+      margin-left: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .welcome-illustration svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    /* 快速开始步骤 */
+    .quick-start {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+    }
+
+    .step-card {
+      background: #fff;
+      border-radius: 8px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      min-height: 160px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    }
+
+    .step-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .step-number {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: #0066FF;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .step-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: #202020;
+    }
+
+    .step-desc {
+      font-size: 12px;
+      color: #666;
+      line-height: 1.5;
+      flex: 1;
+    }
+
+    .step-btn {
+      margin-top: 12px;
+      height: 32px;
+      padding: 0 16px;
+      background: #0066FF;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      font-size: 13px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      transition: background 0.2s;
+    }
+
+    .step-btn:hover {
+      background: #0052CC;
+    }
+
+    /* 实例提示区 */
+    .instance-prompt {
+      background: #fff;
+      border-radius: 8px;
+      padding: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    }
+
+    .instance-prompt-left {
+      flex: 1;
+    }
+
+    .instance-prompt-title {
+      font-size: 16px;
+      color: #202020;
+      margin-bottom: 16px;
+    }
+
+    .instance-prompt-btn {
+      height: 36px;
+      padding: 0 20px;
+      background: #0066FF;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      font-size: 14px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: background 0.2s;
+    }
+
+    .instance-prompt-btn:hover {
+      background: #0052CC;
+    }
+
+    .instance-prompt-illustration {
+      width: 120px;
+      height: 80px;
+      margin-left: 20px;
+    }
+
+    .instance-prompt-illustration svg {
+      width: 100%;
+      height: 100%;
+      opacity: 0.3;
+    }
+
+    /* 功能亮点 */
+    .features-section {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    .feature-card {
+      background: linear-gradient(135deg, #F8FBFF 0%, #fff 100%);
+      border-radius: 8px;
+      padding: 20px;
+      display: flex;
+      gap: 16px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    }
+
+    .feature-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 8px;
+      background: #E8F4FF;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .feature-icon svg {
+      width: 24px;
+      height: 24px;
+      color: #0066FF;
+    }
+
+    .feature-content {
+      flex: 1;
+    }
+
+    .feature-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: #202020;
+      margin-bottom: 6px;
+    }
+
+    .feature-desc {
+      font-size: 12px;
+      color: #666;
+      line-height: 1.5;
+    }
+
+    /* 右侧辅助区 */
+    .help-card {
+      background: #fff;
+      border-radius: 8px;
+      padding: 20px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    }
+
+    .help-card-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: #202020;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .help-card-title svg {
+      width: 16px;
+      height: 16px;
+      color: #0066FF;
+    }
+
+    .help-links {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+    }
+
+    .help-link {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 12px;
+      background: #F8F9FA;
+      border-radius: 4px;
+      font-size: 13px;
+      color: #333;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .help-link:hover {
+      background: #EEF6FF;
+      color: #0066FF;
+    }
+
+    .help-link svg {
+      width: 14px;
+      height: 14px;
+      color: #999;
+    }
+
+    .help-link:hover svg {
+      color: #0066FF;
+    }
+
+    /* 常见问题 */
+    .faq-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .faq-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 0;
+      border-bottom: 1px solid #F0F0F0;
+      font-size: 13px;
+      color: #333;
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+
+    .faq-item:last-child {
+      border-bottom: none;
+    }
+
+    .faq-item:hover {
+      color: #0066FF;
+    }
+
+    .faq-item svg {
+      width: 14px;
+      height: 14px;
+      color: #999;
+      flex-shrink: 0;
+      margin-left: 8px;
+    }
+
+    .faq-item:hover svg {
+      color: #0066FF;
+    }
+  </style>
+</head>
+<body>
+<!-- 顶部导航 -->
+<div class="header">
+  <div class="header-left">
+    <div class="logo">
+      <img class="logo-icon" src="img/logo.png" alt="360智汇云" />
+    </div>
+    <button class="header-btn">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+        <path d="M2 6L8 1L14 6V14C14 14.5304 13.7893 15.0391 13.4142 15.4142C13.0391 15.7893 12.5304 16 12 16H4C3.46957 16 2.96086 15.7893 2.58579 15.4142C2.21071 15.0391 2 14.5304 2 14V6Z" stroke="#666" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M6 16V10H10V16" stroke="#666" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <span>工作台总览</span>
+    </button>
+    <button class="header-btn group">
+      <span class="tag">组</span>
+      <span>BD奇麟大数据-系统部</span>
+      <svg class="dropdown-arrow" width="12" height="12" viewBox="0 0 12 12" fill="none">
+        <path d="M3 4.5L6 7.5L9 4.5" stroke="#202020" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </button>
+  </div>
+  <div class="header-right">
+    <a class="header-link">费用</a>
+    <a class="header-link">工单<span class="dot"></span></a>
+    <a class="header-link">消息<span class="dot"></span></a>
+    <a class="header-link">帮助</a>
+    <div class="header-divider"></div>
+    <div class="user-info">
+      <div class="user-avatar">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+          <circle cx="12" cy="8" r="4" fill="currentColor"/>
+          <path d="M4 20c0-4 4-6 8-6s8 2 8 6" fill="currentColor"/>
+        </svg>
+      </div>
+      <div class="user-detail">
+        <div class="user-name">zhangsan</div>
+        <div class="user-sub">子账号</div>
+      </div>
+      <svg class="dropdown-arrow" width="12" height="12" viewBox="0 0 12 12" fill="none">
+        <path d="M3 4.5L6 7.5L9 4.5" stroke="#202020" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+  </div>
+</div>
+
+<!-- 主体容器（三栏布局） -->
+<div class="container">
+  <!-- 第一栏：左侧图标栏 -->
+  <div class="icon-bar">
+    <div class="icon-item active" title="全部">
+      <div class="icon-svg">
+        <svg width="20" height="20" viewBox="0 0 16 16" fill="none">
+          <rect x="2" y="2" width="5" height="5" rx="1" fill="currentColor"/>
+          <rect x="9" y="2" width="5" height="5" rx="1" fill="currentColor"/>
+          <rect x="2" y="9" width="5" height="5" rx="1" fill="currentColor"/>
+          <rect x="9" y="9" width="5" height="5" rx="1" fill="currentColor"/>
+        </svg>
+      </div>
+      <span class="icon-label">全部</span>
+    </div>
+    <div class="icon-item" title="最近">
+      <div class="icon-svg">
+        <svg width="20" height="20" viewBox="0 0 16 16" fill="none">
+          <circle cx="8" cy="8" r="6" stroke="currentColor" stroke-width="1.5" fill="none"/>
+          <path d="M8 4v4l3 2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <span class="icon-label">最近</span>
+    </div>
+    <div class="icon-item" title="收藏">
+      <div class="icon-svg">
+        <svg width="20" height="20" viewBox="0 0 16 16" fill="none">
+          <path d="M8 2l2.2 4.4 4.8.7-3.5 3.4.8 4.8L8 13l-4.3 2.3.8-4.8-3.5-3.4 4.8-.7L8 2z" fill="currentColor"/>
+        </svg>
+      </div>
+      <span class="icon-label">收藏</span>
+    </div>
+    <div class="icon-item" title="标注TLP">
+      <div class="icon-svg">
+        <svg width="18" height="18" viewBox="0 0 16 16" fill="none">
+          <path d="M2 3h12v10H2V3z" stroke="currentColor" stroke-width="1.5" fill="none"/>
+          <path d="M5 6h6M5 9h4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <span class="icon-label">TLP</span>
+    </div>
+    <div class="icon-item" title="记忆AMS">
+      <div class="icon-svg">
+        <svg width="18" height="18" viewBox="0 0 16 16" fill="none">
+          <circle cx="8" cy="8" r="5" stroke="currentColor" stroke-width="1.5" fill="none"/>
+          <path d="M8 5v6M5 8h6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <span class="icon-label">AMS</span>
+    </div>
+    <div class="icon-item" title="TiDB">
+      <div class="icon-svg">
+        <svg width="18" height="18" viewBox="0 0 16 16" fill="none">
+          <ellipse cx="8" cy="4" rx="5" ry="2" stroke="currentColor" stroke-width="1.5" fill="none"/>
+          <path d="M3 4v8c0 1.1 2.2 2 5 2s5-.9 5-2V4" stroke="currentColor" stroke-width="1.5" fill="none"/>
+        </svg>
+      </div>
+      <span class="icon-label">TiDB</span>
+    </div>
+    <div class="icon-item" title="对话AIM">
+      <div class="icon-svg">
+        <svg width="18" height="18" viewBox="0 0 16 16" fill="none">
+          <path d="M3 4h10v8H9l-3 2v-2H3V4z" stroke="currentColor" stroke-width="1.5" fill="none"/>
+          <circle cx="6" cy="8" r="1" fill="currentColor"/>
+          <circle cx="10" cy="8" r="1" fill="currentColor"/>
+        </svg>
+      </div>
+      <span class="icon-label">AIM</span>
+    </div>
+    <div class="icon-item" title="智器CIS">
+      <div class="icon-svg">
+        <svg width="18" height="18" viewBox="0 0 16 16" fill="none">
+          <rect x="2" y="4" width="12" height="8" rx="2" stroke="currentColor" stroke-width="1.5" fill="none"/>
+          <path d="M5 7h6M5 10h4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <span class="icon-label">CIS</span>
+    </div>
+    <div class="icon-item" title="MongoDB">
+      <div class="icon-svg">
+        <svg width="18" height="18" viewBox="0 0 16 16" fill="none">
+          <path d="M8 2v12M4 5c0-2 2-3 4-3s4 1 4 3c0 4-4 7-4 9" stroke="currentColor" stroke-width="1.5" fill="none"/>
+        </svg>
+      </div>
+      <span class="icon-label">Mgo</span>
+    </div>
+    <div class="icon-item" title="云规则">
+      <div class="icon-svg">
+        <svg width="18" height="18" viewBox="0 0 16 16" fill="none">
+          <path d="M4 11h8v-1H4v1zm0-3h8V7H4v1zm0-3h8V4H4v1z" fill="currentColor"/>
+        </svg>
+      </div>
+      <span class="icon-label">规则</span>
+    </div>
+    <div class="icon-item" title="计算DSC">
+      <div class="icon-svg">
+        <svg width="18" height="18" viewBox="0 0 16 16" fill="none">
+          <path d="M2 8c2-3 4-4 6-4s4 1 6 4c-2 3-4 4-6 4s-4-1-6-4z" stroke="currentColor" stroke-width="1.5" fill="none"/>
+          <circle cx="8" cy="8" r="2" fill="currentColor"/>
+        </svg>
+      </div>
+      <span class="icon-label">DSC</span>
+    </div>
+  </div>
+
+  <!-- 第二栏：中间菜单栏 -->
+  <div class="sidebar">
+    <div class="sidebar-menu">
+      <!-- 一级菜单：大数据 BDW -->
+      <div class="menu-level-1">
+        <div class="menu-item">
+          <div class="menu-icon">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+              <ellipse cx="8" cy="4" rx="5" ry="2" stroke="currentColor" stroke-width="1.5" fill="none"/>
+              <path d="M3 4v8c0 1.1 2.2 2 5 2s5-.9 5-2V4" stroke="currentColor" stroke-width="1.5" fill="none"/>
+              <path d="M3 8c0 1.1 2.2 2 5 2s5-.9 5-2" stroke="currentColor" stroke-width="1.5" fill="none"/>
+            </svg>
+          </div>
+          <span class="menu-text">云数仓 CDW</span>
+          <span class="menu-arrow"><svg class="star-icon" width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9,0 L6.21763372,5.92433023 L0,6.87455368 L4.5,11.4870539 L3.43727684,18 L9,14.9243307 L14.5627232,18 L13.5,11.4870539 L18,6.87455368 L11.7803574,5.92433023 L9,0 Z" stroke="currentColor" stroke-width="1.5"/></svg></span>
+        </div>
+        
+        <!-- 二级菜单：云数仓 CDW -->
+        <div class="menu-level-2">
+          <div class="menu-item">
+            <div class="menu-icon">
+              <svg width="18" height="18" viewBox="0 0 16 16" fill="none">
+                <rect x="2" y="6" width="12" height="8" rx="2" stroke="currentColor" stroke-width="1.5" fill="none"/>
+                <path d="M6 6V4a2 2 0 012-2 2 2 0 012 2v2" stroke="currentColor" stroke-width="1.5" fill="none"/>
+              </svg>
+            </div>
+            <span class="menu-text">云数仓 CDW</span>
+            <span class="menu-arrow"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          </div>
+          
+          <!-- 展开的子菜单 -->
+          <div class="submenu-expanded">
+            <a href="overview.html" class="menu-item active">
+              <div class="menu-icon">
+                <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
+                  <path d="M3 5l5-3 5 3v6l-5 3-5-3V5z" stroke="currentColor" stroke-width="1.5" fill="none"/>
+                </svg>
+              </div>
+              <span class="menu-text">概览</span>
+            </a>
+            <a href="data-agent.html" class="menu-item">
+              <div class="menu-icon">
+                <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
+                  <circle cx="8" cy="8" r="5" stroke="currentColor" stroke-width="1.5" fill="none"/>
+                  <path d="M8 5v3l2 2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                </svg>
+              </div>
+              <span class="menu-text">Data Agent</span>
+            </a>
+            <div class="menu-item">
+              <div class="menu-icon">
+                <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
+                  <circle cx="7" cy="7" r="4" stroke="currentColor" stroke-width="1.5" fill="none"/>
+                  <path d="M10 10l3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                </svg>
+              </div>
+              <span class="menu-text">数据探索</span>
+            </div>
+            <div class="menu-item">
+              <div class="menu-icon">
+                <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
+                  <path d="M8 2v8M5 7l3 3 3-3M4 12h8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+              <span class="menu-text">数据加载</span>
+            </div>
+            <div class="menu-item">
+              <div class="menu-icon">
+                <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
+                  <ellipse cx="8" cy="4" rx="5" ry="2" stroke="currentColor" stroke-width="1.5" fill="none"/>
+                  <path d="M3 4v8c0 1.1 2.2 2 5 2s5-.9 5-2V4" stroke="currentColor" stroke-width="1.5" fill="none"/>
+                </svg>
+              </div>
+              <span class="menu-text">数据库</span>
+            </div>
+            <div class="menu-item">
+              <div class="menu-icon">
+                <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
+                  <rect x="3" y="3" width="10" height="10" rx="1" stroke="currentColor" stroke-width="1.5" fill="none"/>
+                  <path d="M6 6h4M6 8h4M6 10h4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                </svg>
+              </div>
+              <span class="menu-text">计算资源</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 二级菜单：流计算 DSC -->
+        <div class="menu-level-2 collapsed">
+          <div class="menu-item collapsed">
+            <div class="menu-icon">
+              <svg width="18" height="18" viewBox="0 0 16 16" fill="none">
+                <path d="M2 8c2-3 4-4 6-4s4 1 6 4c-2 3-4 4-6 4s-4-1-6-4z" stroke="currentColor" stroke-width="1.5" fill="none"/>
+                <circle cx="8" cy="8" r="2" fill="currentColor"/>
+              </svg>
+            </div>
+            <span class="menu-text">流计算 DSC</span>
+            <span class="menu-arrow"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          </div>
+          
+          <div class="submenu-expanded collapsed">
+            <div class="menu-item">
+              <div class="menu-icon">
+                <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
+                  <path d="M3 5l5-3 5 3v6l-5 3-5-3V5z" stroke="currentColor" stroke-width="1.5" fill="none"/>
+                </svg>
+              </div>
+              <span class="menu-text">概览</span>
+            </div>
+            <div class="menu-item">
+              <div class="menu-icon">
+                <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
+                  <rect x="2" y="2" width="12" height="12" rx="2" stroke="currentColor" stroke-width="1.5" fill="none"/>
+                  <path d="M5 5h6M5 8h6M5 11h4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                </svg>
+              </div>
+              <span class="menu-text">作业管理</span>
+            </div>
+            <div class="menu-item">
+              <div class="menu-icon">
+                <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
+                  <path d="M3 8h10M8 3v10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                </svg>
+              </div>
+              <span class="menu-text">依赖管理</span>
+            </div>
+            <div class="menu-item">
+              <div class="menu-icon">
+                <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
+                  <path d="M8 2v8M5 7l3 3 3-3M4 12h8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+              <span class="menu-text">数据连接</span>
+            </div>
+            <div class="menu-item">
+              <div class="menu-icon">
+                <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
+                  <rect x="3" y="3" width="10" height="10" rx="1" stroke="currentColor" stroke-width="1.5" fill="none"/>
+                  <path d="M6 6h4M6 8h4M6 10h4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                </svg>
+              </div>
+              <span class="menu-text">计算资源</span>
+            </div>
+            <div class="menu-item">
+              <div class="menu-icon">
+                <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
+                  <path d="M8 2v3M8 11v3M2 8h3M11 8h3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                  <circle cx="8" cy="8" r="2" stroke="currentColor" stroke-width="1.5" fill="none"/>
+                </svg>
+              </div>
+              <span class="menu-text">告警管理</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 二级菜单：湖计算 DLC -->
+        <div class="menu-level-2 collapsed">
+          <div class="menu-item collapsed">
+            <div class="menu-icon">
+              <svg width="18" height="18" viewBox="0 0 16 16" fill="none">
+                <path d="M3 6c0-2 2-4 5-4s5 2 5 4c0 3-3 5-5 8-2-3-5-5-5-8z" stroke="currentColor" stroke-width="1.5" fill="none"/>
+              </svg>
+            </div>
+            <span class="menu-text">湖计算 DLC</span>
+            <span class="menu-arrow"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          </div>
+          
+          <div class="submenu-expanded collapsed">
+            <div class="menu-item">
+              <div class="menu-icon">
+                <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
+                  <path d="M3 5l5-3 5 3v6l-5 3-5-3V5z" stroke="currentColor" stroke-width="1.5" fill="none"/>
+                </svg>
+              </div>
+              <span class="menu-text">概览</span>
+            </div>
+            <div class="menu-item">
+              <div class="menu-icon">
+                <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
+                  <rect x="2" y="2" width="12" height="12" rx="2" stroke="currentColor" stroke-width="1.5" fill="none"/>
+                  <path d="M5 5h6M5 8h6M5 11h4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                </svg>
+              </div>
+              <span class="menu-text">作业开发</span>
+            </div>
+            <div class="menu-item">
+              <div class="menu-icon">
+                <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
+                  <rect x="3" y="3" width="10" height="10" rx="1" stroke="currentColor" stroke-width="1.5" fill="none"/>
+                  <path d="M6 3v10M3 6h10" stroke="currentColor" stroke-width="1.5"/>
+                </svg>
+              </div>
+              <span class="menu-text">调度计划</span>
+            </div>
+            <div class="menu-item">
+              <div class="menu-icon">
+                <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
+                  <path d="M3 8h10M8 3v10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                </svg>
+              </div>
+              <span class="menu-text">依赖管理</span>
+            </div>
+            <div class="menu-item">
+              <div class="menu-icon">
+                <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
+                  <rect x="3" y="3" width="10" height="10" rx="1" stroke="currentColor" stroke-width="1.5" fill="none"/>
+                  <path d="M6 6h4M6 8h4M6 10h4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                </svg>
+              </div>
+              <span class="menu-text">计算资源</span>
+            </div>
+            <div class="menu-item">
+              <div class="menu-icon">
+                <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
+                  <circle cx="7" cy="7" r="4" stroke="currentColor" stroke-width="1.5" fill="none"/>
+                  <path d="M10 10l3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                </svg>
+              </div>
+              <span class="menu-text">数据湖探索</span>
+            </div>
+            <div class="menu-item">
+              <div class="menu-icon">
+                <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
+                  <path d="M8 2v8M5 7l3 3 3-3M4 12h8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+              <span class="menu-text">数据连接</span>
+            </div>
+            <div class="menu-item">
+              <div class="menu-icon">
+                <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
+                  <path d="M8 2v3M8 11v3M2 8h3M11 8h3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                  <circle cx="8" cy="8" r="2" stroke="currentColor" stroke-width="1.5" fill="none"/>
+                </svg>
+              </div>
+              <span class="menu-text">告警管理</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 二级菜单：数据集成 DI -->
+        <div class="menu-level-2 collapsed">
+          <div class="menu-item collapsed">
+            <div class="menu-icon">
+              <svg width="18" height="18" viewBox="0 0 16 16" fill="none">
+                <path d="M4 4l8 8M4 12l8-8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <span class="menu-text">数据集成 DI</span>
+            <span class="menu-arrow"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          </div>
+          
+          <div class="submenu-expanded collapsed">
+            <div class="menu-item">
+              <div class="menu-icon">
+                <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
+                  <path d="M3 5l5-3 5 3v6l-5 3-5-3V5z" stroke="currentColor" stroke-width="1.5" fill="none"/>
+                </svg>
+              </div>
+              <span class="menu-text">概览</span>
+            </div>
+            <div class="menu-item">
+              <div class="menu-icon">
+                <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
+                  <path d="M2 8h12M2 8l4-4M2 8l4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+              <span class="menu-text">实时同步</span>
+            </div>
+            <div class="menu-item">
+              <div class="menu-icon">
+                <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
+                  <path d="M2 8h12M2 8l4-4M2 8l4 4M14 8l-4-4M14 8l-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+              <span class="menu-text">离线同步</span>
+            </div>
+            <div class="menu-item">
+              <div class="menu-icon">
+                <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
+                  <circle cx="8" cy="8" r="5" stroke="currentColor" stroke-width="1.5" fill="none"/>
+                  <path d="M8 5v3l2 2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                </svg>
+              </div>
+              <span class="menu-text">运维中心</span>
+            </div>
+            <div class="menu-item">
+              <div class="menu-icon">
+                <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
+                  <path d="M8 2v8M5 7l3 3 3-3M4 12h8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+              <span class="menu-text">数据连接</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 第三栏：右侧主内容 -->
+  <div class="main-content">
+    <div class="breadcrumb">
+      <span class="breadcrumb-left">云数仓 CDW / 概览</span>
+      <a class="breadcrumb-link">CDW帮助文档</a>
+    </div>
+    
+    <div class="content-body">
+      <!-- 欢迎卡片（通栏） -->
+      <div class="welcome-card">
+        <div class="welcome-content">
+          <h2 class="welcome-title">欢迎使用云数仓 CDW</h2>
+          <p class="welcome-desc">云数仓（Cloud Data Warehouse，简称CDW）是一种云端托管的数据仓库服务，支持海量数据存储与分析，适用于企业级数据报表、商业智能分析、数据挖掘等诸多场景。</p>
+        </div>
+        <div class="welcome-illustration">
+          <svg viewBox="0 0 180 120" fill="none">
+            <rect x="30" y="30" width="120" height="60" rx="4" fill="#E8F4FF" stroke="#0066FF" stroke-width="1.5"/>
+            <rect x="40" y="40" width="30" height="40" rx="2" fill="#0066FF" opacity="0.3"/>
+            <rect x="75" y="45" width="30" height="35" rx="2" fill="#0066FF" opacity="0.5"/>
+            <rect x="110" y="50" width="30" height="30" rx="2" fill="#0066FF" opacity="0.7"/>
+            <circle cx="55" cy="85" r="3" fill="#0066FF"/>
+            <circle cx="90" cy="85" r="3" fill="#0066FF"/>
+            <circle cx="125" cy="85" r="3" fill="#0066FF"/>
+          </svg>
+        </div>
+        <div class="welcome-close">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+            <path d="M3 3l8 8M11 3l-8 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </div>
+      </div>
+
+      <!-- 下方内容区 -->
+      <div class="content-bottom">
+        <!-- 主内容区 -->
+        <div class="overview-main">
+          <!-- 快速开始步骤 -->
+          <div class="quick-start">
+            <div class="step-card">
+              <div class="step-header">
+                <span class="step-number">1</span>
+                <span class="step-title">创建数仓实例</span>
+              </div>
+              <p class="step-desc">选择合适的规格配置，快速创建专属数据仓库实例</p>
+              <button class="step-btn">立即创建</button>
+            </div>
+            <div class="step-card">
+              <div class="step-header">
+                <span class="step-number">2</span>
+                <span class="step-title">配置数据源</span>
+              </div>
+              <p class="step-desc">连接多种数据源，打通数据链路实现数据入仓</p>
+              <button class="step-btn">配置数据源</button>
+            </div>
+            <div class="step-card">
+              <div class="step-header">
+                <span class="step-number">3</span>
+                <span class="step-title">数据分析</span>
+              </div>
+              <p class="step-desc">使用SQL或可视化工具进行数据探索和分析</p>
+              <button class="step-btn">开始分析</button>
+            </div>
+            <div class="step-card">
+              <div class="step-header">
+                <span class="step-number">4</span>
+                <span class="step-title">数据应用</span>
+              </div>
+              <p class="step-desc">构建数据报表、仪表盘，实现数据驱动决策</p>
+              <button class="step-btn">创建应用</button>
+            </div>
+          </div>
+
+          <!-- 实例提示区 -->
+          <div class="instance-prompt">
+            <div class="instance-prompt-left">
+              <h3 class="instance-prompt-title">你还没有云数仓实例</h3>
+              <button class="instance-prompt-btn">
+                <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+                  <path d="M8 2v12M2 8h12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+                新建实例
+              </button>
+            </div>
+            <div class="instance-prompt-illustration">
+              <svg viewBox="0 0 120 80" fill="none">
+                <rect x="10" y="10" width="100" height="60" rx="4" stroke="#E0E0E0" stroke-width="1.5" fill="none"/>
+                <rect x="20" y="20" width="80" height="8" rx="2" fill="#E0E0E0"/>
+                <rect x="20" y="35" width="60" height="6" rx="2" fill="#F0F0F0"/>
+                <rect x="20" y="45" width="70" height="6" rx="2" fill="#F0F0F0"/>
+                <rect x="20" y="55" width="50" height="6" rx="2" fill="#F0F0F0"/>
+              </svg>
+            </div>
+          </div>
+
+          <!-- 功能亮点 -->
+          <div class="features-section">
+            <div class="feature-card">
+              <div class="feature-icon">
+                <svg viewBox="0 0 24 24" fill="none">
+                  <path d="M12 2L2 7l10 5 10-5-10-5z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M2 17l10 5 10-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M2 12l10 5 10-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+              <div class="feature-content">
+                <h4 class="feature-title">高可用</h4>
+                <p class="feature-desc">稳定性强，高容灾能力，业务对基础硬件设施的故障无感知</p>
+              </div>
+            </div>
+            <div class="feature-card">
+              <div class="feature-icon">
+                <svg viewBox="0 0 24 24" fill="none">
+                  <rect x="3" y="3" width="7" height="7" rx="1" stroke="currentColor" stroke-width="1.5"/>
+                  <rect x="14" y="3" width="7" height="7" rx="1" stroke="currentColor" stroke-width="1.5"/>
+                  <rect x="3" y="14" width="7" height="7" rx="1" stroke="currentColor" stroke-width="1.5"/>
+                  <rect x="14" y="14" width="7" height="7" rx="1" stroke="currentColor" stroke-width="1.5"/>
+                </svg>
+              </div>
+              <div class="feature-content">
+                <h4 class="feature-title">配置灵活</h4>
+                <p class="feature-desc">提供多种类型和规格的服务器配置，资源供应充足，随时弹性拓展</p>
+              </div>
+            </div>
+            <div class="feature-card">
+              <div class="feature-icon">
+                <svg viewBox="0 0 24 24" fill="none">
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+              <div class="feature-content">
+                <h4 class="feature-title">安全</h4>
+                <p class="feature-desc">基于360强大的安全体系，保障网络安全，为你保驾护航</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 右侧辅助区 -->
+        <div class="overview-sidebar">
+        <!-- 帮助文档 -->
+        <div class="help-card">
+          <h3 class="help-card-title">
+            <svg viewBox="0 0 16 16" fill="none">
+              <path d="M8 1v8M5 6l3 3 3-3M4 12h8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            帮助文档
+          </h3>
+          <div class="help-links">
+            <div class="help-link">
+              产品介绍
+              <svg viewBox="0 0 16 16" fill="none">
+                <path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <div class="help-link">
+              快速入门
+              <svg viewBox="0 0 16 16" fill="none">
+                <path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <div class="help-link">
+              创建实例
+              <svg viewBox="0 0 16 16" fill="none">
+                <path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <div class="help-link">
+              数据导入
+              <svg viewBox="0 0 16 16" fill="none">
+                <path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+          </div>
+        </div>
+
+        <!-- 常见问题 -->
+        <div class="help-card">
+          <h3 class="help-card-title">
+            <svg viewBox="0 0 16 16" fill="none">
+              <circle cx="8" cy="8" r="6" stroke="currentColor" stroke-width="1.5" fill="none"/>
+              <path d="M6 6.5c0-1.1.9-2 2-2s2 .9 2 2c0 .7-.4 1.3-1 1.7-.3.2-.5.4-.5.8v1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+              <circle cx="8" cy="12.5" r="0.5" fill="currentColor"/>
+            </svg>
+            常见问题
+          </h3>
+          <div class="faq-list">
+            <div class="faq-item">
+              实例关机后，还会继续收费吗？
+              <svg viewBox="0 0 16 16" fill="none">
+                <path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <div class="faq-item">
+              如何为实例选择地域和可用区？
+              <svg viewBox="0 0 16 16" fill="none">
+                <path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <div class="faq-item">
+              实例创建后可以更换配置吗？
+              <svg viewBox="0 0 16 16" fill="none">
+                <path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <div class="faq-item">
+              如何连接数据仓库实例？
+              <svg viewBox="0 0 16 16" fill="none">
+                <path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <div class="faq-item">
+              数据如何备份和恢复？
+              <svg viewBox="0 0 16 16" fill="none">
+                <path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <div class="faq-item">
+              如何监控实例运行状态？
+              <svg viewBox="0 0 16 16" fill="none">
+                <path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <div class="faq-item">
+              支持哪些数据源接入？
+              <svg viewBox="0 0 16 16" fill="none">
+                <path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- content-bottom 结束 -->
+    </div>
+  </div>
+</div>
+
+<script>
+  // 图标栏交互
+  document.querySelectorAll('.icon-item').forEach(item => {
+    item.addEventListener('click', function() {
+      document.querySelectorAll('.icon-item').forEach(i => i.classList.remove('active'));
+      this.classList.add('active');
+    });
+  });
+
+  // 一级菜单项点击切换图标状态
+  document.querySelectorAll('.menu-level-1 > .menu-item').forEach(item => {
+    item.addEventListener('click', function(e) {
+      e.stopPropagation();
+      this.classList.toggle('selected');
+    });
+  });
+
+  // 菜单展开/收起交互
+  document.querySelectorAll('.menu-item').forEach(item => {
+    const arrow = item.querySelector('.menu-arrow');
+    if (arrow) {
+      const isTopLevel = item.parentElement.classList.contains('menu-level-1');
+      if (isTopLevel) {
+        return;
+      }
+      
+      item.style.cursor = 'pointer';
+      item.addEventListener('click', function(e) {
+        e.stopPropagation();
+        
+        const parent = this.parentElement;
+        
+        let submenu = parent.querySelector('.menu-level-2');
+        if (submenu) {
+          submenu.classList.toggle('collapsed');
+          this.classList.toggle('collapsed');
+          return;
+        }
+        
+        submenu = parent.querySelector('.submenu-expanded');
+        if (submenu) {
+          submenu.classList.toggle('collapsed');
+          this.classList.toggle('collapsed');
+          return;
+        }
+      });
+    }
+  });
+
+  // 欢迎卡片关闭按钮
+  const welcomeClose = document.querySelector('.welcome-close');
+  if (welcomeClose) {
+    welcomeClose.addEventListener('click', function() {
+      this.closest('.welcome-card').style.display = 'none';
+    });
+  }
+</script>
+</body>
+</html>
