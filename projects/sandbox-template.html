@@ -55,6 +55,10 @@
       height: 28px;
     }
 
+    .logo-text {
+      display: none;
+    }
+
     .header-btn {
       padding: 6px 12px;
       border-radius: 4px;
@@ -81,6 +85,10 @@
       padding: 6px 10px;
     }
 
+    .header-btn.group:hover {
+      background: #F8F9FA;
+    }
+
     .tag {
       background: #EEF6FF;
       color: #0066FF;
@@ -88,6 +96,13 @@
       border-radius: 2px;
       font-size: 14px;
       font-weight: 500;
+    }
+
+    .dropdown-arrow {
+      margin-left: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
     .header-divider {
@@ -113,6 +128,16 @@
 
     .header-link:hover {
       color: #0066FF;
+    }
+
+    .header-link .dot {
+      position: absolute;
+      top: -2px;
+      right: -6px;
+      width: 6px;
+      height: 6px;
+      background: #FF4D4F;
+      border-radius: 50%;
     }
 
     .user-info {
@@ -180,15 +205,16 @@
       height: 40px;
       cursor: pointer;
       display: flex;
-      flex-direction: column;
       align-items: center;
       justify-content: center;
       font-size: 11px;
       color: #E5EAF3;
       transition: all 0.2s;
       background: transparent;
+      position: relative;
     }
 
+    /* 前三个图标高度为50px */
     .icon-item:nth-child(1),
     .icon-item:nth-child(2),
     .icon-item:nth-child(3) {
@@ -205,7 +231,7 @@
       color: #fff;
     }
 
-    .icon-svg {
+    .icon-item .icon-svg {
       width: 18px;
       height: 18px;
       display: flex;
@@ -213,10 +239,34 @@
       justify-content: center;
     }
 
-    .icon-label {
+    /* 前三个图标内的svg大小为20px */
+    .icon-item:nth-child(1) .icon-svg,
+    .icon-item:nth-child(2) .icon-svg,
+    .icon-item:nth-child(3) .icon-svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    .icon-item .icon-text {
       font-size: 9px;
       font-weight: 500;
+    }
+
+    .icon-item .icon-label {
+      display: none;
+      font-size: 10px;
+      font-weight: 400;
       margin-top: 2px;
+    }
+
+    /* 所有图标显示文字标签 */
+    .icon-item .icon-label {
+      display: block;
+    }
+
+    /* 所有图标改为纵向布局 */
+    .icon-item {
+      flex-direction: column;
     }
 
     /* ========== 第二栏：中间菜单栏 ========== */
@@ -245,6 +295,15 @@
       border-radius: 2px;
     }
 
+    .sidebar-menu::-webkit-scrollbar-thumb:hover {
+      background: rgba(0, 0, 0, 0.4);
+    }
+
+    .sidebar-menu::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    /* 一级菜单 */
     .menu-level-1 {
       color: #202020;
       font-size: 14px;
@@ -287,7 +346,42 @@
       cursor: pointer;
       gap: 8px;
       transition: all 0.2s;
+      position: relative;
       color: inherit;
+    }
+
+    .menu-item:hover {
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .menu-item.active {
+      background: #0066FF;
+      color: #fff;
+    }
+
+    .menu-item.active::after {
+      content: '';
+      position: absolute;
+      right: 0;
+      top: 4px;
+      bottom: 4px;
+      width: 2px;
+      background: #fff;
+      border-radius: 1px 0 0 1px;
+    }
+
+    .menu-icon {
+      width: 16px;
+      height: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      opacity: 0.8;
+    }
+
+    .menu-item.active .menu-icon {
+      opacity: 1;
     }
 
     .menu-text {
@@ -295,15 +389,67 @@
       font-size: inherit;
     }
 
+    .menu-arrow {
+      width: 16px;
+      height: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #202020;
+      transition: transform 0.2s ease;
+    }
+
+    .menu-item.collapsed .menu-arrow {
+      transform: rotate(-90deg);
+    }
+
+    /* 二级菜单（深色背景） */
+    .menu-level-2 {
+      background:#ffffff;
+      max-height: 2000px;
+      overflow: hidden;
+      transition: max-height 0.3s ease-out;
+    }
+
+    .menu-level-2.collapsed {
+      max-height: 0;
+    }
+
+    .menu-level-2 .menu-item {
+      font-size: 14px;
+      color: #202020;
+      padding-left: 16px;
+    }
+
+    .menu-level-2 > .menu-item .menu-icon {
+      display: none;
+    }
+
+    .menu-level-2 .menu-item:hover {
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    /* 展开的子菜单（浅色背景） */
     .submenu-expanded {
       background: #ffffff;
+      max-height: 1000px;
+      overflow: hidden;
+      transition: max-height 0.3s ease-out;
+    }
+
+    .submenu-expanded.collapsed {
+      max-height: 0;
+    }
+
+    .menu-level-2.collapsed .submenu-expanded {
+      max-height: 0;
     }
 
     .submenu-expanded .menu-item {
       color: #202020;
       height: 40px;
       line-height: 40px;
-      padding: 0 16px;
+      padding: 0 16px 0 16px;
       font-size: 14px;
     }
 
@@ -344,6 +490,47 @@
       color: #202020;
     }
 
+    /* 三级菜单 */
+    .menu-level-3 {
+      background: #F8F9FA;
+      max-height: 1000px;
+      overflow: hidden;
+      transition: max-height 0.3s ease-out;
+    }
+
+    .menu-level-3.collapsed {
+      max-height: 0;
+    }
+
+    .menu-level-3 .menu-item {
+      padding: 6px 16px 6px 52px;
+      font-size: 12px;
+      color: #202020;
+    }
+
+    .menu-level-3 .menu-item .menu-icon {
+      width: 16px;
+      height: 16px;
+    }
+
+    .menu-level-3 .menu-item .menu-icon svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    .menu-level-3 .menu-item:hover {
+      background: #E9ECEF;
+    }
+
+    .menu-level-3 .menu-item.active {
+      background: #006bff;
+      color: #ffffff;
+    }
+
+    .menu-level-3 .menu-item.active .menu-icon {
+      color: #ffffff;
+    }
+
     /* ========== 第三栏：右侧主内容区 ========== */
     .main-content {
       flex: 1;
@@ -369,6 +556,11 @@
       color: #202020;
     }
 
+    .breadcrumb-sep {
+      color: #202020;
+      margin: 0 8px;
+    }
+
     .breadcrumb-link {
       color: #0066FF;
       text-decoration: none;
@@ -378,6 +570,40 @@
 
     .breadcrumb-link:hover {
       text-decoration: none;
+    }
+
+    .content-header {
+      padding: 16px 24px;
+      border-bottom: 1px solid #E9ECEF;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 16px;
+      font-weight: 500;
+      color: #333;
+      background: #F8F9FA;
+    }
+
+    .back-icon {
+      width: 20px;
+      height: 20px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #666;
+      font-size: 16px;
+      transition: color 0.2s;
+    }
+
+    .back-icon:hover {
+      color: #0066FF;
+    }
+
+    .divider {
+      width: 1px;
+      height: 16px;
+      background: #E9ECEF;
     }
 
     .content-body {
@@ -390,8 +616,8 @@
       overflow: hidden;
     }
 
-    /* 模板列表页面样式 */
-    .template-list-page {
+    /* 产品列表页面样式 */
+    .product-list-page {
       flex: 1;
       display: flex;
       flex-direction: column;
@@ -400,7 +626,7 @@
       min-height: 0;
     }
 
-    .template-toolbar {
+    .product-toolbar {
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -445,6 +671,17 @@
       background: #0052CC;
     }
 
+    .btn-default {
+      background: #fff;
+      color: #333;
+      border-color: #D9D9D9;
+    }
+
+    .btn-default:hover {
+      border-color: #0066FF;
+      color: #0066FF;
+    }
+
     .search-box {
       display: flex;
       align-items: center;
@@ -483,6 +720,23 @@
       color: #0066FF;
     }
 
+    .clear-btn {
+      border: none;
+      background: none;
+      cursor: pointer;
+      color: #999;
+      font-size: 14px;
+      padding: 0 0 0 8px;
+      margin-left: 4px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+    }
+
+    .clear-btn:hover {
+      color: #666;
+    }
+
     .refresh-btn {
       width: 34px;
       height: 34px;
@@ -502,8 +756,40 @@
       color: #0066FF;
     }
 
-    /* 表格样式 */
-    .template-table {
+    .search-icon {
+      color: #999;
+      display: flex;
+      align-items: center;
+    }
+
+    .icon-btn {
+      width: 32px;
+      height: 32px;
+      border: 1px solid #D9D9D9;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      background: #fff;
+      color: #666;
+      transition: all 0.2s;
+    }
+
+    .icon-btn:hover {
+      border-color: #0066FF;
+      color: #0066FF;
+    }
+
+    .pagination-info {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      color: #666;
+    }
+
+    .product-table {
       flex: 1;
       overflow: hidden;
       display: flex;
@@ -511,24 +797,24 @@
       min-height: 0;
     }
 
-    .template-table .table-wrapper {
+    .product-table .table-wrapper {
       flex: 1;
       overflow: auto;
       min-height: 0;
     }
 
-    .template-table table {
+    .product-table table {
       width: 100%;
       border-collapse: collapse;
     }
 
-    .template-table thead {
+    .product-table thead {
       position: sticky;
       top: 0;
       z-index: 1;
     }
 
-    .template-table th {
+    .product-table th {
       background: #F8F9FA;
       padding: 12px 16px;
       text-align: left;
@@ -539,40 +825,41 @@
       white-space: nowrap;
     }
 
-    .template-table td {
+    .product-table th .filter-icon {
+      margin-left: 4px;
+      cursor: pointer;
+      color: #999;
+    }
+
+    .product-table th .filter-icon:hover {
+      color: #0066FF;
+    }
+
+    .product-table td {
       padding: 14px 16px;
       font-size: 14px;
       color: #333;
       border-bottom: 1px solid #F0F0F0;
     }
 
-    .template-table tbody tr:hover {
+    .product-table tbody tr:hover {
       background: #F8F9FA;
     }
 
-    .template-id {
-      display: flex;
-      align-items: center;
-      gap: 4px;
+    /* 空状态样式 */
+    .empty-state {
+      padding: 60px 0 !important;
+      text-align: center;
     }
 
-    .template-id-text {
-      color: #333;
+    .empty-icon {
+      color: #D9D9D9;
+      margin-bottom: 16px;
     }
 
-    .copy-icon {
-      cursor: pointer;
+    .empty-text {
+      font-size: 14px;
       color: #999;
-      display: flex;
-      align-items: center;
-    }
-
-    .copy-icon:hover {
-      color: #0066FF;
-    }
-
-    .template-name {
-      color: #333;
     }
 
     /* 翻页组件样式 */
@@ -611,6 +898,10 @@
       cursor: pointer;
     }
 
+    .page-size-select:hover {
+      border-color: #0066FF;
+    }
+
     .page-btn {
       min-width: 32px;
       height: 32px;
@@ -642,6 +933,119 @@
       color: #D9D9D9;
       cursor: not-allowed;
     }
+
+    .page-ellipsis {
+      min-width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      color: #999;
+    }
+
+    .product-name {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .product-checkbox {
+      width: 16px;
+      height: 16px;
+      cursor: pointer;
+    }
+
+    .product-name-text {
+      color: #0066FF;
+      cursor: pointer;
+    }
+
+    .product-name-text:hover {
+      text-decoration: underline;
+    }
+
+    .product-id {
+      color: #999;
+      font-size: 12px;
+      margin-top: 2px;
+    }
+
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 12px;
+    }
+
+    .status-normal {
+      background: #E6F7EE;
+      color: #52C41A;
+    }
+
+    .status-error {
+      background: #FFF1F0;
+      color: #FF4D4F;
+    }
+
+    .status-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+    }
+
+    .status-normal .status-dot {
+      background: #52C41A;
+    }
+
+    .status-error .status-dot {
+      background: #FF4D4F;
+    }
+
+    .tag {
+      display: inline-block;
+      padding: 2px 8px;
+      background: #F0F5FF;
+      color: #0066FF;
+      border-radius: 4px;
+      font-size: 12px;
+    }
+
+    .text-muted {
+      color: #999;
+    }
+
+    .id-cell {
+      font-family: monospace;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .copy-icon {
+      cursor: pointer;
+      opacity: 0.5;
+      font-size: 12px;
+    }
+
+    .copy-icon:hover {
+      opacity: 1;
+    }
+
+    .template-name {
+      color: #333;
+    }
+
+    .visibility-badge {
+      display: inline-block;
+      padding: 2px 8px;
+      background: #E6F7EE;
+      color: #52C41A;
+      border-radius: 4px;
+      font-size: 12px;
+    }
   </style>
 </head>
 <body>
@@ -661,15 +1065,15 @@
     <button class="header-btn group">
       <span class="tag">组</span>
       <span>BD奇麟大数据-系统部</span>
-      <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <svg class="dropdown-arrow" width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M3 4.5L6 7.5L9 4.5" stroke="#202020" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
       </svg>
     </button>
   </div>
   <div class="header-right">
     <a class="header-link">费用</a>
-    <a class="header-link">工单</a>
-    <a class="header-link">消息</a>
+    <a class="header-link">工单<span class="dot"></span></a>
+    <a class="header-link">消息<span class="dot"></span></a>
     <a class="header-link">帮助</a>
     <div class="header-divider"></div>
     <div class="user-info">
@@ -683,15 +1087,18 @@
         <div class="user-name">zhangsan</div>
         <div class="user-sub">子账号</div>
       </div>
+      <svg class="dropdown-arrow" width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M3 4.5L6 7.5L9 4.5" stroke="#202020" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
     </div>
   </div>
 </div>
 
-<!-- 主体容器 -->
+<!-- 主体容器（三栏布局） -->
 <div class="container">
   <!-- 第一栏：左侧图标栏 -->
   <div class="icon-bar">
-    <div class="icon-item" title="全部">
+    <div class="icon-item active" title="全部">
       <div class="icon-svg">
         <svg width="20" height="20" viewBox="0 0 16 16" fill="none">
           <rect x="2" y="2" width="5" height="5" rx="1" fill="currentColor"/>
@@ -719,24 +1126,6 @@
       </div>
       <span class="icon-label">收藏</span>
     </div>
-    <div class="icon-item" title="对象OBS">
-      <div class="icon-svg">
-        <svg width="18" height="18" viewBox="0 0 16 16" fill="none">
-          <ellipse cx="8" cy="4" rx="5" ry="2" stroke="currentColor" stroke-width="1.5" fill="none"/>
-          <path d="M3 4v8c0 1.1 2.2 2 5 2s5-.9 5-2V4" stroke="currentColor" stroke-width="1.5" fill="none"/>
-        </svg>
-      </div>
-      <span class="icon-label">OBS</span>
-    </div>
-    <div class="icon-item" title="沙箱">
-      <div class="icon-svg">
-        <svg width="18" height="18" viewBox="0 0 16 16" fill="none">
-          <rect x="2" y="3" width="12" height="10" rx="2" stroke="currentColor" stroke-width="1.5" fill="none"/>
-          <path d="M5 7l2 2 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-      </div>
-      <span class="icon-label">沙箱</span>
-    </div>
     <div class="icon-item" title="标注TLP">
       <div class="icon-svg">
         <svg width="18" height="18" viewBox="0 0 16 16" fill="none">
@@ -746,7 +1135,35 @@
       </div>
       <span class="icon-label">TLP</span>
     </div>
-    <div class="icon-item" title="容器CIS">
+    <div class="icon-item" title="记忆AMS">
+      <div class="icon-svg">
+        <svg width="18" height="18" viewBox="0 0 16 16" fill="none">
+          <circle cx="8" cy="8" r="5" stroke="currentColor" stroke-width="1.5" fill="none"/>
+          <path d="M8 5v6M5 8h6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <span class="icon-label">AMS</span>
+    </div>
+    <div class="icon-item" title="TiDB">
+      <div class="icon-svg">
+        <svg width="18" height="18" viewBox="0 0 16 16" fill="none">
+          <ellipse cx="8" cy="4" rx="5" ry="2" stroke="currentColor" stroke-width="1.5" fill="none"/>
+          <path d="M3 4v8c0 1.1 2.2 2 5 2s5-.9 5-2V4" stroke="currentColor" stroke-width="1.5" fill="none"/>
+        </svg>
+      </div>
+      <span class="icon-label">TiDB</span>
+    </div>
+    <div class="icon-item" title="对话AIM">
+      <div class="icon-svg">
+        <svg width="18" height="18" viewBox="0 0 16 16" fill="none">
+          <path d="M3 4h10v8H9l-3 2v-2H3V4z" stroke="currentColor" stroke-width="1.5" fill="none"/>
+          <circle cx="6" cy="8" r="1" fill="currentColor"/>
+          <circle cx="10" cy="8" r="1" fill="currentColor"/>
+        </svg>
+      </div>
+      <span class="icon-label">AIM</span>
+    </div>
+    <div class="icon-item" title="智器CIS">
       <div class="icon-svg">
         <svg width="18" height="18" viewBox="0 0 16 16" fill="none">
           <rect x="2" y="4" width="12" height="8" rx="2" stroke="currentColor" stroke-width="1.5" fill="none"/>
@@ -755,87 +1172,122 @@
       </div>
       <span class="icon-label">CIS</span>
     </div>
-    <div class="icon-item" title="观测GC">
+    <div class="icon-item" title="MongoDB">
       <div class="icon-svg">
         <svg width="18" height="18" viewBox="0 0 16 16" fill="none">
-          <circle cx="8" cy="8" r="5" stroke="currentColor" stroke-width="1.5" fill="none"/>
-          <path d="M8 5v3l2 2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          <path d="M8 2v12M4 5c0-2 2-3 4-3s4 1 4 3c0 4-4 7-4 9" stroke="currentColor" stroke-width="1.5" fill="none"/>
         </svg>
       </div>
-      <span class="icon-label">GC</span>
+      <span class="icon-label">Mgo</span>
     </div>
-    <div class="icon-item" title="模型TLM">
+    <div class="icon-item" title="云规则">
       <div class="icon-svg">
         <svg width="18" height="18" viewBox="0 0 16 16" fill="none">
-          <path d="M3 8h10M8 3v10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          <path d="M4 11h8v-1H4v1zm0-3h8V7H4v1zm0-3h8V4H4v1z" fill="currentColor"/>
         </svg>
       </div>
-      <span class="icon-label">TLM</span>
+      <span class="icon-label">规则</span>
     </div>
-    <div class="icon-item" title="MySQL">
-      <div class="icon-svg">
-        <svg width="18" height="18" viewBox="0 0 16 16" fill="none">
-          <ellipse cx="8" cy="4" rx="5" ry="2" stroke="currentColor" stroke-width="1.5" fill="none"/>
-          <path d="M3 4v8c0 1.1 2.2 2 5 2s5-.9 5-2V4" stroke="currentColor" stroke-width="1.5" fill="none"/>
-        </svg>
-      </div>
-      <span class="icon-label">MySQL</span>
-    </div>
-    <div class="icon-item" title="ECS">
-      <div class="icon-svg">
-        <svg width="18" height="18" viewBox="0 0 16 16" fill="none">
-          <rect x="2" y="2" width="12" height="12" rx="2" stroke="currentColor" stroke-width="1.5" fill="none"/>
-          <path d="M6 6h4M6 8h4M6 10h2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-        </svg>
-      </div>
-      <span class="icon-label">ECS</span>
-    </div>
-    <div class="icon-item" title="函数FC">
+    <div class="icon-item" title="计算DSC">
       <div class="icon-svg">
         <svg width="18" height="18" viewBox="0 0 16 16" fill="none">
           <path d="M2 8c2-3 4-4 6-4s4 1 6 4c-2 3-4 4-6 4s-4-1-6-4z" stroke="currentColor" stroke-width="1.5" fill="none"/>
           <circle cx="8" cy="8" r="2" fill="currentColor"/>
         </svg>
       </div>
-      <span class="icon-label">FC</span>
+      <span class="icon-label">DSC</span>
     </div>
   </div>
 
   <!-- 第二栏：中间菜单栏 -->
   <div class="sidebar">
     <div class="sidebar-menu">
+      <!-- 一级菜单：AI沙箱 Sandbox -->
       <div class="menu-level-1">
         <div class="menu-item">
-          <span class="menu-text">AI沙箱 Sandbox</span>
-          <span class="menu-arrow">
-            <svg class="star-icon" width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M9,0 L6.21763372,5.92433023 L0,6.87455368 L4.5,11.4870539 L3.43727684,18 L9,14.9243307 L14.5627232,18 L13.5,11.4870539 L18,6.87455368 L11.7803574,5.92433023 L9,0 Z" stroke="currentColor" stroke-width="1.5"/>
+          <div class="menu-icon">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+              <rect x="2" y="3" width="12" height="10" rx="2" stroke="currentColor" stroke-width="1.5" fill="none"/>
+              <path d="M5 7l2 2 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
-          </span>
+          </div>
+          <span class="menu-text">AI沙箱 Sandbox</span>
+          <span class="menu-arrow"><svg class="star-icon" width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9,0 L6.21763372,5.92433023 L0,6.87455368 L4.5,11.4870539 L3.43727684,18 L9,14.9243307 L14.5627232,18 L13.5,11.4870539 L18,6.87455368 L11.7803574,5.92433023 L9,0 Z" stroke="currentColor" stroke-width="1.5"/></svg></span>
         </div>
+        
+        <!-- 展开的子菜单：AI沙箱 Sandbox -->
         <div class="submenu-expanded">
-          <a href="index.html" class="menu-item">
-            <span class="menu-text">沙箱实例</span>
-          </a>
-          <a href="sandbox-template.html" class="menu-item active">
-            <span class="menu-text">沙箱模板</span>
-          </a>
           <div class="menu-item">
+            <div class="menu-icon">
+              <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
+                <rect x="2" y="2" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.5" fill="none"/>
+                <rect x="9" y="2" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.5" fill="none"/>
+                <rect x="2" y="9" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.5" fill="none"/>
+                <rect x="9" y="9" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.5" fill="none"/>
+              </svg>
+            </div>
+            <span class="menu-text">沙箱实例</span>
+          </div>
+          <div class="menu-item active">
+            <div class="menu-icon">
+              <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
+                <rect x="2" y="2" width="12" height="12" rx="2" stroke="currentColor" stroke-width="1.5" fill="none"/>
+                <path d="M6 6l2 2 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <span class="menu-text">沙箱模板</span>
+          </div>
+          <div class="menu-item">
+            <div class="menu-icon">
+              <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
+                <circle cx="8" cy="8" r="5" stroke="currentColor" stroke-width="1.5" fill="none"/>
+                <path d="M8 5v3l2 2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+              </svg>
+            </div>
             <span class="menu-text">试验场</span>
           </div>
           <div class="menu-item">
+            <div class="menu-icon">
+              <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
+                <path d="M3 12l3-3 3 3 4-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
             <span class="menu-text">用量统计</span>
           </div>
           <div class="menu-item">
+            <div class="menu-icon">
+              <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
+                <rect x="2" y="3" width="12" height="10" rx="2" stroke="currentColor" stroke-width="1.5" fill="none"/>
+                <path d="M5 7h6M5 10h4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+              </svg>
+            </div>
             <span class="menu-text">运行日志</span>
           </div>
           <div class="menu-item">
+            <div class="menu-icon">
+              <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
+                <path d="M7 3L3 6v5c0 2 2 3 4 3s4-1 4-3V6l-4-3z" stroke="currentColor" stroke-width="1.5" fill="none"/>
+                <circle cx="8" cy="8" r="2" stroke="currentColor" stroke-width="1.5" fill="none"/>
+              </svg>
+            </div>
             <span class="menu-text">API密钥</span>
           </div>
           <div class="menu-item">
+            <div class="menu-icon">
+              <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
+                <rect x="2" y="4" width="12" height="9" rx="1" stroke="currentColor" stroke-width="1.5" fill="none"/>
+                <path d="M5 4V3a3 3 0 016 0v1" stroke="currentColor" stroke-width="1.5"/>
+              </svg>
+            </div>
             <span class="menu-text">定价和资源包</span>
           </div>
           <div class="menu-item">
+            <div class="menu-icon">
+              <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
+                <rect x="2" y="2" width="12" height="12" rx="2" stroke="currentColor" stroke-width="1.5" fill="none"/>
+                <path d="M2 6h12M6 6v8" stroke="currentColor" stroke-width="1.5"/>
+              </svg>
+            </div>
             <span class="menu-text">资源组详情</span>
           </div>
         </div>
@@ -846,13 +1298,13 @@
   <!-- 第三栏：右侧主内容 -->
   <div class="main-content">
     <div class="breadcrumb">
-      <span class="breadcrumb-left">沙箱模板</span>
-      <a class="breadcrumb-link">Sandbox 帮助文档</a>
+      <span class="breadcrumb-left" id="menu-name-display">沙箱模板</span>
+      <a class="breadcrumb-link" id="menu-link-display">Sandbox 帮助文档</a>
     </div>
     <div class="content-body">
-      <div class="template-list-page">
+      <div class="product-list-page">
         <!-- 工具栏 -->
-        <div class="template-toolbar">
+        <div class="product-toolbar">
           <div class="toolbar-left">
             <button class="btn btn-primary">
               <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
@@ -863,7 +1315,7 @@
           </div>
           <div class="toolbar-right">
             <div class="search-box">
-              <input type="text" placeholder="请输入模板ID">
+              <input type="text" id="sandbox-search" placeholder="请输入模板ID">
               <button class="search-btn">
                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
                   <circle cx="7" cy="7" r="5" stroke="currentColor" stroke-width="1.5" fill="none"/>
@@ -881,101 +1333,171 @@
         </div>
         
         <!-- 表格 -->
-        <div class="template-table">
+        <div class="product-table">
           <div class="table-wrapper">
             <table>
-              <thead>
-                <tr>
-                  <th>模板ID</th>
-                  <th>模板名称</th>
-                  <th>CPU</th>
-                  <th>内存(Memory)</th>
-                  <th>创建时间</th>
-                  <th>更新时间</th>
-                  <th>可见性</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>
-                    <div class="template-id">
-                      <span class="template-id-text">zs47yil2jbkdf73nali2</span>
-                      <span class="copy-icon">
-                        <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
-                          <rect x="5" y="5" width="8" height="8" rx="1" stroke="currentColor" stroke-width="1.5" fill="none"/>
-                          <path d="M3 11V4a1 1 0 011-1h7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-                        </svg>
-                      </span>
-                    </div>
-                  </td>
-                  <td class="template-name">code-interpreter-v1</td>
-                  <td>2</td>
-                  <td>1024MB</td>
-                  <td>2025-09-12 17:24:45</td>
-                  <td>2025-09-12 17:24:45</td>
-                  <td>Public</td>
-                </tr>
-                <tr>
-                  <td>
-                    <div class="template-id">
-                      <span class="template-id-text">y0ad1vs1k72ijelq7jjy</span>
-                      <span class="copy-icon">
-                        <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
-                          <rect x="5" y="5" width="8" height="8" rx="1" stroke="currentColor" stroke-width="1.5" fill="none"/>
-                          <path d="M3 11V4a1 1 0 011-1h7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-                        </svg>
-                      </span>
-                    </div>
-                  </td>
-                  <td class="template-name">desktop</td>
-                  <td>2</td>
-                  <td>1024MB</td>
-                  <td>2025-09-22 15:10:28</td>
-                  <td>2025-09-22 15:10:28</td>
-                  <td>Public</td>
-                </tr>
-                <tr>
-                  <td>
-                    <div class="template-id">
-                      <span class="template-id-text">kqepe5sjnv9hrcxzxe2g</span>
-                      <span class="copy-icon">
-                        <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
-                          <rect x="5" y="5" width="8" height="8" rx="1" stroke="currentColor" stroke-width="1.5" fill="none"/>
-                          <path d="M3 11V4a1 1 0 011-1h7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-                        </svg>
-                      </span>
-                    </div>
-                  </td>
-                  <td class="template-name">chrome-template</td>
-                  <td>2</td>
-                  <td>1024MB</td>
-                  <td>2025-11-12 15:36:52</td>
-                  <td>2025-11-12 15:36:55</td>
-                  <td>Public</td>
-                </tr>
-              </tbody>
-            </table>
+            <thead>
+              <tr>
+                <th>模板ID</th>
+                <th>模板名称</th>
+                <th>CPU</th>
+                <th>内存(Memory)</th>
+                <th>创建时间</th>
+                <th>更新时间</th>
+                <th>可见性</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="id-cell">zs47yil2jbkdf73nali2<span class="copy-icon" onclick="copyText('zs47yil2jbkdf73nali2')">📋</span></td>
+                <td class="template-name">code-interpreter-v1</td>
+                <td>2</td>
+                <td>1024MB</td>
+                <td>2025-09-12 17:24:45</td>
+                <td>2025-09-12 17:24:45</td>
+                <td><span class="visibility-badge">Public</span></td>
+              </tr>
+              <tr>
+                <td class="id-cell">y0ad1vs1k72ijelq7jjy<span class="copy-icon" onclick="copyText('y0ad1vs1k72ijelq7jjy')">📋</span></td>
+                <td class="template-name">desktop</td>
+                <td>2</td>
+                <td>1024MB</td>
+                <td>2025-09-22 15:10:28</td>
+                <td>2025-09-22 15:10:28</td>
+                <td><span class="visibility-badge">Public</span></td>
+              </tr>
+              <tr>
+                <td class="id-cell">kqepe5sjnv9hrcxzxe2g<span class="copy-icon" onclick="copyText('kqepe5sjnv9hrcxzxe2g')">📋</span></td>
+                <td class="template-name">chrome-template</td>
+                <td>2</td>
+                <td>1024MB</td>
+                <td>2025-11-12 15:36:52</td>
+                <td>2025-11-12 15:36:55</td>
+                <td><span class="visibility-badge">Public</span></td>
+              </tr>
+            </tbody>
+          </table>
           </div>
         </div>
         
         <!-- 翻页组件 -->
         <div class="pagination-bar">
-          <div class="pagination-left">共3条记录 第1 / 1页</div>
-          <div class="pagination-right">
-            <div class="page-size-select">
-              10条/页
-              <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-                <path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </div>
-            <button class="page-btn disabled">&lt;</button>
-            <button class="page-btn active">1</button>
-            <button class="page-btn disabled">&gt;</button>
-          </div>
+          <div class="pagination-left">共3条记录 第1/1页</div>
         </div>
       </div>
     </div>
   </div>
 </div>
+
+<script>
+  // 复制文本功能
+  function copyText(text) {
+    navigator.clipboard.writeText(text).then(() => {
+      alert('已复制: ' + text);
+    });
+  }
+
+  // 图标栏交互
+  document.querySelectorAll('.icon-item').forEach(item => {
+    item.addEventListener('click', function() {
+      document.querySelectorAll('.icon-item').forEach(i => i.classList.remove('active'));
+      this.classList.add('active');
+    });
+  });
+
+  // 一级菜单项点击切换图标状态
+  document.querySelectorAll('.menu-level-1 > .menu-item').forEach(item => {
+    item.addEventListener('click', function(e) {
+      e.stopPropagation();
+      // 切换选中状态
+      this.classList.toggle('selected');
+    });
+  });
+
+  // 子菜单项点击选中交互
+  document.querySelectorAll('.submenu-expanded .menu-item').forEach(item => {
+    item.addEventListener('click', function(e) {
+      e.stopPropagation();
+      
+      // 移除同一子菜单内其他项的active状态
+      const parentSubmenu = this.closest('.submenu-expanded');
+      if (parentSubmenu) {
+        parentSubmenu.querySelectorAll('.menu-item').forEach(i => i.classList.remove('active'));
+      }
+      
+      // 添加当前项的active状态
+      this.classList.add('active');
+      
+      // 更新右侧主内容区的菜单名称
+      const menuText = this.querySelector('.menu-text');
+      if (menuText) {
+        document.getElementById('menu-name-display').textContent = menuText.textContent;
+      }
+    });
+  });
+
+  // 三级菜单项点击选中交互
+  document.querySelectorAll('.menu-level-3 .menu-item').forEach(item => {
+    item.addEventListener('click', function(e) {
+      e.stopPropagation();
+      
+      // 移除所有三级菜单项的active状态
+      document.querySelectorAll('.menu-level-3 .menu-item').forEach(i => i.classList.remove('active'));
+      
+      // 添加当前项的active状态
+      this.classList.add('active');
+      
+      // 更新右侧主内容区的菜单名称
+      const menuText = this.querySelector('.menu-text');
+      if (menuText) {
+        document.getElementById('menu-name-display').textContent = menuText.textContent;
+      }
+    });
+  });
+
+  // 菜单展开/收起交互
+  document.querySelectorAll('.menu-item').forEach(item => {
+    const arrow = item.querySelector('.menu-arrow');
+    if (arrow) {
+      // 一级菜单的箭头图标不触发交互
+      const isTopLevel = item.parentElement.classList.contains('menu-level-1');
+      if (isTopLevel) {
+        return; // 跳过一级菜单项
+      }
+      
+      item.style.cursor = 'pointer';
+      item.addEventListener('click', function(e) {
+        e.stopPropagation();
+        
+        // 找到父元素
+        const parent = this.parentElement;
+        
+        // 情况1：一级菜单项，控制 menu-level-2
+        let submenu = parent.querySelector('.menu-level-2');
+        if (submenu) {
+          submenu.classList.toggle('collapsed');
+          this.classList.toggle('collapsed');
+          return;
+        }
+        
+        // 情况2：二级菜单项，控制 submenu-expanded
+        submenu = parent.querySelector('.submenu-expanded');
+        if (submenu) {
+          submenu.classList.toggle('collapsed');
+          this.classList.toggle('collapsed');
+          return;
+        }
+        
+        // 情况3：三级菜单项
+        submenu = parent.querySelector('.menu-level-3');
+        if (submenu) {
+          submenu.classList.toggle('collapsed');
+          this.classList.toggle('collapsed');
+          return;
+        }
+      });
+    }
+  });
+</script>
 </body>
 </html>
