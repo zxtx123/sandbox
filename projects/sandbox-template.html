@@ -1,0 +1,981 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>沙箱模板 - 360智汇云</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    a {
+      text-decoration: none;
+    }
+    
+    body {
+      font-family: "Microsoft YaHei", "PingFang SC", -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #F0F5F7;
+      font-size: 14px;
+      color: #202020;
+      line-height: 1.5;
+      overflow: hidden;
+    }
+
+    /* ========== 顶部导航栏 ========== */
+    .header {
+      height: 50px;
+      background: #fff;
+      box-shadow: 0 2px 6px rgba(49, 49, 71, 0.26);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 20px;
+      position: relative;
+      z-index: 100;
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+    }
+
+    .logo-icon {
+      width: 177px;
+      height: 28px;
+    }
+
+    .header-btn {
+      padding: 6px 12px;
+      border-radius: 4px;
+      background: #F8F9FA;
+      font-size: 14px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s;
+      color: #202020;
+      border: 1px #F8F9FA solid;
+    }
+
+    .header-btn:hover {
+      background: #F8F9FA;
+      color: #202020;
+    }
+
+    .header-btn.group {
+      background: #fff;
+      border-color: #D8E0E8;
+      color: #202020;
+      padding: 6px 10px;
+    }
+
+    .tag {
+      background: #EEF6FF;
+      color: #0066FF;
+      padding: 2px 6px;
+      border-radius: 2px;
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .header-divider {
+      width: 1px;
+      height: 50px;
+      background: #F5F5F5;
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .header-link {
+      color: #666;
+      text-decoration: none;
+      font-size: 14px;
+      position: relative;
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+
+    .header-link:hover {
+      color: #0066FF;
+    }
+
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      padding: 4px 0px;
+      border-radius: 4px;
+      transition: background 0.2s;
+    }
+
+    .user-info:hover {
+      background: #F5F7FA;
+    }
+
+    .user-avatar {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: #0066FF;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 14px;
+    }
+
+    .user-detail {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .user-name {
+      font-size: 14px;
+      color: #333;
+      line-height: 1.3;
+    }
+
+    .user-sub {
+      font-size: 12px;
+      color: #8C9AAE;
+      line-height: 1.3;
+    }
+
+    /* ========== 主体容器（三栏布局） ========== */
+    .container {
+      display: flex;
+      height: calc(100vh - 56px);
+    }
+
+    /* ========== 第一栏：左侧图标栏 ========== */
+    .icon-bar {
+      width: 50px;
+      background: #2e8cff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+      flex-shrink: 0;
+    }
+
+    .icon-item {
+      width: 50px;
+      height: 40px;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      color: #E5EAF3;
+      transition: all 0.2s;
+      background: transparent;
+    }
+
+    .icon-item:nth-child(1),
+    .icon-item:nth-child(2),
+    .icon-item:nth-child(3) {
+      height: 50px;
+    }
+
+    .icon-item:hover {
+      background: #0066FF;
+      color: #fff;
+    }
+
+    .icon-item.active {
+      background: #0066FF;
+      color: #fff;
+    }
+
+    .icon-svg {
+      width: 18px;
+      height: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .icon-label {
+      font-size: 9px;
+      font-weight: 500;
+      margin-top: 2px;
+    }
+
+    /* ========== 第二栏：中间菜单栏 ========== */
+    .sidebar {
+      width: 200px;
+      background: #ffffff;
+      flex-direction: column;
+      overflow: hidden;
+      flex-shrink: 0;
+      border-right: 1px solid #E6E6e6;
+      color: #202020;
+    }
+
+    .sidebar-menu {
+      flex: 1;
+      overflow-y: auto;
+      overflow-x: hidden;
+    }
+
+    .sidebar-menu::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    .sidebar-menu::-webkit-scrollbar-thumb {
+      background: rgba(0, 0, 0, 0.2);
+      border-radius: 2px;
+    }
+
+    .menu-level-1 {
+      color: #202020;
+      font-size: 14px;
+    }
+
+    .menu-level-1 > .menu-item {
+      border-bottom: 1px solid #E6E6e6;
+    }
+
+    .menu-level-1 > .menu-item .menu-icon {
+      display: none;
+    }
+
+    .menu-level-1 > .menu-item .menu-arrow {
+      pointer-events: none;
+    }
+
+    .menu-level-1 > .menu-item .menu-arrow .star-icon {
+      width: 18px;
+      height: 18px;
+      color: #999999;
+      fill: transparent;
+      transition: all 0.2s ease;
+    }
+
+    .menu-level-1 > .menu-item.selected .menu-arrow .star-icon {
+      color: #0066FF;
+      fill: #0066FF;
+    }
+
+    .menu-item {
+      display: flex;
+      align-items: center;
+      padding: 0 16px;
+      height: 50px;
+      line-height: 50px;
+      color: #202020;
+      font-size: 16px;
+      font-weight: 500;
+      cursor: pointer;
+      gap: 8px;
+      transition: all 0.2s;
+      color: inherit;
+    }
+
+    .menu-text {
+      flex: 1;
+      font-size: inherit;
+    }
+
+    .submenu-expanded {
+      background: #ffffff;
+    }
+
+    .submenu-expanded .menu-item {
+      color: #202020;
+      height: 40px;
+      line-height: 40px;
+      padding: 0 16px;
+      font-size: 14px;
+    }
+
+    .submenu-expanded .menu-item:hover {
+      background: #f5f5f5;
+    }
+
+    .submenu-expanded .menu-item.active {
+      background: #006bff;
+      color: #ffffff;
+    }
+
+    .submenu-expanded .menu-item.active::after {
+      display: none;
+    }
+
+    .submenu-expanded .menu-item.active::before {
+      display: none;
+    }
+
+    .submenu-expanded .menu-icon {
+      opacity: 1;
+      color: #202020;
+      width: 16px;
+      height: 16px;
+    }
+
+    .submenu-expanded .menu-icon svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    .submenu-expanded .menu-item.active .menu-icon {
+      color: #ffffff;
+    }
+
+    .submenu-expanded .menu-arrow {
+      color: #202020;
+    }
+
+    /* ========== 第三栏：右侧主内容区 ========== */
+    .main-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      min-width: 0;
+    }
+
+    .breadcrumb {
+      padding: 0px 20px;
+      border-bottom: 1px solid #E6E6e6;
+      font-size: 14px;
+      display: flex;
+      height: 50px;
+      line-height: 50px;
+      justify-content: space-between;
+      align-items: center;
+      background: #ffffff;
+    }
+
+    .breadcrumb-left {
+      color: #202020;
+    }
+
+    .breadcrumb-link {
+      color: #0066FF;
+      text-decoration: none;
+      cursor: pointer;
+      font-size: 12px;
+    }
+
+    .breadcrumb-link:hover {
+      text-decoration: none;
+    }
+
+    .content-body {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      background: #ffffff;
+      margin: 20px;
+      box-shadow: 0 2px 3px rgba(0, 0, 0, 0.09);
+      overflow: hidden;
+    }
+
+    /* 模板列表页面样式 */
+    .template-list-page {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      padding: 0;
+      overflow: hidden;
+      min-height: 0;
+    }
+
+    .template-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 20px;
+      border-bottom: 1px solid #E9ECEF;
+      gap: 12px;
+      flex-shrink: 0;
+    }
+
+    .toolbar-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .toolbar-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn {
+      height: 32px;
+      padding: 0 12px;
+      border-radius: 4px;
+      font-size: 14px;
+      cursor: pointer;
+      border: 1px solid transparent;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+
+    .btn-primary {
+      background: #0066FF;
+      color: #fff;
+      border-color: #0066FF;
+    }
+
+    .btn-primary:hover {
+      background: #0052CC;
+    }
+
+    .search-box {
+      display: flex;
+      align-items: center;
+      border: 1px solid #D9D9D9;
+      border-radius: 4px;
+      padding: 0 12px;
+      background: #fff;
+    }
+
+    .search-box input {
+      border: none;
+      outline: none;
+      padding: 8px 0;
+      font-size: 14px;
+      width: 200px;
+    }
+
+    .search-box input::placeholder {
+      color: #999;
+    }
+
+    .search-btn {
+      border: none;
+      background: none;
+      cursor: pointer;
+      color: #999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+      margin-left: 8px;
+      height: 32px;
+    }
+
+    .search-btn:hover {
+      color: #0066FF;
+    }
+
+    .refresh-btn {
+      width: 34px;
+      height: 34px;
+      border: 1px solid #D9D9D9;
+      background: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: #666;
+      border-radius: 4px;
+      margin-left: 8px;
+    }
+
+    .refresh-btn:hover {
+      border-color: #0066FF;
+      color: #0066FF;
+    }
+
+    /* 表格样式 */
+    .template-table {
+      flex: 1;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+    }
+
+    .template-table .table-wrapper {
+      flex: 1;
+      overflow: auto;
+      min-height: 0;
+    }
+
+    .template-table table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .template-table thead {
+      position: sticky;
+      top: 0;
+      z-index: 1;
+    }
+
+    .template-table th {
+      background: #F8F9FA;
+      padding: 12px 16px;
+      text-align: left;
+      font-size: 14px;
+      font-weight: 500;
+      color: #333;
+      border-bottom: 1px solid #E9ECEF;
+      white-space: nowrap;
+    }
+
+    .template-table td {
+      padding: 14px 16px;
+      font-size: 14px;
+      color: #333;
+      border-bottom: 1px solid #F0F0F0;
+    }
+
+    .template-table tbody tr:hover {
+      background: #F8F9FA;
+    }
+
+    .template-id {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .template-id-text {
+      color: #333;
+    }
+
+    .copy-icon {
+      cursor: pointer;
+      color: #999;
+      display: flex;
+      align-items: center;
+    }
+
+    .copy-icon:hover {
+      color: #0066FF;
+    }
+
+    .template-name {
+      color: #333;
+    }
+
+    /* 翻页组件样式 */
+    .pagination-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 20px;
+      border-top: 1px solid #E9ECEF;
+      background: #fff;
+      flex-shrink: 0;
+    }
+
+    .pagination-left {
+      font-size: 14px;
+      color: #666;
+    }
+
+    .pagination-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .page-size-select {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      padding: 0 8px;
+      height: 32px;
+      border: 1px solid #D9D9D9;
+      border-radius: 4px;
+      background: #fff;
+      font-size: 14px;
+      color: #333;
+      cursor: pointer;
+    }
+
+    .page-btn {
+      min-width: 32px;
+      height: 32px;
+      padding: 0 8px;
+      border: 1px solid #D9D9D9;
+      border-radius: 4px;
+      background: #fff;
+      font-size: 14px;
+      color: #333;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+
+    .page-btn:hover:not(.disabled):not(.active) {
+      border-color: #0066FF;
+      color: #0066FF;
+    }
+
+    .page-btn.active {
+      background: #0066FF;
+      border-color: #0066FF;
+      color: #fff;
+    }
+
+    .page-btn.disabled {
+      color: #D9D9D9;
+      cursor: not-allowed;
+    }
+  </style>
+</head>
+<body>
+<!-- 顶部导航 -->
+<div class="header">
+  <div class="header-left">
+    <div class="logo">
+      <img class="logo-icon" src="img/logo.png" alt="360智汇云" />
+    </div>
+    <button class="header-btn">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink: 0;">
+        <path d="M2 6L8 1L14 6V14C14 14.5304 13.7893 15.0391 13.4142 15.4142C13.0391 15.7893 12.5304 16 12 16H4C3.46957 16 2.96086 15.7893 2.58579 15.4142C2.21071 15.0391 2 14.5304 2 14V6Z" stroke="#666" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M6 16V10H10V16" stroke="#666" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <span>工作台总览</span>
+    </button>
+    <button class="header-btn group">
+      <span class="tag">组</span>
+      <span>BD奇麟大数据-系统部</span>
+      <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M3 4.5L6 7.5L9 4.5" stroke="#202020" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </button>
+  </div>
+  <div class="header-right">
+    <a class="header-link">费用</a>
+    <a class="header-link">工单</a>
+    <a class="header-link">消息</a>
+    <a class="header-link">帮助</a>
+    <div class="header-divider"></div>
+    <div class="user-info">
+      <div class="user-avatar">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="12" cy="8" r="4" fill="currentColor"/>
+          <path d="M4 20c0-4 4-6 8-6s8 2 8 6" fill="currentColor"/>
+        </svg>
+      </div>
+      <div class="user-detail">
+        <div class="user-name">zhangsan</div>
+        <div class="user-sub">子账号</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 主体容器 -->
+<div class="container">
+  <!-- 第一栏：左侧图标栏 -->
+  <div class="icon-bar">
+    <div class="icon-item" title="全部">
+      <div class="icon-svg">
+        <svg width="20" height="20" viewBox="0 0 16 16" fill="none">
+          <rect x="2" y="2" width="5" height="5" rx="1" fill="currentColor"/>
+          <rect x="9" y="2" width="5" height="5" rx="1" fill="currentColor"/>
+          <rect x="2" y="9" width="5" height="5" rx="1" fill="currentColor"/>
+          <rect x="9" y="9" width="5" height="5" rx="1" fill="currentColor"/>
+        </svg>
+      </div>
+      <span class="icon-label">全部</span>
+    </div>
+    <div class="icon-item" title="最近">
+      <div class="icon-svg">
+        <svg width="20" height="20" viewBox="0 0 16 16" fill="none">
+          <circle cx="8" cy="8" r="6" stroke="currentColor" stroke-width="1.5" fill="none"/>
+          <path d="M8 4v4l3 2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <span class="icon-label">最近</span>
+    </div>
+    <div class="icon-item" title="收藏">
+      <div class="icon-svg">
+        <svg width="20" height="20" viewBox="0 0 16 16" fill="none">
+          <path d="M8 2l2.2 4.4 4.8.7-3.5 3.4.8 4.8L8 13l-4.3 2.3.8-4.8-3.5-3.4 4.8-.7L8 2z" fill="currentColor"/>
+        </svg>
+      </div>
+      <span class="icon-label">收藏</span>
+    </div>
+    <div class="icon-item" title="对象OBS">
+      <div class="icon-svg">
+        <svg width="18" height="18" viewBox="0 0 16 16" fill="none">
+          <ellipse cx="8" cy="4" rx="5" ry="2" stroke="currentColor" stroke-width="1.5" fill="none"/>
+          <path d="M3 4v8c0 1.1 2.2 2 5 2s5-.9 5-2V4" stroke="currentColor" stroke-width="1.5" fill="none"/>
+        </svg>
+      </div>
+      <span class="icon-label">OBS</span>
+    </div>
+    <div class="icon-item" title="沙箱">
+      <div class="icon-svg">
+        <svg width="18" height="18" viewBox="0 0 16 16" fill="none">
+          <rect x="2" y="3" width="12" height="10" rx="2" stroke="currentColor" stroke-width="1.5" fill="none"/>
+          <path d="M5 7l2 2 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <span class="icon-label">沙箱</span>
+    </div>
+    <div class="icon-item" title="标注TLP">
+      <div class="icon-svg">
+        <svg width="18" height="18" viewBox="0 0 16 16" fill="none">
+          <path d="M2 3h12v10H2V3z" stroke="currentColor" stroke-width="1.5" fill="none"/>
+          <path d="M5 6h6M5 9h4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <span class="icon-label">TLP</span>
+    </div>
+    <div class="icon-item" title="容器CIS">
+      <div class="icon-svg">
+        <svg width="18" height="18" viewBox="0 0 16 16" fill="none">
+          <rect x="2" y="4" width="12" height="8" rx="2" stroke="currentColor" stroke-width="1.5" fill="none"/>
+          <path d="M5 7h6M5 10h4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <span class="icon-label">CIS</span>
+    </div>
+    <div class="icon-item" title="观测GC">
+      <div class="icon-svg">
+        <svg width="18" height="18" viewBox="0 0 16 16" fill="none">
+          <circle cx="8" cy="8" r="5" stroke="currentColor" stroke-width="1.5" fill="none"/>
+          <path d="M8 5v3l2 2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <span class="icon-label">GC</span>
+    </div>
+    <div class="icon-item" title="模型TLM">
+      <div class="icon-svg">
+        <svg width="18" height="18" viewBox="0 0 16 16" fill="none">
+          <path d="M3 8h10M8 3v10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <span class="icon-label">TLM</span>
+    </div>
+    <div class="icon-item" title="MySQL">
+      <div class="icon-svg">
+        <svg width="18" height="18" viewBox="0 0 16 16" fill="none">
+          <ellipse cx="8" cy="4" rx="5" ry="2" stroke="currentColor" stroke-width="1.5" fill="none"/>
+          <path d="M3 4v8c0 1.1 2.2 2 5 2s5-.9 5-2V4" stroke="currentColor" stroke-width="1.5" fill="none"/>
+        </svg>
+      </div>
+      <span class="icon-label">MySQL</span>
+    </div>
+    <div class="icon-item" title="ECS">
+      <div class="icon-svg">
+        <svg width="18" height="18" viewBox="0 0 16 16" fill="none">
+          <rect x="2" y="2" width="12" height="12" rx="2" stroke="currentColor" stroke-width="1.5" fill="none"/>
+          <path d="M6 6h4M6 8h4M6 10h2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <span class="icon-label">ECS</span>
+    </div>
+    <div class="icon-item" title="函数FC">
+      <div class="icon-svg">
+        <svg width="18" height="18" viewBox="0 0 16 16" fill="none">
+          <path d="M2 8c2-3 4-4 6-4s4 1 6 4c-2 3-4 4-6 4s-4-1-6-4z" stroke="currentColor" stroke-width="1.5" fill="none"/>
+          <circle cx="8" cy="8" r="2" fill="currentColor"/>
+        </svg>
+      </div>
+      <span class="icon-label">FC</span>
+    </div>
+  </div>
+
+  <!-- 第二栏：中间菜单栏 -->
+  <div class="sidebar">
+    <div class="sidebar-menu">
+      <div class="menu-level-1">
+        <div class="menu-item">
+          <span class="menu-text">AI沙箱 Sandbox</span>
+          <span class="menu-arrow">
+            <svg class="star-icon" width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M9,0 L6.21763372,5.92433023 L0,6.87455368 L4.5,11.4870539 L3.43727684,18 L9,14.9243307 L14.5627232,18 L13.5,11.4870539 L18,6.87455368 L11.7803574,5.92433023 L9,0 Z" stroke="currentColor" stroke-width="1.5"/>
+            </svg>
+          </span>
+        </div>
+        <div class="submenu-expanded">
+          <a href="index.html" class="menu-item">
+            <span class="menu-text">沙箱实例</span>
+          </a>
+          <a href="sandbox-template.html" class="menu-item active">
+            <span class="menu-text">沙箱模板</span>
+          </a>
+          <div class="menu-item">
+            <span class="menu-text">试验场</span>
+          </div>
+          <div class="menu-item">
+            <span class="menu-text">用量统计</span>
+          </div>
+          <div class="menu-item">
+            <span class="menu-text">运行日志</span>
+          </div>
+          <div class="menu-item">
+            <span class="menu-text">API密钥</span>
+          </div>
+          <div class="menu-item">
+            <span class="menu-text">定价和资源包</span>
+          </div>
+          <div class="menu-item">
+            <span class="menu-text">资源组详情</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 第三栏：右侧主内容 -->
+  <div class="main-content">
+    <div class="breadcrumb">
+      <span class="breadcrumb-left">沙箱模板</span>
+      <a class="breadcrumb-link">Sandbox 帮助文档</a>
+    </div>
+    <div class="content-body">
+      <div class="template-list-page">
+        <!-- 工具栏 -->
+        <div class="template-toolbar">
+          <div class="toolbar-left">
+            <button class="btn btn-primary">
+              <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+                <path d="M8 2v12M2 8h12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+              创建模板
+            </button>
+          </div>
+          <div class="toolbar-right">
+            <div class="search-box">
+              <input type="text" placeholder="请输入模板ID">
+              <button class="search-btn">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                  <circle cx="7" cy="7" r="5" stroke="currentColor" stroke-width="1.5" fill="none"/>
+                  <path d="M11 11l3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                </svg>
+              </button>
+            </div>
+            <button class="refresh-btn" title="刷新">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <path d="M14 8A6 6 0 118 2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                <path d="M14 2v4h-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+        
+        <!-- 表格 -->
+        <div class="template-table">
+          <div class="table-wrapper">
+            <table>
+              <thead>
+                <tr>
+                  <th>模板ID</th>
+                  <th>模板名称</th>
+                  <th>CPU</th>
+                  <th>内存(Memory)</th>
+                  <th>创建时间</th>
+                  <th>更新时间</th>
+                  <th>可见性</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>
+                    <div class="template-id">
+                      <span class="template-id-text">zs47yil2jbkdf73nali2</span>
+                      <span class="copy-icon">
+                        <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+                          <rect x="5" y="5" width="8" height="8" rx="1" stroke="currentColor" stroke-width="1.5" fill="none"/>
+                          <path d="M3 11V4a1 1 0 011-1h7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                        </svg>
+                      </span>
+                    </div>
+                  </td>
+                  <td class="template-name">code-interpreter-v1</td>
+                  <td>2</td>
+                  <td>1024MB</td>
+                  <td>2025-09-12 17:24:45</td>
+                  <td>2025-09-12 17:24:45</td>
+                  <td>Public</td>
+                </tr>
+                <tr>
+                  <td>
+                    <div class="template-id">
+                      <span class="template-id-text">y0ad1vs1k72ijelq7jjy</span>
+                      <span class="copy-icon">
+                        <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+                          <rect x="5" y="5" width="8" height="8" rx="1" stroke="currentColor" stroke-width="1.5" fill="none"/>
+                          <path d="M3 11V4a1 1 0 011-1h7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                        </svg>
+                      </span>
+                    </div>
+                  </td>
+                  <td class="template-name">desktop</td>
+                  <td>2</td>
+                  <td>1024MB</td>
+                  <td>2025-09-22 15:10:28</td>
+                  <td>2025-09-22 15:10:28</td>
+                  <td>Public</td>
+                </tr>
+                <tr>
+                  <td>
+                    <div class="template-id">
+                      <span class="template-id-text">kqepe5sjnv9hrcxzxe2g</span>
+                      <span class="copy-icon">
+                        <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+                          <rect x="5" y="5" width="8" height="8" rx="1" stroke="currentColor" stroke-width="1.5" fill="none"/>
+                          <path d="M3 11V4a1 1 0 011-1h7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                        </svg>
+                      </span>
+                    </div>
+                  </td>
+                  <td class="template-name">chrome-template</td>
+                  <td>2</td>
+                  <td>1024MB</td>
+                  <td>2025-11-12 15:36:52</td>
+                  <td>2025-11-12 15:36:55</td>
+                  <td>Public</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        
+        <!-- 翻页组件 -->
+        <div class="pagination-bar">
+          <div class="pagination-left">共3条记录 第1 / 1页</div>
+          <div class="pagination-right">
+            <div class="page-size-select">
+              10条/页
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                <path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <button class="page-btn disabled">&lt;</button>
+            <button class="page-btn active">1</button>
+            <button class="page-btn disabled">&gt;</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>
