@@ -686,7 +686,8 @@
       display: flex;
       align-items: center;
       border: 1px solid #D9D9D9;
-      border-radius: 4px;
+      border-right: none;
+      border-radius: 4px 0 0 4px;
       padding: 0 12px;
       background: #fff;
     }
@@ -735,6 +736,24 @@
 
     .clear-btn:hover {
       color: #666;
+    }
+
+    .refresh-btn {
+      width: 32px;
+      height: 34px;
+      border: none;
+      border-left: 1px solid #E9ECEF;
+      background: #F8F9FA;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: #666;
+      border-radius: 0 4px 4px 0;
+    }
+
+    .refresh-btn:hover {
+      color: #0066FF;
     }
 
     .search-icon {
@@ -1275,6 +1294,12 @@
               </button>
               <button class="clear-btn">C</button>
             </div>
+            <button class="refresh-btn" title="刷新">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <path d="M14 8A6 6 0 118 2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                <path d="M14 2v4h-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
           </div>
         </div>
         
