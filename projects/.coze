@@ -1,11 +1,12 @@
 [project]
-entrypoint = "index.html"
-requires = ["python-3.12"]
+sub_id = "330a726a"
+name = "360规范站"
+requires = []
+project_type = "web"
+
+[preview]
+preview_enable = "enabled"
 
 [dev]
-build = []
-run = ["python", "-m", "http.server", "5000", "--bind", "0.0.0.0"]
-
-[deploy]
-build = []
-run = ["python", "-m", "http.server", "5000", "--bind", "0.0.0.0"]
+build = ["bash", "../../scripts/coze-preview-build.sh"]
+run = ["bash", "../../scripts/coze-preview-run.sh"]
