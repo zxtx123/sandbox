@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>360智汇云规范</title>
+  <title>试验场 - 360智汇云</title>
   <style>
     * {
       margin: 0;
@@ -1016,6 +1016,195 @@
     .text-muted {
       color: #999;
     }
+
+    .id-cell {
+      font-family: monospace;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .copy-icon {
+      cursor: pointer;
+      opacity: 0.5;
+      font-size: 12px;
+    }
+
+    .copy-icon:hover {
+      opacity: 1;
+    }
+
+    .template-name {
+      color: #333;
+    }
+
+    .visibility-badge {
+      display: inline-block;
+      padding: 2px 8px;
+      background: #E6F7EE;
+      color: #52C41A;
+      border-radius: 4px;
+      font-size: 12px;
+    }
+
+    /* ========== 试验场页面样式 ========== */
+    .playground-page {
+      padding: 20px;
+      height: calc(100vh - 90px);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .playground-tabs {
+      display: flex;
+      gap: 4px;
+      margin-bottom: 20px;
+      background: #fff;
+      padding: 4px;
+      border-radius: 8px;
+      width: fit-content;
+    }
+
+    .tab-btn {
+      padding: 8px 20px;
+      border: none;
+      background: transparent;
+      color: #666;
+      font-size: 14px;
+      cursor: pointer;
+      border-radius: 6px;
+      transition: all 0.2s;
+    }
+
+    .tab-btn:hover {
+      color: #333;
+    }
+
+    .tab-btn.active {
+      background: #0066FF;
+      color: #fff;
+    }
+
+    .playground-content {
+      display: flex;
+      gap: 20px;
+      flex: 1;
+    }
+
+    .code-panel, .sandbox-panel {
+      background: #fff;
+      border-radius: 8px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .code-panel {
+      flex: 1;
+    }
+
+    .sandbox-panel {
+      flex: 1;
+    }
+
+    .panel-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 20px;
+      font-size: 16px;
+      font-weight: 500;
+      color: #333;
+    }
+
+    .code-placeholder {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: #999;
+      text-align: center;
+      padding: 20px;
+    }
+
+    .placeholder-icon {
+      margin-bottom: 16px;
+    }
+
+    .code-placeholder p {
+      font-size: 14px;
+      line-height: 1.6;
+      max-width: 280px;
+    }
+
+    .example-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .example-btn {
+      padding: 12px 20px;
+      background: #F0F5F7;
+      border: 1px solid #E8E8E8;
+      border-radius: 6px;
+      color: #333;
+      font-size: 14px;
+      cursor: pointer;
+      text-align: left;
+      transition: all 0.2s;
+    }
+
+    .example-btn:hover {
+      background: #E8F4FF;
+      border-color: #0066FF;
+      color: #0066FF;
+    }
+
+    .input-area {
+      display: flex;
+      gap: 12px;
+      margin-top: auto;
+    }
+
+    .sandbox-input {
+      flex: 1;
+      height: 44px;
+      padding: 0 16px;
+      border: 1px solid #D9D9D9;
+      border-radius: 6px;
+      font-size: 14px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .sandbox-input:focus {
+      border-color: #0066FF;
+    }
+
+    .sandbox-input::placeholder {
+      color: #999;
+    }
+
+    .send-btn {
+      width: 44px;
+      height: 44px;
+      background: #0066FF;
+      border: none;
+      border-radius: 50%;
+      color: #fff;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s;
+    }
+
+    .send-btn:hover {
+      background: #0052CC;
+    }
   </style>
 </head>
 <body>
@@ -1187,7 +1376,7 @@
         
         <!-- 展开的子菜单：AI沙箱 Sandbox -->
         <div class="submenu-expanded">
-          <div class="menu-item active">
+          <div class="menu-item">
             <div class="menu-icon">
               <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
                 <rect x="2" y="2" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.5" fill="none"/>
@@ -1196,17 +1385,25 @@
                 <rect x="9" y="9" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.5" fill="none"/>
               </svg>
             </div>
-            <span class="menu-text">沙箱实例</span>
+            <a href="index.html"><span class="menu-text">沙箱实例</span></a>
           </div>
-          <a href="sandbox-template.html" class="menu-item">
+          <div class="menu-item">
             <div class="menu-icon">
               <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
                 <rect x="2" y="2" width="12" height="12" rx="2" stroke="currentColor" stroke-width="1.5" fill="none"/>
                 <path d="M6 6l2 2 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
               </svg>
             </div>
-            <span class="menu-text">沙箱模板</span>
-          </a>
+            <a href="sandbox-template.html"><span class="menu-text">沙箱模板</span></a>
+          </div>
+          <div class="menu-item active">
+            <div class="menu-icon">
+              <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
+                <path d="M8 2L10 6H14L11 9L12 14L8 11L4 14L5 9L2 6H6L8 2Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <span class="menu-text">试验场</span>
+          </div>
           <div class="menu-item">
             <div class="menu-icon">
               <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
@@ -1214,7 +1411,7 @@
                 <path d="M8 5v3l2 2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
               </svg>
             </div>
-            <a href="sandbox-playground.html"><span class="menu-text">试验场</span></a>
+            <span class="menu-text">试验场</span>
           </div>
           <div class="menu-item">
             <div class="menu-icon">
@@ -1268,92 +1465,71 @@
   <!-- 第三栏：右侧主内容 -->
   <div class="main-content">
     <div class="breadcrumb">
-      <span class="breadcrumb-left" id="menu-name-display">沙箱实例</span>
+      <span class="breadcrumb-left" id="menu-name-display">试验场</span>
       <a class="breadcrumb-link" id="menu-link-display">Sandbox 帮助文档</a>
     </div>
     <div class="content-body">
-      <div class="product-list-page">
-        <!-- 工具栏 -->
-        <div class="product-toolbar">
-          <div class="toolbar-left">
-            <button class="btn btn-primary">
-              <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
-                <path d="M8 2v12M2 8h12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      <div class="playground-page">
+        <!-- 顶部标签栏 -->
+        <div class="playground-tabs">
+          <button class="tab-btn active">代码沙箱</button>
+          <button class="tab-btn">桌面沙箱</button>
+          <button class="tab-btn">浏览器沙箱</button>
+        </div>
+        
+        <!-- 主内容区域 -->
+        <div class="playground-content">
+          <!-- 左侧代码区域 -->
+          <div class="code-panel">
+            <div class="panel-header">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                <rect width="24" height="24" rx="4" fill="#0066FF"/>
+                <path d="M7 8L3 12L7 16M17 8L21 12L17 16" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
               </svg>
-              创建沙箱
-            </button>
+              <span>代码</span>
+            </div>
+            <div class="code-placeholder">
+              <div class="placeholder-icon">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none">
+                  <rect width="24" height="24" rx="4" fill="#0066FF" opacity="0.2"/>
+                  <path d="M7 8L3 12L7 16M17 8L21 12L17 16" stroke="#0066FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+              <p>在右侧文本框输入一段文字或者选择一个例子来体验沙箱功能</p>
+            </div>
           </div>
-          <div class="toolbar-right">
-            <div class="search-box">
-              <input type="text" id="sandbox-search" placeholder="请输入沙箱ID">
-              <button class="search-btn">
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                  <circle cx="7" cy="7" r="5" stroke="currentColor" stroke-width="1.5" fill="none"/>
-                  <path d="M11 11l3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          
+          <!-- 右侧沙箱体验区 -->
+          <div class="sandbox-panel">
+            <div class="panel-header">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <rect x="2" y="2" width="20" height="20" rx="4" fill="url(#gradient)"/>
+                <defs>
+                  <linearGradient id="gradient" x1="2" y1="2" x2="22" y2="22">
+                    <stop offset="0%" stop-color="#0066FF"/>
+                    <stop offset="100%" stop-color="#00D4AA"/>
+                  </linearGradient>
+                </defs>
+              </svg>
+              <span>沙箱体验示例，选择点击运行</span>
+            </div>
+            
+            <!-- 示例按钮 -->
+            <div class="example-buttons">
+              <button class="example-btn">编写一个JavaScript函数</button>
+              <button class="example-btn">生成一个PNG图片</button>
+              <button class="example-btn">使用Python的matplotlib库生成一个柱状图</button>
+            </div>
+            
+            <!-- 输入区域 -->
+            <div class="input-area">
+              <input type="text" class="sandbox-input" placeholder="输入您想要实现的代码功能">
+              <button class="send-btn">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                  <path d="M22 2L11 13M22 2L15 22L11 13M22 2L2 9L11 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
               </button>
-              <button class="clear-btn" onclick="document.getElementById('sandbox-search').value=''" title="清除">C</button>
             </div>
-            <button class="refresh-btn" title="刷新">
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                <path d="M14 8A6 6 0 118 2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-                <path d="M14 2v4h-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </button>
-          </div>
-        </div>
-        
-        <!-- 表格 -->
-        <div class="product-table">
-          <div class="table-wrapper">
-            <table>
-            <thead>
-              <tr>
-                <th style="width: 40px;"><input type="checkbox" class="product-checkbox"></th>
-                <th>沙箱ID</th>
-                <th>模板</th>
-                <th>CPU</th>
-                <th>内存</th>
-                <th>MetaData</th>
-                <th>启动时间</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td colspan="7" class="empty-state">
-                  <div class="empty-icon">
-                    <svg width="64" height="64" viewBox="0 0 64 64" fill="none">
-                      <rect x="12" y="20" width="40" height="28" rx="4" stroke="currentColor" stroke-width="2" fill="none"/>
-                      <path d="M12 28h40" stroke="currentColor" stroke-width="2"/>
-                      <path d="M20 20V16a4 4 0 014-4h16a4 4 0 014 4v4" stroke="currentColor" stroke-width="2" fill="none"/>
-                    </svg>
-                  </div>
-                  <div class="empty-text">暂无数据</div>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-          </div>
-        </div>
-        
-        <!-- 翻页组件 -->
-        <div class="pagination-bar">
-          <div class="pagination-left">共3条记录 第1/1页</div>
-          <div class="pagination-right">
-            <div class="page-size-select">
-              10条/页
-              <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-                <path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </div>
-            <button class="page-btn disabled">&lt;</button>
-            <button class="page-btn active">1</button>
-            <button class="page-btn">2</button>
-            <button class="page-btn">3</button>
-            <button class="page-btn">4</button>
-            <span class="page-ellipsis">···</span>
-            <button class="page-btn">50</button>
-            <button class="page-btn">&gt;</button>
           </div>
         </div>
       </div>
@@ -1362,6 +1538,13 @@
 </div>
 
 <script>
+  // 复制文本功能
+  function copyText(text) {
+    navigator.clipboard.writeText(text).then(() => {
+      alert('已复制: ' + text);
+    });
+  }
+
   // 图标栏交互
   document.querySelectorAll('.icon-item').forEach(item => {
     item.addEventListener('click', function() {
