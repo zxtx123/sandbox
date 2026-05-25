@@ -1428,7 +1428,7 @@
                 <th>操作</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody id="policy-tbody">
               <tr data-id="policy-001" data-name="开发环境访问策略" data-source="sandbox-dev-python" data-vpc="vpc-01" data-subnet="subnet-01" data-sg="sg-01" data-remark="开发环境默认访问策略">
                 <td>policy-001</td>
                 <td>开发环境访问策略</td>
@@ -1781,6 +1781,68 @@
       });
     }
   });
+
+  // 标签映射
+  const vpcLabels = {'vpc-01':'vpc-01 (10.0.0.0/16)','vpc-02':'vpc-02 (172.16.0.0/16)'};
+  const subnetLabels = {'subnet-01':'subnet-01 (10.0.1.0/24)','subnet-02':'subnet-02 (10.0.2.0/24)','subnet-03':'subnet-03 (172.16.1.0/24)'};
+  const sgLabels = {'sg-01':'sg-01 (默认安全组)','sg-02':'sg-02 (Web安全组)','sg-03':'sg-03 (数据库安全组)'};
+
+  // 绑定编辑/删除事件
+  function bindRowEvents() {
+    document.querySelectorAll('.edit-btn').forEach(btn => {
+      btn.onclick = function(e) {
+        e.preventDefault();
+        const row = this.closest('tr');
+        editingRow = row;
+        document.getElementById('edit-policy-id').value = row.dataset.id;
+        document.getElementById('edit-policy-name').value = row.dataset.name;
+        document.getElementById('edit-access-source').value = row.dataset.source;
+        document.getElementById('edit-target-vpc').value = row.dataset.vpc;
+        document.getElementById('edit-target-subnet').value = row.dataset.subnet;
+        document.getElementById('edit-security-group').value = row.dataset.sg;
+        document.getElementById('edit-policy-remark').value = row.dataset.remark || '';
+        document.getElementById('edit-policy-desc').value = '';
+        document.getElementById('edit-policy-modal').classList.add('active');
+      };
+    });
+    document.querySelectorAll('.delete-btn').forEach(btn => {
+      btn.onclick = function(e) {
+        e.preventDefault();
+        const row = this.closest('tr');
+        deletingRow = row;
+        document.getElementById('delete-policy-msg').textContent = '确认删除' + row.dataset.name + '策略吗，删除后不可恢复。';
+        document.getElementById('delete-policy-modal').classList.add('active');
+      };
+    });
+  }
+
+  // 从 localStorage 加载策略
+  function loadPoliciesFromStorage() {
+    const policies = JSON.parse(localStorage.getItem('sandboxPolicies') || '[]');
+    const tbody = document.getElementById('policy-tbody');
+    policies.forEach(p => {
+      const tr = document.createElement('tr');
+      tr.dataset.id = p.id;
+      tr.dataset.name = p.name;
+      tr.dataset.source = p.source;
+      tr.dataset.vpc = p.vpc;
+      tr.dataset.subnet = p.subnet;
+      tr.dataset.sg = p.sg;
+      tr.dataset.remark = p.remark || '';
+      tr.innerHTML = '<td>' + p.id + '</td>' +
+        '<td>' + p.name + '</td>' +
+        '<td>' + p.source + '</td>' +
+        '<td>' + (vpcLabels[p.vpc] || p.vpc) + '</td>' +
+        '<td>' + (subnetLabels[p.subnet] || p.subnet) + '</td>' +
+        '<td>' + (sgLabels[p.sg] || p.sg) + '</td>' +
+        '<td>' + (p.remark || '') + '</td>' +
+        '<td><a href="#" class="action-link edit-btn">编辑</a> <a href="#" class="action-link delete-btn">删除</a></td>';
+      tbody.appendChild(tr);
+    });
+    bindRowEvents();
+  }
+
+  loadPoliciesFromStorage();
 
   // 创建策略弹窗
   const createBtn = document.getElementById('create-policy-btn');

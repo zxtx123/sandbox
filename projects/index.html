@@ -1345,7 +1345,7 @@
                 <td>4GB</td>
                 <td>dev-env</td>
                 <td>2026-05-20 10:30:00</td>
-                <td><a href="sandbox-policy.html" class="action-link">访问策略</a></td>
+                <td><a href="#" class="action-link set-policy-btn" data-sandbox="sandbox-dev-python">访问策略</a></td>
               </tr>
               <tr>
                 <td><input type="checkbox" class="product-checkbox"></td>
@@ -1355,7 +1355,7 @@
                 <td>8GB</td>
                 <td>prod-env</td>
                 <td>2026-05-21 14:15:00</td>
-                <td><a href="sandbox-policy.html" class="action-link">访问策略</a></td>
+                <td><a href="#" class="action-link set-policy-btn" data-sandbox="sandbox-prod-java">访问策略</a></td>
               </tr>
               <tr>
                 <td><input type="checkbox" class="product-checkbox"></td>
@@ -1365,7 +1365,7 @@
                 <td>4GB</td>
                 <td>test-env</td>
                 <td>2026-05-22 09:00:00</td>
-                <td><a href="sandbox-policy.html" class="action-link">访问策略</a></td>
+                <td><a href="#" class="action-link set-policy-btn" data-sandbox="sandbox-test-node">访问策略</a></td>
               </tr>
             </tbody>
           </table>
@@ -1396,6 +1396,185 @@
     </div>
   </div>
 </div>
+
+<!-- 设置策略弹窗 -->
+<div class="modal-overlay" id="set-policy-modal">
+  <div class="modal-dialog">
+    <div class="modal-header">
+      <h3 class="modal-title">设置策略</h3>
+      <button class="modal-close" onclick="closeSetPolicyModal()">&times;</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label class="form-label">沙箱</label>
+        <div class="form-control">
+          <input type="text" class="form-input" id="set-sandbox-name" readonly style="background:#f5f5f5;color:#999;">
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">策略名称 <span class="required">*</span></label>
+        <div class="form-control">
+          <input type="text" class="form-input" id="set-policy-name" placeholder="请输入策略名称">
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">目标VPC <span class="required">*</span></label>
+        <div class="form-control">
+          <select class="form-select" id="set-target-vpc">
+            <option value="">请选择目标VPC</option>
+            <option value="vpc-01">vpc-01 (10.0.0.0/16)</option>
+            <option value="vpc-02">vpc-02 (172.16.0.0/16)</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">目标子网 <span class="required">*</span></label>
+        <div class="form-control">
+          <select class="form-select" id="set-target-subnet">
+            <option value="">请选择目标子网</option>
+            <option value="subnet-01">subnet-01 (10.0.1.0/24)</option>
+            <option value="subnet-02">subnet-02 (10.0.2.0/24)</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">安全组 <span class="required">*</span></label>
+        <div class="form-control">
+          <select class="form-select" id="set-security-group">
+            <option value="">请选择安全组</option>
+            <option value="sg-01">sg-01 (默认安全组)</option>
+            <option value="sg-02">sg-02 (Web安全组)</option>
+            <option value="sg-03">sg-03 (数据库安全组)</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">备注</label>
+        <div class="form-control">
+          <input type="text" class="form-input" id="set-policy-remark" placeholder="请输入备注（可选）">
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">描述</label>
+        <div class="form-control">
+          <textarea class="form-textarea" id="set-policy-desc" placeholder="请输入策略描述（可选）" rows="3"></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-default" onclick="closeSetPolicyModal()">取消</button>
+      <button class="btn btn-primary" onclick="createPolicyFromSandbox()">创建</button>
+    </div>
+  </div>
+</div>
+
+<style>
+  .modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+  }
+  .modal-overlay.active {
+    display: flex;
+  }
+  .modal-dialog {
+    background: #fff;
+    border-radius: 8px;
+    width: 560px;
+    max-width: 90%;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  }
+  .modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px;
+    border-bottom: 1px solid #eee;
+  }
+  .modal-title {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 600;
+    color: #333;
+  }
+  .modal-close {
+    background: none;
+    border: none;
+    font-size: 24px;
+    color: #999;
+    cursor: pointer;
+    padding: 0;
+    line-height: 1;
+  }
+  .modal-close:hover {
+    color: #333;
+  }
+  .modal-body {
+    padding: 20px;
+    max-height: 60vh;
+    overflow-y: auto;
+  }
+  .modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    padding: 16px 20px;
+    border-top: 1px solid #eee;
+  }
+  .form-group {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 16px;
+  }
+  .form-group:last-child {
+    margin-bottom: 0;
+  }
+  .form-label {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+    width: 80px;
+    margin-bottom: 0;
+    font-size: 14px;
+    color: #333;
+    line-height: 36px;
+    justify-content: flex-end;
+    padding-right: 12px;
+  }
+  .form-control {
+    flex: 1;
+    min-width: 0;
+  }
+  .required {
+    color: #ff4d4f;
+  }
+  .form-input,
+  .form-select,
+  .form-textarea {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+    box-sizing: border-box;
+  }
+  .form-input:focus,
+  .form-select:focus,
+  .form-textarea:focus {
+    outline: none;
+    border-color: #1890ff;
+  }
+  .form-textarea {
+    resize: vertical;
+  }
+</style>
 
 <script>
   // 图标栏交互
@@ -1497,6 +1676,63 @@
           return;
         }
       });
+    }
+  });
+
+  // 设置策略弹窗
+  let currentSandboxName = '';
+  document.querySelectorAll('.set-policy-btn').forEach(btn => {
+    btn.addEventListener('click', function(e) {
+      e.preventDefault();
+      currentSandboxName = this.dataset.sandbox;
+      document.getElementById('set-sandbox-name').value = currentSandboxName;
+      document.getElementById('set-policy-modal').classList.add('active');
+    });
+  });
+
+  function closeSetPolicyModal() {
+    document.getElementById('set-policy-modal').classList.remove('active');
+    document.getElementById('set-policy-name').value = '';
+    document.getElementById('set-target-vpc').value = '';
+    document.getElementById('set-target-subnet').value = '';
+    document.getElementById('set-security-group').value = '';
+    document.getElementById('set-policy-remark').value = '';
+    document.getElementById('set-policy-desc').value = '';
+    currentSandboxName = '';
+  }
+
+  function createPolicyFromSandbox() {
+    const policyName = document.getElementById('set-policy-name').value.trim();
+    const targetVpc = document.getElementById('set-target-vpc').value;
+    const targetSubnet = document.getElementById('set-target-subnet').value;
+    const securityGroup = document.getElementById('set-security-group').value;
+
+    if (!policyName) { alert('请输入策略名称'); return; }
+    if (!targetVpc) { alert('请选择目标VPC'); return; }
+    if (!targetSubnet) { alert('请选择目标子网'); return; }
+    if (!securityGroup) { alert('请选择安全组'); return; }
+
+    // 保存到 localStorage
+    const policies = JSON.parse(localStorage.getItem('sandboxPolicies') || '[]');
+    policies.push({
+      id: 'policy-' + String(policies.length + 4).padStart(3, '0'),
+      name: policyName,
+      source: currentSandboxName,
+      vpc: targetVpc,
+      subnet: targetSubnet,
+      sg: securityGroup,
+      remark: document.getElementById('set-policy-remark').value.trim(),
+      desc: document.getElementById('set-policy-desc').value.trim()
+    });
+    localStorage.setItem('sandboxPolicies', JSON.stringify(policies));
+
+    alert('策略创建成功！');
+    closeSetPolicyModal();
+  }
+
+  document.getElementById('set-policy-modal').addEventListener('click', function(e) {
+    if (e.target === this) {
+      closeSetPolicyModal();
     }
   });
 </script>
