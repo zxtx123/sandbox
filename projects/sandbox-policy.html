@@ -95,7 +95,7 @@
             <span class="multi-select-placeholder" style="color:#bfbfbf;font-size:13px;">请选择沙箱</span>
             <span class="multi-select-arrow" style="position:absolute;right:8px;top:50%;transform:translateY(-50%);color:#bfbfbf;font-size:12px;">▼</span>
           </div>
-          <div class="multi-select-dropdown" id="sandbox-dropdown" style="display:none;position:absolute;top:100%;left:0;right:0;z-index:1000;background:#fff;border:1px solid #d9d9d9;border-radius:4px;box-shadow:0 2px 8px rgba(0,0,0,0.15);max-height:200px;overflow-y:auto;margin-top:2px;">
+          <div class="multi-select-dropdown" id="sandbox-dropdown" style="display:none;position:fixed;z-index:10000;background:#fff;border:1px solid #d9d9d9;border-radius:4px;box-shadow:0 2px 8px rgba(0,0,0,0.15);max-height:200px;overflow-y:auto;">
             <div class="multi-select-option" data-value="sandbox-dev-python" onclick="toggleSandboxOption(this)" style="padding:8px 12px;cursor:pointer;display:flex;align-items:center;gap:8px;font-size:13px;">
               <span class="multi-select-check" style="width:16px;height:16px;border:1px solid #d9d9d9;border-radius:3px;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;"></span>
               <span>sandbox-dev-python</span>
@@ -2002,7 +2002,16 @@
 
   function toggleSandboxDropdown() {
     var dropdown = document.getElementById('sandbox-dropdown');
-    dropdown.style.display = dropdown.style.display === 'none' ? 'block' : 'none';
+    if (dropdown.style.display === 'none') {
+      var display = document.getElementById('sandbox-select-display');
+      var rect = display.getBoundingClientRect();
+      dropdown.style.top = (rect.bottom + 2) + 'px';
+      dropdown.style.left = rect.left + 'px';
+      dropdown.style.width = rect.width + 'px';
+      dropdown.style.display = 'block';
+    } else {
+      dropdown.style.display = 'none';
+    }
   }
 
   function toggleSandboxOption(el) {
@@ -2073,7 +2082,7 @@
   document.addEventListener('click', function(e) {
     var wrapper = document.getElementById('sandbox-multi-select');
     var dropdown = document.getElementById('sandbox-dropdown');
-    if (wrapper && !wrapper.contains(e.target)) {
+    if (wrapper && !wrapper.contains(e.target) && !dropdown.contains(e.target)) {
       dropdown.style.display = 'none';
     }
   });
