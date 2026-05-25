@@ -5,1788 +5,356 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>网络策略 - 360智汇云</title>
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    a { text-decoration: none; }
+    body { font-family: "Microsoft YaHei", "PingFang SC", sans-serif; background: #F0F5F7; font-size: 14px; color: #202020; line-height: 1.5; overflow: hidden; }
     
-    a {
-      text-decoration: none;
-    }
+    .header { height: 50px; background: #fff; box-shadow: 0 2px 6px rgba(49, 49, 71, 0.26); display: flex; align-items: center; justify-content: space-between; padding: 0 20px; position: relative; z-index: 100; }
+    .header-left { display: flex; align-items: center; gap: 20px; }
+    .logo { font-size: 18px; font-weight: bold; color: #202020; }
+    .header-nav { display: flex; gap: 15px; }
+    .header-nav a { color: #666; font-size: 14px; }
+    .header-right { display: flex; align-items: center; gap: 15px; }
+    .header-right a { color: #666; font-size: 14px; }
+    .user-info { display: flex; align-items: center; gap: 8px; }
+    .user-avatar { width: 32px; height: 32px; border-radius: 50%; background: #1890ff; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 12px; }
     
-    body {
-      font-family: "Microsoft YaHei", "PingFang SC", -apple-system, BlinkMacSystemFont, sans-serif;
-      background: #F0F5F7;
-      font-size: 14px;
-      color: #202020;
-      line-height: 1.5;
-      overflow: hidden;
-    }
-
-    /* ========== 顶部导航栏 ========== */
-    .header {
-      height: 50px;
-      background: #fff;
-      box-shadow: 0 2px 6px rgba(49, 49, 71, 0.26);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 20px;
-      position: relative;
-      z-index: 100;
-    }
-
-    .header-left {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-    }
-
-    .logo {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      cursor: pointer;
-    }
-
-    .logo-icon {
-      width: 177px;
-      height: 28px;
-    }
-
-    .logo-text {
-      display: none;
-    }
-
-    .header-btn {
-      padding: 6px 12px;
-      border-radius: 4px;
-      background: #F8F9FA;
-      font-size: 14px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      transition: all 0.2s;
-      color: #202020;
-      border: 1px #F8F9FA solid;
-    }
-
-    .header-btn:hover {
-      background: #F8F9FA;
-      color: #202020;
-    }
-
-    .header-btn.group {
-      background: #fff;
-      border-color: #D8E0E8;
-      color: #202020;
-      padding: 6px 10px;
-    }
-
-    .header-btn.group:hover {
-      background: #F8F9FA;
-    }
-
-    .tag {
-      background: #EEF6FF;
-      color: #0066FF;
-      padding: 2px 6px;
-      border-radius: 2px;
-      font-size: 14px;
-      font-weight: 500;
-    }
-
-    .dropdown-arrow {
-      margin-left: 4px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .header-divider {
-      width: 1px;
-      height: 50px;
-      background: #F5F5F5;
-    }
-
-    .header-right {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-    }
-
-    .header-link {
-      color: #666;
-      text-decoration: none;
-      font-size: 14px;
-      position: relative;
-      cursor: pointer;
-      transition: color 0.2s;
-    }
-
-    .header-link:hover {
-      color: #0066FF;
-    }
-
-    .header-link .dot {
-      position: absolute;
-      top: -2px;
-      right: -6px;
-      width: 6px;
-      height: 6px;
-      background: #FF4D4F;
-      border-radius: 50%;
-    }
-
-    .user-info {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      cursor: pointer;
-      padding: 4px 0px;
-      border-radius: 4px;
-      transition: background 0.2s;
-    }
-
-    .user-info:hover {
-      background: #F5F7FA;
-    }
-
-    .user-avatar {
-      width: 28px;
-      height: 28px;
-      border-radius: 50%;
-      background: #0066FF;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #fff;
-      font-size: 14px;
-    }
-
-    .user-detail {
-      display: flex;
-      flex-direction: column;
-    }
-
-    .user-name {
-      font-size: 14px;
-      color: #333;
-      line-height: 1.3;
-    }
-
-    .user-sub {
-      font-size: 12px;
-      color: #8C9AAE;
-      line-height: 1.3;
-    }
-
-    /* ========== 主体容器（三栏布局） ========== */
-    .container {
-      display: flex;
-      height: calc(100vh - 56px);
-    }
-
-    /* ========== 第一栏：左侧图标栏 ========== */
-    .icon-bar {
-      width: 50px;
-      background: #2e8cff;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 2px;
-      flex-shrink: 0;
-    }
-
-    .icon-item {
-      width: 50px;
-      height: 40px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 11px;
-      color: #E5EAF3;
-      transition: all 0.2s;
-      background: transparent;
-      position: relative;
-    }
-
-    /* 前三个图标高度为50px */
-    .icon-item:nth-child(1),
-    .icon-item:nth-child(2),
-    .icon-item:nth-child(3) {
-      height: 50px;
-    }
-
-    .icon-item:hover {
-      background: #0066FF;
-      color: #fff;
-    }
-
-    .icon-item.active {
-      background: #0066FF;
-      color: #fff;
-    }
-
-    .icon-item .icon-svg {
-      width: 18px;
-      height: 18px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    /* 前三个图标内的svg大小为20px */
-    .icon-item:nth-child(1) .icon-svg,
-    .icon-item:nth-child(2) .icon-svg,
-    .icon-item:nth-child(3) .icon-svg {
-      width: 20px;
-      height: 20px;
-    }
-
-    .icon-item .icon-text {
-      font-size: 9px;
-      font-weight: 500;
-    }
-
-    .icon-item .icon-label {
-      display: none;
-      font-size: 10px;
-      font-weight: 400;
-      margin-top: 2px;
-    }
-
-    /* 所有图标显示文字标签 */
-    .icon-item .icon-label {
-      display: block;
-    }
-
-    /* 所有图标改为纵向布局 */
-    .icon-item {
-      flex-direction: column;
-    }
-
-    /* ========== 第二栏：中间菜单栏 ========== */
-    .sidebar {
-      width: 200px;
-      background: #ffffff;
-      flex-direction: column;
-      overflow: hidden;
-      flex-shrink: 0;
-      border-right: 1px solid #E6E6e6;
-      color: #202020;
-    }
-
-    .sidebar-menu {
-      flex: 1;
-      overflow-y: auto;
-      overflow-x: hidden;
-    }
-
-    .sidebar-menu::-webkit-scrollbar {
-      width: 4px;
-    }
-
-    .sidebar-menu::-webkit-scrollbar-thumb {
-      background: rgba(0, 0, 0, 0.2);
-      border-radius: 2px;
-    }
-
-    .sidebar-menu::-webkit-scrollbar-thumb:hover {
-      background: rgba(0, 0, 0, 0.4);
-    }
-
-    .sidebar-menu::-webkit-scrollbar-track {
-      background: transparent;
-    }
-
-    /* 一级菜单 */
-    .menu-level-1 {
-      color: #202020;
-      font-size: 14px;
-    }
-
-    .menu-level-1 > .menu-item {
-      border-bottom: 1px solid #E6E6e6;
-    }
-
-    .menu-level-1 > .menu-item .menu-icon {
-      display: none;
-    }
-
-    .menu-level-1 > .menu-item .menu-arrow {
-      pointer-events: none;
-    }
-
-    .menu-level-1 > .menu-item .menu-arrow .star-icon {
-      width: 18px;
-      height: 18px;
-      color: #999999;
-      fill: transparent;
-      transition: all 0.2s ease;
-    }
-
-    .menu-level-1 > .menu-item.selected .menu-arrow .star-icon {
-      color: #0066FF;
-      fill: #0066FF;
-    }
-
-    .menu-item {
-      display: flex;
-      align-items: center;
-      padding: 0 16px;
-      height: 50px;
-      line-height: 50px;
-      color: #202020;
-      font-size: 16px;
-      font-weight: 500;
-      cursor: pointer;
-      gap: 8px;
-      transition: all 0.2s;
-      position: relative;
-      color: inherit;
-    }
-
-    .menu-item:hover {
-      background: rgba(255, 255, 255, 0.1);
-    }
-
-    .menu-item.active {
-      background: #0066FF;
-      color: #fff;
-    }
-
-    .menu-item.active::after {
-      content: '';
-      position: absolute;
-      right: 0;
-      top: 4px;
-      bottom: 4px;
-      width: 2px;
-      background: #fff;
-      border-radius: 1px 0 0 1px;
-    }
-
-    .menu-icon {
-      width: 16px;
-      height: 16px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-      opacity: 0.8;
-    }
-
-    .menu-item.active .menu-icon {
-      opacity: 1;
-    }
-
-    .menu-text {
-      flex: 1;
-      font-size: inherit;
-    }
-
-    .menu-arrow {
-      width: 16px;
-      height: 16px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #202020;
-      transition: transform 0.2s ease;
-    }
-
-    .menu-item.collapsed .menu-arrow {
-      transform: rotate(-90deg);
-    }
-
-    /* 二级菜单（深色背景） */
-    .menu-level-2 {
-      background:#ffffff;
-      max-height: 2000px;
-      overflow: hidden;
-      transition: max-height 0.3s ease-out;
-    }
-
-    .menu-level-2.collapsed {
-      max-height: 0;
-    }
-
-    .menu-level-2 .menu-item {
-      font-size: 14px;
-      color: #202020;
-      padding-left: 16px;
-    }
-
-    .menu-level-2 > .menu-item .menu-icon {
-      display: none;
-    }
-
-    .menu-level-2 .menu-item:hover {
-      background: rgba(255, 255, 255, 0.1);
-    }
-
-    /* 展开的子菜单（浅色背景） */
-    .submenu-expanded {
-      background: #ffffff;
-      max-height: 1000px;
-      overflow: hidden;
-      transition: max-height 0.3s ease-out;
-    }
-
-    .submenu-expanded.collapsed {
-      max-height: 0;
-    }
-
-    .menu-level-2.collapsed .submenu-expanded {
-      max-height: 0;
-    }
-
-    .submenu-expanded .menu-item {
-      color: #202020;
-      height: 40px;
-      line-height: 40px;
-      padding: 0 16px 0 16px;
-      font-size: 14px;
-    }
-
-    .submenu-expanded .menu-item:hover {
-      background: #f5f5f5;
-    }
-
-    .submenu-expanded .menu-item.active {
-      background: #006bff;
-      color: #ffffff;
-    }
-
-    .submenu-expanded .menu-item.active::after {
-      display: none;
-    }
-
-    .submenu-expanded .menu-item.active::before {
-      display: none;
-    }
-
-    .submenu-expanded .menu-icon {
-      opacity: 1;
-      color: #202020;
-      width: 16px;
-      height: 16px;
-    }
-
-    .submenu-expanded .menu-icon svg {
-      width: 16px;
-      height: 16px;
-    }
-
-    .submenu-expanded .menu-item.active .menu-icon {
-      color: #ffffff;
-    }
-
-    .submenu-expanded .menu-arrow {
-      color: #202020;
-    }
-
-    /* 三级菜单 */
-    .menu-level-3 {
-      background: #F8F9FA;
-      max-height: 1000px;
-      overflow: hidden;
-      transition: max-height 0.3s ease-out;
-    }
-
-    .menu-level-3.collapsed {
-      max-height: 0;
-    }
-
-    .menu-level-3 .menu-item {
-      padding: 6px 16px 6px 52px;
-      font-size: 12px;
-      color: #202020;
-    }
-
-    .menu-level-3 .menu-item .menu-icon {
-      width: 16px;
-      height: 16px;
-    }
-
-    .menu-level-3 .menu-item .menu-icon svg {
-      width: 16px;
-      height: 16px;
-    }
-
-    .menu-level-3 .menu-item:hover {
-      background: #E9ECEF;
-    }
-
-    .menu-level-3 .menu-item.active {
-      background: #006bff;
-      color: #ffffff;
-    }
-
-    .menu-level-3 .menu-item.active .menu-icon {
-      color: #ffffff;
-    }
-
-    /* ========== 第三栏：右侧主内容区 ========== */
-    .main-content {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-      min-width: 0;
-    }
-
-    .breadcrumb {
-      padding: 0px 20px;
-      border-bottom: 1px solid #E6E6e6;
-      font-size: 14px;
-      display: flex;
-      height: 50px;
-      line-height: 50px;
-      justify-content: space-between;
-      align-items: center;
-      background: #ffffff;
-    }
-
-    .breadcrumb-left {
-      color: #202020;
-    }
-
-    .breadcrumb-sep {
-      color: #202020;
-      margin: 0 8px;
-    }
-
-    .breadcrumb-link {
-      color: #0066FF;
-      text-decoration: none;
-      cursor: pointer;
-      font-size: 12px;
-    }
-
-    .breadcrumb-link:hover {
-      text-decoration: none;
-    }
-
-    .content-header {
-      padding: 16px 24px;
-      border-bottom: 1px solid #E9ECEF;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      font-size: 16px;
-      font-weight: 500;
-      color: #333;
-      background: #F8F9FA;
-    }
-
-    .back-icon {
-      width: 20px;
-      height: 20px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #666;
-      font-size: 16px;
-      transition: color 0.2s;
-    }
-
-    .back-icon:hover {
-      color: #0066FF;
-    }
-
-    .divider {
-      width: 1px;
-      height: 16px;
-      background: #E9ECEF;
-    }
-
-    .content-body {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      background: #ffffff;
-      margin: 20px;
-      box-shadow: 0 2px 3px rgba(0, 0, 0, 0.09);
-      overflow: hidden;
-    }
-
-    /* 产品列表页面样式 */
-    .product-list-page {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      padding: 0;
-      overflow: hidden;
-      min-height: 0;
-    }
-
-    .product-toolbar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 16px 20px;
-      border-bottom: 1px solid #E9ECEF;
-      gap: 12px;
-      flex-shrink: 0;
-    }
-
-    .toolbar-left {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .toolbar-right {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .btn {
-      height: 32px;
-      padding: 0 12px;
-      border-radius: 4px;
-      font-size: 14px;
-      cursor: pointer;
-      border: 1px solid transparent;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      transition: all 0.2s;
-    }
-
-    .btn-primary {
-      background: #0066FF;
-      color: #fff;
-      border-color: #0066FF;
-    }
-
-    .btn-primary:hover {
-      background: #0052CC;
-    }
-
-    .btn-default {
-      background: #fff;
-      color: #333;
-      border-color: #D9D9D9;
-    }
-
-    .btn-default:hover {
-      border-color: #0066FF;
-      color: #0066FF;
-    }
-
-    .search-box {
-      display: flex;
-      align-items: center;
-      border: 1px solid #D9D9D9;
-      border-radius: 4px;
-      padding: 0 12px;
-      background: #fff;
-    }
-
-    .search-box input {
-      border: none;
-      outline: none;
-      padding: 8px 0;
-      font-size: 14px;
-      width: 200px;
-    }
-
-    .search-box input::placeholder {
-      color: #999;
-    }
-
-    .search-btn {
-      border: none;
-      background: none;
-      cursor: pointer;
-      color: #999;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 0;
-      margin-left: 8px;
-      height: 32px;
-    }
-
-    .search-btn:hover {
-      color: #0066FF;
-    }
-
-    .clear-btn {
-      border: none;
-      background: none;
-      cursor: pointer;
-      color: #999;
-      font-size: 14px;
-      padding: 0 0 0 8px;
-      margin-left: 4px;
-      height: 32px;
-      display: flex;
-      align-items: center;
-    }
-
-    .clear-btn:hover {
-      color: #666;
-    }
-
-    .refresh-btn {
-      width: 34px;
-      height: 34px;
-      border: 1px solid #D9D9D9;
-      background: #fff;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      color: #666;
-      border-radius: 4px;
-      margin-left: 8px;
-    }
-
-    .refresh-btn:hover {
-      border-color: #0066FF;
-      color: #0066FF;
-    }
-
-    .search-icon {
-      color: #999;
-      display: flex;
-      align-items: center;
-    }
-
-    .icon-btn {
-      width: 32px;
-      height: 32px;
-      border: 1px solid #D9D9D9;
-      border-radius: 4px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      background: #fff;
-      color: #666;
-      transition: all 0.2s;
-    }
-
-    .icon-btn:hover {
-      border-color: #0066FF;
-      color: #0066FF;
-    }
-
-    .pagination-info {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 14px;
-      color: #666;
-    }
-
-    .product-table {
-      flex: 1;
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      min-height: 0;
-    }
-
-    .product-table .table-wrapper {
-      flex: 1;
-      overflow: auto;
-      min-height: 0;
-    }
-
-    .product-table table {
-      width: 100%;
-      border-collapse: collapse;
-    }
-
-    .product-table thead {
-      position: sticky;
-      top: 0;
-      z-index: 1;
-    }
-
-    .product-table th {
-      background: #F8F9FA;
-      padding: 12px 16px;
-      text-align: left;
-      font-size: 14px;
-      font-weight: 500;
-      color: #333;
-      border-bottom: 1px solid #E9ECEF;
-      white-space: nowrap;
-    }
-
-    .product-table th .filter-icon {
-      margin-left: 4px;
-      cursor: pointer;
-      color: #999;
-    }
-
-    .product-table th .filter-icon:hover {
-      color: #0066FF;
-    }
-
-    .product-table td {
-      padding: 14px 16px;
-      font-size: 14px;
-      color: #333;
-      border-bottom: 1px solid #F0F0F0;
-    }
-
-    .product-table tbody tr:hover {
-      background: #F8F9FA;
-    }
-
-    /* 空状态样式 */
-    .empty-state {
-      padding: 60px 0 !important;
-      text-align: center;
-    }
-
-    .empty-icon {
-      color: #D9D9D9;
-      margin-bottom: 16px;
-    }
-
-    .empty-text {
-      font-size: 14px;
-      color: #999;
-    }
-
-    /* 翻页组件样式 */
-    .pagination-bar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 12px 20px;
-      border-top: 1px solid #E9ECEF;
-      background: #fff;
-      flex-shrink: 0;
-    }
-
-    .pagination-left {
-      font-size: 14px;
-      color: #666;
-    }
-
-    .pagination-right {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .page-size-select {
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      padding: 0 8px;
-      height: 32px;
-      border: 1px solid #D9D9D9;
-      border-radius: 4px;
-      background: #fff;
-      font-size: 14px;
-      color: #333;
-      cursor: pointer;
-    }
-
-    .page-size-select:hover {
-      border-color: #0066FF;
-    }
-
-    .page-btn {
-      min-width: 32px;
-      height: 32px;
-      padding: 0 8px;
-      border: 1px solid #D9D9D9;
-      border-radius: 4px;
-      background: #fff;
-      font-size: 14px;
-      color: #333;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: all 0.2s;
-    }
-
-    .page-btn:hover:not(.disabled):not(.active) {
-      border-color: #0066FF;
-      color: #0066FF;
-    }
-
-    .page-btn.active {
-      background: #0066FF;
-      border-color: #0066FF;
-      color: #fff;
-    }
-
-    .page-btn.disabled {
-      color: #D9D9D9;
-      cursor: not-allowed;
-    }
-
-    .page-ellipsis {
-      min-width: 32px;
-      height: 32px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 14px;
-      color: #999;
-    }
-
-    .product-name {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .product-checkbox {
-      width: 16px;
-      height: 16px;
-      cursor: pointer;
-    }
-
-    .product-name-text {
-      color: #0066FF;
-      cursor: pointer;
-    }
-
-    .product-name-text:hover {
-      text-decoration: underline;
-    }
-
-    .product-id {
-      color: #999;
-      font-size: 12px;
-      margin-top: 2px;
-    }
-
-    .status-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      padding: 2px 8px;
-      border-radius: 4px;
-      font-size: 12px;
-    }
-
-    .status-normal {
-      background: #E6F7EE;
-      color: #52C41A;
-    }
-
-    .status-error {
-      background: #FFF1F0;
-      color: #FF4D4F;
-    }
-
-    .status-dot {
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-    }
-
-    .status-normal .status-dot {
-      background: #52C41A;
-    }
-
-    .status-error .status-dot {
-      background: #FF4D4F;
-    }
-
-    .tag {
-      display: inline-block;
-      padding: 2px 8px;
-      background: #F0F5FF;
-      color: #0066FF;
-      border-radius: 4px;
-      font-size: 12px;
-    }
-
-    .text-muted {
-      color: #999;
-    }
-
-    .id-cell {
-      font-family: monospace;
-      display: flex;
-      align-items: center;
-      gap: 4px;
-    }
-
-    .copy-icon {
-      cursor: pointer;
-      opacity: 0.5;
-      font-size: 12px;
-    }
-
-    .copy-icon:hover {
-      opacity: 1;
-    }
-
-    .template-name {
-      color: #333;
-    }
-
-    .visibility-badge {
-      display: inline-block;
-      padding: 2px 8px;
-      background: #E6F7EE;
-      color: #52C41A;
-      border-radius: 4px;
-      font-size: 12px;
-    }
+    .layout-container { display: flex; height: calc(100vh - 50px); }
+    .icon-sidebar { width: 48px; background: #fff; border-right: 1px solid #E8E8E8; display: flex; flex-direction: column; padding-top: 12px; gap: 4px; }
+    .icon-item { width: 32px; height: 32px; margin: 0 auto; display: flex; align-items: center; justify-content: center; cursor: pointer; color: #666; font-size: 12px; border-radius: 4px; }
+    .icon-item:hover { background: #F0F5F7; }
+    .icon-item.active { background: #E6F7FF; color: #1890FF; }
+    .icon-item i { font-size: 16px; }
+    
+    .sidebar { width: 200px; background: #fff; border-right: 1px solid #E8E8E8; overflow-y: auto; }
+    .sidebar-header { padding: 16px; font-weight: bold; color: #202020; font-size: 14px; display: flex; align-items: center; gap: 8px; }
+    .sidebar-section { padding: 8px 0; }
+    .menu-level-1 > .menu-item { padding: 8px 16px; font-size: 14px; color: #333; cursor: pointer; display: flex; align-items: center; justify-content: space-between; }
+    .menu-level-1 > .menu-item:hover { background: #F0F5F7; }
+    .menu-level-1 > .menu-item.collapsed .menu-arrow { transform: rotate(-90deg); }
+    .submenu-expanded { background: #F7F9FB; }
+    .submenu-expanded .menu-item { padding: 6px 16px 6px 32px; font-size: 13px; color: #666; cursor: pointer; display: flex; align-items: center; }
+    .submenu-expanded .menu-item:hover { background: #E6F7FF; color: #1890FF; }
+    .submenu-expanded .menu-item.active { background: #E6F7FF; color: #1890FF; font-weight: 500; }
+    .submenu-expanded .menu-item.active::before { content: ''; position: absolute; left: 0; width: 3px; height: 20px; background: #1890FF; }
+    .menu-text { flex: 1; }
+    .menu-arrow { font-size: 10px; transition: transform 0.2s; }
+    .submenu-expanded.collapsed { display: none; }
+    
+    .main-content { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+    .content-header { background: #fff; padding: 12px 20px; border-bottom: 1px solid #E8E8E8; display: flex; align-items: center; justify-content: space-between; }
+    .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 14px; }
+    .breadcrumb-left { color: #999; }
+    .breadcrumb-sep { color: #ccc; }
+    .breadcrumb-right { color: #333; font-weight: 500; }
+    .help-link { color: #1890FF; font-size: 14px; }
+    
+    .content-body { flex: 1; padding: 20px; overflow-y: auto; }
+    
+    .toolbar { background: #fff; padding: 16px; border-radius: 4px; margin-bottom: 16px; display: flex; align-items: center; justify-content: space-between; }
+    .btn { padding: 6px 16px; border-radius: 4px; cursor: pointer; font-size: 14px; border: none; }
+    .btn-primary { background: #1890FF; color: #fff; }
+    .btn-primary:hover { background: #40A9FF; }
+    .search-box { display: flex; align-items: center; border: 1px solid #D9D9D9; border-radius: 4px; overflow: hidden; }
+    .search-box input { border: none; padding: 6px 12px; width: 200px; outline: none; font-size: 14px; }
+    .search-btn { border: none; border-left: 1px solid #D9D9D9; padding: 6px 12px; background: #fff; cursor: pointer; color: #666; }
+    .search-btn:hover { background: #F0F5F7; }
+    .refresh-btn { margin-left: 8px; border: 1px solid #D9D9D9; border-radius: 4px; padding: 6px 10px; background: #fff; cursor: pointer; color: #666; }
+    .refresh-btn:hover { border-color: #1890FF; color: #1890FF; }
+    
+    .product-table { width: 100%; background: #fff; border-radius: 4px; border-collapse: collapse; overflow: hidden; }
+    .product-table th { background: #FAFBFC; padding: 12px 16px; text-align: left; font-weight: 500; color: #333; border-bottom: 1px solid #E8E8E8; font-size: 14px; }
+    .product-table td { padding: 12px 16px; border-bottom: 1px solid #E8E8E8; color: #666; font-size: 14px; }
+    .product-table tr:hover { background: #F7F9FB; }
+    
+    .pagination-bar { background: #fff; padding: 16px; border-radius: 4px; margin-top: 16px; display: flex; align-items: center; justify-content: space-between; }
+    .pagination-info { color: #666; font-size: 14px; }
+    .pagination-controls { display: flex; align-items: center; gap: 8px; }
+    .pagination-btn { border: 1px solid #D9D9D9; background: #fff; padding: 4px 12px; border-radius: 4px; cursor: pointer; color: #666; font-size: 14px; }
+    .pagination-btn:hover { border-color: #1890FF; color: #1890FF; }
+    .pagination-btn.active { background: #1890FF; color: #fff; border-color: #1890FF; }
+    .pagination-select { padding: 4px 8px; border: 1px solid #D9D9D9; border-radius: 4px; font-size: 14px; }
+    
+    .empty-state { text-align: center; padding: 60px 0; color: #999; }
+    .empty-icon { font-size: 48px; margin-bottom: 16px; color: #D9D9D9; }
+    .empty-text { font-size: 14px; }
+    
+    .action-link { color: #1890FF; margin-right: 12px; cursor: pointer; }
+    .action-link:hover { color: #40A9FF; }
+    .action-link:last-child { margin-right: 0; }
+    
+    /* Modal Styles */
+    .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); z-index: 1000; align-items: center; justify-content: center; }
+    .modal-overlay.show { display: flex; }
+    .modal-container { background: #fff; width: 520px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); }
+    .modal-header { padding: 16px 20px; border-bottom: 1px solid #E8E8E8; display: flex; align-items: center; justify-content: space-between; }
+    .modal-header h3 { font-size: 16px; font-weight: 500; color: #333; }
+    .modal-close { border: none; background: none; font-size: 20px; color: #999; cursor: pointer; }
+    .modal-close:hover { color: #666; }
+    .modal-body { padding: 20px; max-height: 60vh; overflow-y: auto; }
+    .form-group { margin-bottom: 16px; }
+    .form-group label { display: block; margin-bottom: 8px; font-size: 14px; color: #333; }
+    .required { color: #FF4D4F; margin-right: 4px; }
+    .form-control { width: 100%; padding: 8px 12px; border: 1px solid #D9D9D9; border-radius: 4px; font-size: 14px; outline: none; }
+    .form-control:focus { border-color: #1890FF; box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2); }
+    .form-textarea { width: 100%; padding: 8px 12px; border: 1px solid #D9D9D9; border-radius: 4px; font-size: 14px; outline: none; resize: vertical; min-height: 80px; }
+    .form-textarea:focus { border-color: #1890FF; box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2); }
+    .modal-footer { padding: 16px 20px; border-top: 1px solid #E8E8E8; display: flex; justify-content: flex-end; gap: 12px; }
+    .btn-secondary { background: #fff; border: 1px solid #D9D9D9; color: #333; }
+    .btn-secondary:hover { border-color: #1890FF; color: #1890FF; }
+    .btn-primary-submit { background: #1890FF; color: #fff; }
+    .btn-primary-submit:hover { background: #40A9FF; }
   </style>
 </head>
 <body>
-<!-- 顶部导航 -->
-<div class="header">
-  <div class="header-left">
-    <div class="logo">
-      <img class="logo-icon" src="img/logo.png" alt="360智汇云" />
+  <!-- Header -->
+  <div class="header">
+    <div class="header-left">
+      <div class="logo">360智汇云</div>
+      <div class="header-nav">
+        <a href="#">工作台总览</a>
+        <a href="#">组 智能工程部</a>
+      </div>
     </div>
-    <button class="header-btn">
-      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink: 0;">
-        <path d="M2 6L8 1L14 6V14C14 14.5304 13.7893 15.0391 13.4142 15.4142C13.0391 15.7893 12.5304 16 12 16H4C3.46957 16 2.96086 15.7893 2.58579 15.4142C2.21071 15.0391 2 14.5304 2 14V6Z" stroke="#666" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-        <path d="M6 16V10H10V16" stroke="#666" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
-      <span>工作台总览</span>
-    </button>
-    <button class="header-btn group">
-      <span class="tag">组</span>
-      <span>BD奇麟大数据-系统部</span>
-      <svg class="dropdown-arrow" width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M3 4.5L6 7.5L9 4.5" stroke="#202020" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
-    </button>
-  </div>
-  <div class="header-right">
-    <a class="header-link">费用</a>
-    <a class="header-link">工单<span class="dot"></span></a>
-    <a class="header-link">消息<span class="dot"></span></a>
-    <a class="header-link">帮助</a>
-    <div class="header-divider"></div>
-    <div class="user-info">
-      <div class="user-avatar">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="12" cy="8" r="4" fill="currentColor"/>
-          <path d="M4 20c0-4 4-6 8-6s8 2 8 6" fill="currentColor"/>
-        </svg>
+    <div class="header-right">
+      <a href="#">AI功能</a>
+      <a href="#">费用</a>
+      <a href="#">工单</a>
+      <a href="#">消息</a>
+      <a href="#">帮助</a>
+      <div class="user-info">
+        <div class="user-avatar">zx</div>
+        <span>zhangxing5</span>
       </div>
-      <div class="user-detail">
-        <div class="user-name">zhangsan</div>
-        <div class="user-sub">子账号</div>
-      </div>
-      <svg class="dropdown-arrow" width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M3 4.5L6 7.5L9 4.5" stroke="#202020" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
     </div>
   </div>
-</div>
-
-<!-- 主体容器（三栏布局） -->
-<div class="container">
-  <!-- 第一栏：左侧图标栏 -->
-  <div class="icon-bar">
-    <div class="icon-item active" title="全部">
-      <div class="icon-svg">
-        <svg width="20" height="20" viewBox="0 0 16 16" fill="none">
-          <rect x="2" y="2" width="5" height="5" rx="1" fill="currentColor"/>
-          <rect x="9" y="2" width="5" height="5" rx="1" fill="currentColor"/>
-          <rect x="2" y="9" width="5" height="5" rx="1" fill="currentColor"/>
-          <rect x="9" y="9" width="5" height="5" rx="1" fill="currentColor"/>
-        </svg>
-      </div>
-      <span class="icon-label">全部</span>
+  
+  <div class="layout-container">
+    <!-- Icon Sidebar -->
+    <div class="icon-sidebar">
+      <div class="icon-item" title="全部"><i>📋</i></div>
+      <div class="icon-item" title="最近"><i>🕐</i></div>
+      <div class="icon-item" title="收藏"><i>⭐</i></div>
+      <div class="icon-item" title="对象OBS"><i>📦</i></div>
+      <div class="icon-item active" title="Sandbox"><i>🔧</i></div>
     </div>
-    <div class="icon-item" title="最近">
-      <div class="icon-svg">
-        <svg width="20" height="20" viewBox="0 0 16 16" fill="none">
-          <circle cx="8" cy="8" r="6" stroke="currentColor" stroke-width="1.5" fill="none"/>
-          <path d="M8 4v4l3 2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-        </svg>
+    
+    <!-- Sidebar Menu -->
+    <div class="sidebar">
+      <div class="sidebar-header">
+        <span>AI沙箱 Sandbox</span>
       </div>
-      <span class="icon-label">最近</span>
-    </div>
-    <div class="icon-item" title="收藏">
-      <div class="icon-svg">
-        <svg width="20" height="20" viewBox="0 0 16 16" fill="none">
-          <path d="M8 2l2.2 4.4 4.8.7-3.5 3.4.8 4.8L8 13l-4.3 2.3.8-4.8-3.5-3.4 4.8-.7L8 2z" fill="currentColor"/>
-        </svg>
-      </div>
-      <span class="icon-label">收藏</span>
-    </div>
-    <div class="icon-item" title="标注TLP">
-      <div class="icon-svg">
-        <svg width="18" height="18" viewBox="0 0 16 16" fill="none">
-          <path d="M2 3h12v10H2V3z" stroke="currentColor" stroke-width="1.5" fill="none"/>
-          <path d="M5 6h6M5 9h4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-        </svg>
-      </div>
-      <span class="icon-label">TLP</span>
-    </div>
-    <div class="icon-item" title="记忆AMS">
-      <div class="icon-svg">
-        <svg width="18" height="18" viewBox="0 0 16 16" fill="none">
-          <circle cx="8" cy="8" r="5" stroke="currentColor" stroke-width="1.5" fill="none"/>
-          <path d="M8 5v6M5 8h6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-        </svg>
-      </div>
-      <span class="icon-label">AMS</span>
-    </div>
-    <div class="icon-item" title="TiDB">
-      <div class="icon-svg">
-        <svg width="18" height="18" viewBox="0 0 16 16" fill="none">
-          <ellipse cx="8" cy="4" rx="5" ry="2" stroke="currentColor" stroke-width="1.5" fill="none"/>
-          <path d="M3 4v8c0 1.1 2.2 2 5 2s5-.9 5-2V4" stroke="currentColor" stroke-width="1.5" fill="none"/>
-        </svg>
-      </div>
-      <span class="icon-label">TiDB</span>
-    </div>
-    <div class="icon-item" title="对话AIM">
-      <div class="icon-svg">
-        <svg width="18" height="18" viewBox="0 0 16 16" fill="none">
-          <path d="M3 4h10v8H9l-3 2v-2H3V4z" stroke="currentColor" stroke-width="1.5" fill="none"/>
-          <circle cx="6" cy="8" r="1" fill="currentColor"/>
-          <circle cx="10" cy="8" r="1" fill="currentColor"/>
-        </svg>
-      </div>
-      <span class="icon-label">AIM</span>
-    </div>
-    <div class="icon-item" title="智器CIS">
-      <div class="icon-svg">
-        <svg width="18" height="18" viewBox="0 0 16 16" fill="none">
-          <rect x="2" y="4" width="12" height="8" rx="2" stroke="currentColor" stroke-width="1.5" fill="none"/>
-          <path d="M5 7h6M5 10h4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-        </svg>
-      </div>
-      <span class="icon-label">CIS</span>
-    </div>
-    <div class="icon-item" title="MongoDB">
-      <div class="icon-svg">
-        <svg width="18" height="18" viewBox="0 0 16 16" fill="none">
-          <path d="M8 2v12M4 5c0-2 2-3 4-3s4 1 4 3c0 4-4 7-4 9" stroke="currentColor" stroke-width="1.5" fill="none"/>
-        </svg>
-      </div>
-      <span class="icon-label">Mgo</span>
-    </div>
-    <div class="icon-item" title="云规则">
-      <div class="icon-svg">
-        <svg width="18" height="18" viewBox="0 0 16 16" fill="none">
-          <path d="M4 11h8v-1H4v1zm0-3h8V7H4v1zm0-3h8V4H4v1z" fill="currentColor"/>
-        </svg>
-      </div>
-      <span class="icon-label">规则</span>
-    </div>
-    <div class="icon-item" title="计算DSC">
-      <div class="icon-svg">
-        <svg width="18" height="18" viewBox="0 0 16 16" fill="none">
-          <path d="M2 8c2-3 4-4 6-4s4 1 6 4c-2 3-4 4-6 4s-4-1-6-4z" stroke="currentColor" stroke-width="1.5" fill="none"/>
-          <circle cx="8" cy="8" r="2" fill="currentColor"/>
-        </svg>
-      </div>
-      <span class="icon-label">DSC</span>
-    </div>
-  </div>
-
-  <!-- 第二栏：中间菜单栏 -->
-  <div class="sidebar">
-    <div class="sidebar-menu">
-      <!-- 一级菜单：AI沙箱 Sandbox -->
-      <div class="menu-level-1">
-        <div class="menu-item">
-          <div class="menu-icon">
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-              <rect x="2" y="3" width="12" height="10" rx="2" stroke="currentColor" stroke-width="1.5" fill="none"/>
-              <path d="M5 7l2 2 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </div>
-          <span class="menu-text">AI沙箱 Sandbox</span>
-          <span class="menu-arrow"><svg class="star-icon" width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9,0 L6.21763372,5.92433023 L0,6.87455368 L4.5,11.4870539 L3.43727684,18 L9,14.9243307 L14.5627232,18 L13.5,11.4870539 L18,6.87455368 L11.7803574,5.92433023 L9,0 Z" stroke="currentColor" stroke-width="1.5"/></svg></span>
-        </div>
-        
-        <!-- 展开的子菜单：AI沙箱 Sandbox -->
-        <div class="submenu-expanded">
+      <div class="sidebar-section">
+        <div class="menu-level-1">
           <div class="menu-item">
-            <div class="menu-icon">
-              <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
-                <rect x="2" y="2" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.5" fill="none"/>
-                <rect x="9" y="2" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.5" fill="none"/>
-                <rect x="2" y="9" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.5" fill="none"/>
-                <rect x="9" y="9" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.5" fill="none"/>
-              </svg>
-            </div>
-            <a href="index.html"><span class="menu-text">沙箱实例</span></a>
+            <span class="menu-text">AI沙箱 Sandbox</span>
+            <span class="menu-arrow">▼</span>
           </div>
-          <div class="menu-item">
-            <div class="menu-icon">
-              <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
-                <rect x="2" y="2" width="12" height="12" rx="2" stroke="currentColor" stroke-width="1.5" fill="none"/>
-                <path d="M6 6l2 2 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </div>
-            <span class="menu-text">沙箱模板</span>
-          </div>
-          <div class="menu-item active">
-            <div class="menu-icon">
-              <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
-                <path d="M3 12l3-3 3 3 4-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </div>
-            <span class="menu-text">网络策略</span>
-          </div>
-          <div class="menu-item">
-            <div class="menu-icon">
-              <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
-                <circle cx="8" cy="8" r="5" stroke="currentColor" stroke-width="1.5" fill="none"/>
-                <path d="M8 5v3l2 2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-              </svg>
-            </div>
-            <a href="sandbox-playground.html"><span class="menu-text">试验场</span></a>
-          </div>
-          <div class="menu-item">
-            <div class="menu-icon">
-              <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
-                <path d="M3 12l3-3 3 3 4-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </div>
-            <span class="menu-text">用量统计</span>
-          </div>
-          <div class="menu-item">
-            <div class="menu-icon">
-              <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
-                <rect x="2" y="3" width="12" height="10" rx="2" stroke="currentColor" stroke-width="1.5" fill="none"/>
-                <path d="M5 7h6M5 10h4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-              </svg>
-            </div>
-            <span class="menu-text">运行日志</span>
-          </div>
-          <div class="menu-item">
-            <div class="menu-icon">
-              <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
-                <path d="M7 3L3 6v5c0 2 2 3 4 3s4-1 4-3V6l-4-3z" stroke="currentColor" stroke-width="1.5" fill="none"/>
-                <circle cx="8" cy="8" r="2" stroke="currentColor" stroke-width="1.5" fill="none"/>
-              </svg>
-            </div>
-            <span class="menu-text">API密钥</span>
-          </div>
-          <div class="menu-item">
-            <div class="menu-icon">
-              <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
-                <rect x="2" y="4" width="12" height="9" rx="1" stroke="currentColor" stroke-width="1.5" fill="none"/>
-                <path d="M5 4V3a3 3 0 016 0v1" stroke="currentColor" stroke-width="1.5"/>
-              </svg>
-            </div>
-            <span class="menu-text">定价和资源包</span>
-          </div>
-          <div class="menu-item">
-            <div class="menu-icon">
-              <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
-                <rect x="2" y="2" width="12" height="12" rx="2" stroke="currentColor" stroke-width="1.5" fill="none"/>
-                <path d="M2 6h12M6 6v8" stroke="currentColor" stroke-width="1.5"/>
-              </svg>
-            </div>
-            <span class="menu-text">资源组详情</span>
+          <div class="submenu-expanded">
+            <div class="menu-item"><a href="index.html"><span class="menu-text">沙箱实例</span></a></div>
+            <div class="menu-item"><a href="sandbox-template.html"><span class="menu-text">沙箱模板</span></a></div>
+            <div class="menu-item"><a href="sandbox-playground.html"><span class="menu-text">试验场</span></a></div>
+            <div class="menu-item"><a href="#"><span class="menu-text">用量统计</span></a></div>
+            <div class="menu-item"><a href="#"><span class="menu-text">运行日志</span></a></div>
+            <div class="menu-item"><a href="#"><span class="menu-text">API密钥</span></a></div>
+            <div class="menu-item"><a href="#"><span class="menu-text">定价和资源包</span></a></div>
+            <div class="menu-item active"><span class="menu-text">网络策略</span></div>
+            <div class="menu-item"><a href="#"><span class="menu-text">资源组详情</span></a></div>
           </div>
         </div>
       </div>
     </div>
-  </div>
-
-  <!-- 第三栏：右侧主内容 -->
-  <div class="main-content">
-    <div class="breadcrumb">
-      <span class="breadcrumb-left" id="menu-name-display">网络策略</span>
-      <a class="breadcrumb-link" id="menu-link-display">Sandbox 帮助文档</a>
-    </div>
-    <div class="content-body">
-      <div class="product-list-page">
-        <!-- 工具栏 -->
-        <div class="product-toolbar">
-          <div class="toolbar-left">
-            <button class="btn btn-primary" id="create-policy-btn">
-              <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
-                <path d="M8 2v12M2 8h12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-              </svg>
-              创建策略
-            </button>
-          </div>
-          <div class="toolbar-right">
+    
+    <!-- Main Content -->
+    <div class="main-content">
+      <div class="content-header">
+        <div class="breadcrumb">
+          <span class="breadcrumb-left">AI沙箱 Sandbox</span>
+          <span class="breadcrumb-sep">/</span>
+          <span class="breadcrumb-right" id="menu-name-display">网络策略</span>
+        </div>
+        <a class="help-link" href="#">Sandbox 帮助文档</a>
+      </div>
+      
+      <div class="content-body">
+        <div class="toolbar">
+          <button class="btn btn-primary" id="create-policy-btn">+ 创建策略</button>
+          <div style="display: flex; align-items: center;">
             <div class="search-box">
               <input type="text" id="sandbox-search" placeholder="请输入策略ID">
-              <button class="search-btn">
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                  <circle cx="7" cy="7" r="5" stroke="currentColor" stroke-width="1.5" fill="none"/>
-                  <path d="M11 11l3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-                </svg>
-              </button>
+              <button class="search-btn">🔍</button>
             </div>
-            <button class="refresh-btn" title="刷新">
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                <path d="M14 8A6 6 0 118 2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-                <path d="M14 2v4h-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </button>
+            <button class="refresh-btn" title="刷新">🔄</button>
           </div>
         </div>
         
-        <!-- 表格 -->
-        <div class="product-table">
-          <div class="table-wrapper">
-            <table>
-            <thead>
-              <tr>
-                <th>策略ID</th>
-                <th>策略名称</th>
-                <th>访问源</th>
-                <th>目标VPC</th>
-                <th>目标子网</th>
-                <th>安全组</th>
-                <th>操作</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td class="id-cell">policy-001<span class="copy-icon" onclick="copyText('policy-001')">📋</span></td>
-                <td>允许HTTP访问</td>
-                <td>0.0.0.0/0</td>
-                <td>vpc-default</td>
-                <td>subnet-01</td>
-                <td>sg-web</td>
-                <td><span class="action-link">编辑</span> <span class="action-link">删除</span></td>
-              </tr>
-              <tr>
-                <td class="id-cell">policy-002<span class="copy-icon" onclick="copyText('policy-002')">📋</span></td>
-                <td>内网互通策略</td>
-                <td>10.0.0.0/8</td>
-                <td>vpc-internal</td>
-                <td>subnet-02</td>
-                <td>sg-internal</td>
-                <td><span class="action-link">编辑</span> <span class="action-link">删除</span></td>
-              </tr>
-              <tr>
-                <td class="id-cell">policy-003<span class="copy-icon" onclick="copyText('policy-003')">📋</span></td>
-                <td>数据库访问策略</td>
-                <td>172.16.0.0/12</td>
-                <td>vpc-db</td>
-                <td>subnet-db</td>
-                <td>sg-database</td>
-                <td><span class="action-link">编辑</span> <span class="action-link">删除</span></td>
-              </tr>
-            </tbody>
-          </table>
-          </div>
-        </div>
+        <table class="product-table">
+          <thead>
+            <tr>
+              <th>策略ID</th>
+              <th>策略名称</th>
+              <th>访问源</th>
+              <th>目标VPC</th>
+              <th>目标子网</th>
+              <th>安全组</th>
+              <th>操作</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>pol-abc123</td>
+              <td>测试策略</td>
+              <td>测试沙箱-01</td>
+              <td>vpc-default (vpc-xxxxx1)</td>
+              <td>subnet-default (subnet-xxxxx1)</td>
+              <td>sg-default</td>
+              <td>
+                <span class="action-link">编辑</span>
+                <span class="action-link">删除</span>
+              </td>
+            </tr>
+            <tr>
+              <td>pol-def456</td>
+              <td>开发策略</td>
+              <td>开发沙箱-01</td>
+              <td>vpc-dev (vpc-xxxxx2)</td>
+              <td>subnet-dev (subnet-xxxxx2)</td>
+              <td>sg-dev</td>
+              <td>
+                <span class="action-link">编辑</span>
+                <span class="action-link">删除</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
         
-        <!-- 翻页组件 -->
         <div class="pagination-bar">
-          <div class="pagination-left">共3条记录 第1/1页</div>
+          <div class="pagination-info">共2条记录 第1/1页</div>
+          <div class="pagination-controls">
+            <button class="pagination-btn" disabled>上一页</button>
+            <button class="pagination-btn active">1</button>
+            <button class="pagination-btn" disabled>下一页</button>
+            <select class="pagination-select">
+              <option>10条/页</option>
+            </select>
+          </div>
         </div>
       </div>
     </div>
   </div>
-</div>
-
-<script>
-  // 复制文本功能
-  function copyText(text) {
-    navigator.clipboard.writeText(text).then(() => {
-      alert('已复制: ' + text);
-    });
-  }
-
-  // 图标栏交互
-  document.querySelectorAll('.icon-item').forEach(item => {
-    item.addEventListener('click', function() {
-      document.querySelectorAll('.icon-item').forEach(i => i.classList.remove('active'));
-      this.classList.add('active');
-    });
-  });
-
-  // 一级菜单项点击切换图标状态
-  document.querySelectorAll('.menu-level-1 > .menu-item').forEach(item => {
-    item.addEventListener('click', function(e) {
-      e.stopPropagation();
-      // 切换选中状态
-      this.classList.toggle('selected');
-    });
-  });
-
-  // 子菜单项点击选中交互
-  document.querySelectorAll('.submenu-expanded .menu-item').forEach(item => {
-    item.addEventListener('click', function(e) {
-      e.stopPropagation();
-      
-      // 移除同一子菜单内其他项的active状态
-      const parentSubmenu = this.closest('.submenu-expanded');
-      if (parentSubmenu) {
-        parentSubmenu.querySelectorAll('.menu-item').forEach(i => i.classList.remove('active'));
-      }
-      
-      // 添加当前项的active状态
-      this.classList.add('active');
-      
-      // 更新右侧主内容区的菜单名称
-      const menuText = this.querySelector('.menu-text');
-      if (menuText) {
-        document.getElementById('menu-name-display').textContent = menuText.textContent;
-      }
-    });
-  });
-
-  // 三级菜单项点击选中交互
-  document.querySelectorAll('.menu-level-3 .menu-item').forEach(item => {
-    item.addEventListener('click', function(e) {
-      e.stopPropagation();
-      
-      // 移除所有三级菜单项的active状态
-      document.querySelectorAll('.menu-level-3 .menu-item').forEach(i => i.classList.remove('active'));
-      
-      // 添加当前项的active状态
-      this.classList.add('active');
-      
-      // 更新右侧主内容区的菜单名称
-      const menuText = this.querySelector('.menu-text');
-      if (menuText) {
-        document.getElementById('menu-name-display').textContent = menuText.textContent;
-      }
-    });
-  });
-
-  // 菜单展开/收起交互
-  document.querySelectorAll('.menu-item').forEach(item => {
-    const arrow = item.querySelector('.menu-arrow');
-    if (arrow) {
-      // 一级菜单的箭头图标不触发交互
-      const isTopLevel = item.parentElement.classList.contains('menu-level-1');
-      if (isTopLevel) {
-        return; // 跳过一级菜单项
-      }
-      
-      item.style.cursor = 'pointer';
-      item.addEventListener('click', function(e) {
-        e.stopPropagation();
-        
-        // 找到父元素
-        const parent = this.parentElement;
-        
-        // 情况1：一级菜单项，控制 menu-level-2
-        let submenu = parent.querySelector('.menu-level-2');
-        if (submenu) {
-          submenu.classList.toggle('collapsed');
-          this.classList.toggle('collapsed');
-          return;
-        }
-        
-        // 情况2：二级菜单项，控制 submenu-expanded
-        submenu = parent.querySelector('.submenu-expanded');
-        if (submenu) {
-          submenu.classList.toggle('collapsed');
-          this.classList.toggle('collapsed');
-          return;
-        }
-        
-        // 情况3：三级菜单项
-        submenu = parent.querySelector('.menu-level-3');
-        if (submenu) {
-          submenu.classList.toggle('collapsed');
-          this.classList.toggle('collapsed');
-          return;
+  
+  <!-- Modal: Create Policy -->
+  <div class="modal-overlay" id="policy-modal">
+    <div class="modal-container">
+      <div class="modal-header">
+        <h3>创建网络策略</h3>
+        <button class="modal-close" id="modal-close-btn">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="policy-form">
+          <div class="form-group">
+            <label><span class="required">*</span>策略名称</label>
+            <input type="text" class="form-control" id="policy-name" placeholder="请输入策略名称" required>
+          </div>
+          <div class="form-group">
+            <label><span class="required">*</span>访问源</label>
+            <select class="form-control" id="access-source" required>
+              <option value="">请选择访问源</option>
+              <option value="sandbox-01">测试沙箱-01</option>
+              <option value="sandbox-02">开发沙箱-01</option>
+              <option value="sandbox-03">预发沙箱-01</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label><span class="required">*</span>目标VPC</label>
+            <select class="form-control" id="target-vpc" required>
+              <option value="">请选择目标VPC</option>
+              <option value="vpc-1">vpc-default (vpc-xxxxx1)</option>
+              <option value="vpc-2">vpc-dev (vpc-xxxxx2)</option>
+              <option value="vpc-3">vpc-prod (vpc-xxxxx3)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label><span class="required">*</span>目标子网</label>
+            <select class="form-control" id="target-subnet" required>
+              <option value="">请选择目标子网</option>
+              <option value="subnet-1">subnet-default (subnet-xxxxx1)</option>
+              <option value="subnet-2">subnet-dev (subnet-xxxxx2)</option>
+              <option value="subnet-3">subnet-prod (subnet-xxxxx3)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label><span class="required">*</span>安全组</label>
+            <select class="form-control" id="security-group" required>
+              <option value="">请选择安全组</option>
+              <option value="sg-1">sg-default</option>
+              <option value="sg-2">sg-dev</option>
+              <option value="sg-3">sg-prod</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>备注</label>
+            <textarea class="form-textarea" id="policy-remark" placeholder="请输入备注信息（选填）"></textarea>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" id="modal-cancel-btn">取消</button>
+        <button type="submit" class="btn btn-primary-submit" form="policy-form">确定</button>
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    // Test: Check if elements exist
+    console.log('Testing element access...');
+    console.log('createBtn:', document.getElementById('create-policy-btn'));
+    console.log('modal:', document.getElementById('policy-modal'));
+    
+    // Open modal
+    const createBtn = document.getElementById('create-policy-btn');
+    const modal = document.getElementById('policy-modal');
+    const closeBtn = document.getElementById('modal-close-btn');
+    const cancelBtn = document.getElementById('modal-cancel-btn');
+    
+    if (createBtn) {
+      createBtn.addEventListener('click', function() {
+        console.log('Create button clicked!');
+        modal.style.display = 'flex';
+      });
+    }
+    
+    if (closeBtn) {
+      closeBtn.addEventListener('click', function() {
+        modal.style.display = 'none';
+      });
+    }
+    
+    if (cancelBtn) {
+      cancelBtn.addEventListener('click', function() {
+        modal.style.display = 'none';
+      });
+    }
+    
+    // Close modal when clicking outside
+    if (modal) {
+      modal.addEventListener('click', function(e) {
+        if (e.target === modal) {
+          modal.style.display = 'none';
         }
       });
     }
-  });
-
-  // 创建策略弹窗
-  const modal = document.getElementById('policy-modal');
-  const createBtn = document.getElementById('create-policy-btn');
-  const closeBtn = document.querySelector('.modal-close');
-
-  createBtn.addEventListener('click', function() {
-    modal.style.display = 'flex';
-  });
-
-  closeBtn.addEventListener('click', function() {
-    modal.style.display = 'none';
-  });
-
-  modal.addEventListener('click', function(e) {
-    if (e.target === modal) {
-      modal.style.display = 'none';
+    
+    // Form submit
+    const form = document.getElementById('policy-form');
+    if (form) {
+      form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        alert('策略创建成功！');
+        modal.style.display = 'none';
+        form.reset();
+      });
     }
-  });
-
-  // 取消按钮
-  document.querySelector('.modal-cancel').addEventListener('click', function() {
-    modal.style.display = 'none';
-  });
-
-  // 模拟数据
-  const sandboxList = [
-    { id: 'sandbox-001', name: '测试沙箱-01' },
-    { id: 'sandbox-002', name: '开发沙箱-01' },
-    { id: 'sandbox-003', name: '预发沙箱-01' }
-  ];
-
-  const vpcList = [
-    { id: 'vpc-001', name: '默认VPC (vpc-001)' },
-    { id: 'vpc-002', name: '测试网络 (vpc-002)' },
-    { id: 'vpc-003', name: '生产网络 (vpc-003)' }
-  ];
-
-  const subnetList = [
-    { id: 'subnet-001', name: '子网-01 (subnet-001)' },
-    { id: 'subnet-002', name: '子网-02 (subnet-002)' },
-    { id: 'subnet-003', name: '子网-03 (subnet-003)' }
-  ];
-
-  const securityGroupList = [
-    { id: 'sg-001', name: '默认安全组' },
-    { id: 'sg-002', name: 'Web安全组' },
-    { id: 'sg-003', name: '数据库安全组' }
-  ];
-
-  // 填充下拉选项
-  function populateSelect(selectId, data, placeholder) {
-    const select = document.getElementById(selectId);
-    select.innerHTML = '<option value="">' + placeholder + '</option>';
-    data.forEach(item => {
-      const option = document.createElement('option');
-      option.value = item.id;
-      option.textContent = item.name;
-      select.appendChild(option);
-    });
-  }
-
-  populateSelect('access-source', sandboxList, '请选择访问源');
-  populateSelect('target-vpc', vpcList, '请选择目标VPC');
-  populateSelect('target-subnet', subnetList, '请选择目标子网');
-  populateSelect('security-group', securityGroupList, '请选择安全组');
-
-  // 表单提交
-  document.getElementById('policy-form').addEventListener('submit', function(e) {
-    e.preventDefault();
-    alert('策略创建成功！');
-    modal.style.display = 'none';
-  });
-
-<style>
-  /* 模态弹窗样式 */
-  .modal-overlay {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    z-index: 1000;
-    justify-content: center;
-    align-items: center;
-  }
-
-  .modal-container {
-    background: #fff;
-    border-radius: 8px;
-    width: 600px;
-    max-height: 90vh;
-    overflow: hidden;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-  }
-
-  .modal-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 16px 20px;
-    border-bottom: 1px solid #E8E8E8;
-    background: #F8F9FA;
-  }
-
-  .modal-header h3 {
-    margin: 0;
-    font-size: 16px;
-    font-weight: 600;
-    color: #202020;
-  }
-
-  .modal-close {
-    width: 24px;
-    height: 24px;
-    border: none;
-    background: transparent;
-    cursor: pointer;
-    color: #666;
-    font-size: 20px;
-    line-height: 1;
-    padding: 0;
-  }
-
-  .modal-close:hover {
-    color: #333;
-  }
-
-  .modal-body {
-    padding: 20px;
-    max-height: calc(90vh - 130px);
-    overflow-y: auto;
-  }
-
-  .form-group {
-    margin-bottom: 16px;
-  }
-
-  .form-group label {
-    display: block;
-    margin-bottom: 6px;
-    font-size: 14px;
-    color: #333;
-    font-weight: 500;
-  }
-
-  .form-group label .required {
-    color: #FF4D4F;
-    margin-right: 4px;
-  }
-
-  .form-control {
-    width: 100%;
-    height: 36px;
-    padding: 0 12px;
-    border: 1px solid #D9D9D9;
-    border-radius: 4px;
-    font-size: 14px;
-    color: #333;
-  }
-
-  .form-control:focus {
-    outline: none;
-    border-color: #1890FF;
-    box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
-  }
-
-  .form-control:disabled {
-    background: #F5F5F5;
-    cursor: not-allowed;
-  }
-
-  .form-textarea {
-    width: 100%;
-    min-height: 100px;
-    padding: 8px 12px;
-    border: 1px solid #D9D9D9;
-    border-radius: 4px;
-    font-size: 14px;
-    color: #333;
-    resize: vertical;
-    font-family: inherit;
-  }
-
-  .form-textarea:focus {
-    outline: none;
-    border-color: #1890FF;
-    box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
-  }
-
-  .modal-footer {
-    display: flex;
-    justify-content: flex-end;
-    gap: 12px;
-    padding: 16px 20px;
-    border-top: 1px solid #E8E8E8;
-    background: #F8F9FA;
-  }
-
-  .btn {
-    height: 32px;
-    padding: 0 16px;
-    border-radius: 4px;
-    font-size: 14px;
-    cursor: pointer;
-    border: none;
-  }
-
-  .btn-secondary {
-    background: #fff;
-    border: 1px solid #D9D9D9;
-    color: #333;
-  }
-
-  .btn-secondary:hover {
-    border-color: #1890FF;
-    color: #1890FF;
-  }
-
-  .btn-primary-submit {
-    background: #1890FF;
-    color: #fff;
-  }
-
-  .btn-primary-submit:hover {
-    background: #40A9FF;
-  }
-</style>
-
-
-<!-- 创建策略弹窗 -->
-<div class="modal-overlay" id="policy-modal">
-  <div class="modal-container">
-    <div class="modal-header">
-      <h3>创建网络策略</h3>
-      <button class="modal-close">&times;</button>
-    </div>
-    <div class="modal-body">
-      <form id="policy-form">
-        <div class="form-group">
-          <label><span class="required">*</span>策略名称</label>
-          <input type="text" class="form-control" id="policy-name" placeholder="请输入策略名称" required>
-        </div>
-        <div class="form-group">
-          <label><span class="required">*</span>访问源</label>
-          <select class="form-control" id="access-source" required>
-            <option value="">请选择访问源</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label><span class="required">*</span>目标VPC</label>
-          <select class="form-control" id="target-vpc" required>
-            <option value="">请选择目标VPC</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label><span class="required">*</span>目标子网</label>
-          <select class="form-control" id="target-subnet" required>
-            <option value="">请选择目标子网</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label><span class="required">*</span>安全组</label>
-          <select class="form-control" id="security-group" required>
-            <option value="">请选择安全组</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label>备注</label>
-          <textarea class="form-textarea" id="policy-remark" placeholder="请输入备注信息（选填）"></textarea>
-        </div>
-      </form>
-    </div>
-    <div class="modal-footer">
-      <button type="button" class="btn btn-secondary modal-cancel">取消</button>
-      <button type="submit" class="btn btn-primary-submit" form="policy-form">确定</button>
-    </div>
-  </div>
-</div>
-</script>
+  </script>
 </body>
 </html>
