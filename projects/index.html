@@ -1016,6 +1016,15 @@
     .text-muted {
       color: #999;
     }
+
+    .action-link {
+      color: #0066FF;
+      text-decoration: none;
+      font-size: 13px;
+    }
+    .action-link:hover {
+      text-decoration: underline;
+    }
   </style>
 </head>
 <body>
@@ -1324,6 +1333,7 @@
                 <th>内存</th>
                 <th>MetaData</th>
                 <th>启动时间</th>
+                <th>操作</th>
               </tr>
             </thead>
             <tbody>
@@ -1335,6 +1345,7 @@
                 <td>4GB</td>
                 <td>dev-env</td>
                 <td>2026-05-20 10:30:00</td>
+                <td><a href="sandbox-policy.html" class="action-link">访问策略</a></td>
               </tr>
               <tr>
                 <td><input type="checkbox" class="product-checkbox"></td>
@@ -1344,6 +1355,7 @@
                 <td>8GB</td>
                 <td>prod-env</td>
                 <td>2026-05-21 14:15:00</td>
+                <td><a href="sandbox-policy.html" class="action-link">访问策略</a></td>
               </tr>
               <tr>
                 <td><input type="checkbox" class="product-checkbox"></td>
@@ -1353,6 +1365,7 @@
                 <td>4GB</td>
                 <td>test-env</td>
                 <td>2026-05-22 09:00:00</td>
+                <td><a href="sandbox-policy.html" class="action-link">访问策略</a></td>
               </tr>
             </tbody>
           </table>
