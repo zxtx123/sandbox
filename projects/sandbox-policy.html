@@ -39,13 +39,14 @@
       </div>
       <div class="form-group">
         <label class="form-label">目标服务 <span class="required">*</span></label>
-        <div class="form-control">
+        <div class="form-control inline-group">
           <select class="form-select" id="edit-target-service">
-            <option value="">请选择目标服务</option>
+            <option value="">请选择HULK终端节点服务</option>
             <option value="endpoint-service-01">endpoint-service-01 (VPC endpoint service)</option>
             <option value="endpoint-service-02">endpoint-service-02 (VPC endpoint service)</option>
             <option value="endpoint-service-03">endpoint-service-03 (VPC endpoint service)</option>
           </select>
+          <a href="#" class="link-btn" onclick="alert('创建服务功能开发中...'); return false;">创建服务</a>
         </div>
       </div>
       <div class="form-group">
@@ -1490,13 +1491,14 @@
       </div>
       <div class="form-group">
         <label class="form-label">目标服务 <span class="required">*</span></label>
-        <div class="form-control">
+        <div class="form-control inline-group">
           <select class="form-select" id="target-service">
-            <option value="">请选择目标服务</option>
+            <option value="">请选择HULK终端节点服务</option>
             <option value="endpoint-service-01">endpoint-service-01 (VPC endpoint service)</option>
             <option value="endpoint-service-02">endpoint-service-02 (VPC endpoint service)</option>
             <option value="endpoint-service-03">endpoint-service-03 (VPC endpoint service)</option>
           </select>
+          <a href="#" class="link-btn" onclick="alert('创建服务功能开发中...'); return false;">创建服务</a>
         </div>
       </div>
       <div class="form-group">
@@ -1529,6 +1531,23 @@
   }
   .modal-overlay.active {
     display: flex;
+  }
+  .inline-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .inline-group .form-select {
+    flex: 1;
+  }
+  .link-btn {
+    color: #1890ff;
+    text-decoration: none;
+    font-size: 14px;
+    white-space: nowrap;
+  }
+  .link-btn:hover {
+    text-decoration: underline;
   }
   .modal-dialog {
     background: #fff;
