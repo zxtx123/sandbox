@@ -1314,7 +1314,7 @@
         <!-- 工具栏 -->
         <div class="product-toolbar">
           <div class="toolbar-left">
-            <button class="btn btn-primary">
+            <button class="btn btn-primary" id="create-policy-btn">
               <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
                 <path d="M8 2v12M2 8h12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
               </svg>
@@ -1506,6 +1506,286 @@
       });
     }
   });
+
+  // 创建策略弹窗
+  const modal = document.getElementById('policy-modal');
+  const createBtn = document.getElementById('create-policy-btn');
+  const closeBtn = document.querySelector('.modal-close');
+
+  createBtn.addEventListener('click', function() {
+    modal.style.display = 'flex';
+  });
+
+  closeBtn.addEventListener('click', function() {
+    modal.style.display = 'none';
+  });
+
+  modal.addEventListener('click', function(e) {
+    if (e.target === modal) {
+      modal.style.display = 'none';
+    }
+  });
+
+  // 取消按钮
+  document.querySelector('.modal-cancel').addEventListener('click', function() {
+    modal.style.display = 'none';
+  });
+
+  // 模拟数据
+  const sandboxList = [
+    { id: 'sandbox-001', name: '测试沙箱-01' },
+    { id: 'sandbox-002', name: '开发沙箱-01' },
+    { id: 'sandbox-003', name: '预发沙箱-01' }
+  ];
+
+  const vpcList = [
+    { id: 'vpc-001', name: '默认VPC (vpc-001)' },
+    { id: 'vpc-002', name: '测试网络 (vpc-002)' },
+    { id: 'vpc-003', name: '生产网络 (vpc-003)' }
+  ];
+
+  const subnetList = [
+    { id: 'subnet-001', name: '子网-01 (subnet-001)' },
+    { id: 'subnet-002', name: '子网-02 (subnet-002)' },
+    { id: 'subnet-003', name: '子网-03 (subnet-003)' }
+  ];
+
+  const securityGroupList = [
+    { id: 'sg-001', name: '默认安全组' },
+    { id: 'sg-002', name: 'Web安全组' },
+    { id: 'sg-003', name: '数据库安全组' }
+  ];
+
+  // 填充下拉选项
+  function populateSelect(selectId, data, placeholder) {
+    const select = document.getElementById(selectId);
+    select.innerHTML = '<option value="">' + placeholder + '</option>';
+    data.forEach(item => {
+      const option = document.createElement('option');
+      option.value = item.id;
+      option.textContent = item.name;
+      select.appendChild(option);
+    });
+  }
+
+  populateSelect('access-source', sandboxList, '请选择访问源');
+  populateSelect('target-vpc', vpcList, '请选择目标VPC');
+  populateSelect('target-subnet', subnetList, '请选择目标子网');
+  populateSelect('security-group', securityGroupList, '请选择安全组');
+
+  // 表单提交
+  document.getElementById('policy-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    alert('策略创建成功！');
+    modal.style.display = 'none';
+  });
 </script>
+
+<style>
+  /* 模态弹窗样式 */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .modal-container {
+    background: #fff;
+    border-radius: 8px;
+    width: 600px;
+    max-height: 90vh;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  }
+
+  .modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 20px;
+    border-bottom: 1px solid #E8E8E8;
+    background: #F8F9FA;
+  }
+
+  .modal-header h3 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 600;
+    color: #202020;
+  }
+
+  .modal-close {
+    width: 24px;
+    height: 24px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    color: #666;
+    font-size: 20px;
+    line-height: 1;
+    padding: 0;
+  }
+
+  .modal-close:hover {
+    color: #333;
+  }
+
+  .modal-body {
+    padding: 20px;
+    max-height: calc(90vh - 130px);
+    overflow-y: auto;
+  }
+
+  .form-group {
+    margin-bottom: 16px;
+  }
+
+  .form-group label {
+    display: block;
+    margin-bottom: 6px;
+    font-size: 14px;
+    color: #333;
+    font-weight: 500;
+  }
+
+  .form-group label .required {
+    color: #FF4D4F;
+    margin-right: 4px;
+  }
+
+  .form-control {
+    width: 100%;
+    height: 36px;
+    padding: 0 12px;
+    border: 1px solid #D9D9D9;
+    border-radius: 4px;
+    font-size: 14px;
+    color: #333;
+  }
+
+  .form-control:focus {
+    outline: none;
+    border-color: #1890FF;
+    box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
+  }
+
+  .form-control:disabled {
+    background: #F5F5F5;
+    cursor: not-allowed;
+  }
+
+  .form-textarea {
+    width: 100%;
+    min-height: 100px;
+    padding: 8px 12px;
+    border: 1px solid #D9D9D9;
+    border-radius: 4px;
+    font-size: 14px;
+    color: #333;
+    resize: vertical;
+    font-family: inherit;
+  }
+
+  .form-textarea:focus {
+    outline: none;
+    border-color: #1890FF;
+    box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
+  }
+
+  .modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    padding: 16px 20px;
+    border-top: 1px solid #E8E8E8;
+    background: #F8F9FA;
+  }
+
+  .btn {
+    height: 32px;
+    padding: 0 16px;
+    border-radius: 4px;
+    font-size: 14px;
+    cursor: pointer;
+    border: none;
+  }
+
+  .btn-secondary {
+    background: #fff;
+    border: 1px solid #D9D9D9;
+    color: #333;
+  }
+
+  .btn-secondary:hover {
+    border-color: #1890FF;
+    color: #1890FF;
+  }
+
+  .btn-primary-submit {
+    background: #1890FF;
+    color: #fff;
+  }
+
+  .btn-primary-submit:hover {
+    background: #40A9FF;
+  }
+</style>
+
+<!-- 创建策略弹窗 -->
+<div class="modal-overlay" id="policy-modal">
+  <div class="modal-container">
+    <div class="modal-header">
+      <h3>创建网络策略</h3>
+      <button class="modal-close">&times;</button>
+    </div>
+    <div class="modal-body">
+      <form id="policy-form">
+        <div class="form-group">
+          <label><span class="required">*</span>策略名称</label>
+          <input type="text" class="form-control" id="policy-name" placeholder="请输入策略名称" required>
+        </div>
+        <div class="form-group">
+          <label><span class="required">*</span>访问源</label>
+          <select class="form-control" id="access-source" required>
+            <option value="">请选择访问源</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label><span class="required">*</span>目标VPC</label>
+          <select class="form-control" id="target-vpc" required>
+            <option value="">请选择目标VPC</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label><span class="required">*</span>目标子网</label>
+          <select class="form-control" id="target-subnet" required>
+            <option value="">请选择目标子网</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label><span class="required">*</span>安全组</label>
+          <select class="form-control" id="security-group" required>
+            <option value="">请选择安全组</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>备注</label>
+          <textarea class="form-textarea" id="policy-remark" placeholder="请输入备注信息（选填）"></textarea>
+        </div>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary modal-cancel">取消</button>
+      <button type="submit" class="btn btn-primary-submit" form="policy-form">确定</button>
+    </div>
+  </div>
+</div>
 </body>
 </html>
