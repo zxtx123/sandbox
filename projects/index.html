@@ -1448,12 +1448,7 @@
           </select>
         </div>
       </div>
-      <div class="form-group">
-        <label class="form-label">备注</label>
-        <div class="form-control">
-          <input type="text" class="form-input" id="set-policy-remark" placeholder="请输入备注（可选）">
-        </div>
-      </div>
+
       <div class="form-group">
         <label class="form-label">描述</label>
         <div class="form-control">
@@ -1696,7 +1691,7 @@
     document.getElementById('set-target-vpc').value = '';
     document.getElementById('set-target-subnet').value = '';
     document.getElementById('set-security-group').value = '';
-    document.getElementById('set-policy-remark').value = '';
+
     document.getElementById('set-policy-desc').value = '';
     currentSandboxName = '';
   }
@@ -1721,7 +1716,7 @@
       vpc: targetVpc,
       subnet: targetSubnet,
       sg: securityGroup,
-      remark: document.getElementById('set-policy-remark').value.trim(),
+
       desc: document.getElementById('set-policy-desc').value.trim()
     });
     localStorage.setItem('sandboxPolicies', JSON.stringify(policies));
