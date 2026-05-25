@@ -1368,7 +1368,7 @@
         <!-- 工具栏 -->
         <div class="product-toolbar">
           <div class="toolbar-left">
-            <button class="btn btn-primary">
+            <button class="btn btn-primary" id="create-policy-btn">
               <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
                 <path d="M8 2v12M2 8h12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
               </svg>
@@ -1766,7 +1766,7 @@
   });
 
   // 创建策略弹窗
-  const createBtn = document.querySelector('.btn-primary');
+  const createBtn = document.getElementById('create-policy-btn');
   if (createBtn) {
     createBtn.addEventListener('click', function() {
       document.getElementById('create-policy-modal').classList.add('active');
