@@ -1418,33 +1418,13 @@
         </div>
       </div>
       <div class="form-group">
-        <label class="form-label">目标VPC <span class="required">*</span></label>
+        <label class="form-label">目标服务 <span class="required">*</span></label>
         <div class="form-control">
-          <select class="form-select" id="set-target-vpc">
-            <option value="">请选择目标VPC</option>
-            <option value="vpc-01">vpc-01 (10.0.0.0/16)</option>
-            <option value="vpc-02">vpc-02 (172.16.0.0/16)</option>
-          </select>
-        </div>
-      </div>
-      <div class="form-group">
-        <label class="form-label">目标子网 <span class="required">*</span></label>
-        <div class="form-control">
-          <select class="form-select" id="set-target-subnet">
-            <option value="">请选择目标子网</option>
-            <option value="subnet-01">subnet-01 (10.0.1.0/24)</option>
-            <option value="subnet-02">subnet-02 (10.0.2.0/24)</option>
-          </select>
-        </div>
-      </div>
-      <div class="form-group">
-        <label class="form-label">安全组 <span class="required">*</span></label>
-        <div class="form-control">
-          <select class="form-select" id="set-security-group">
-            <option value="">请选择安全组</option>
-            <option value="sg-01">sg-01 (默认安全组)</option>
-            <option value="sg-02">sg-02 (Web安全组)</option>
-            <option value="sg-03">sg-03 (数据库安全组)</option>
+          <select class="form-select" id="set-target-service">
+            <option value="">请选择目标服务</option>
+            <option value="endpoint-service-01">endpoint-service-01 (VPC endpoint service)</option>
+            <option value="endpoint-service-02">endpoint-service-02 (VPC endpoint service)</option>
+            <option value="endpoint-service-03">endpoint-service-03 (VPC endpoint service)</option>
           </select>
         </div>
       </div>
@@ -1688,24 +1668,17 @@
   function closeSetPolicyModal() {
     document.getElementById('set-policy-modal').classList.remove('active');
     document.getElementById('set-policy-name').value = '';
-    document.getElementById('set-target-vpc').value = '';
-    document.getElementById('set-target-subnet').value = '';
-    document.getElementById('set-security-group').value = '';
-
+    document.getElementById('set-target-service').value = '';
     document.getElementById('set-policy-desc').value = '';
     currentSandboxName = '';
   }
 
   function createPolicyFromSandbox() {
     const policyName = document.getElementById('set-policy-name').value.trim();
-    const targetVpc = document.getElementById('set-target-vpc').value;
-    const targetSubnet = document.getElementById('set-target-subnet').value;
-    const securityGroup = document.getElementById('set-security-group').value;
+    const targetService = document.getElementById('set-target-service').value;
 
     if (!policyName) { alert('请输入策略名称'); return; }
-    if (!targetVpc) { alert('请选择目标VPC'); return; }
-    if (!targetSubnet) { alert('请选择目标子网'); return; }
-    if (!securityGroup) { alert('请选择安全组'); return; }
+    if (!targetService) { alert('请选择目标服务'); return; }
 
     // 保存到 localStorage
     const policies = JSON.parse(localStorage.getItem('sandboxPolicies') || '[]');
@@ -1713,10 +1686,7 @@
       id: 'policy-' + String(policies.length + 4).padStart(3, '0'),
       name: policyName,
       source: currentSandboxName,
-      vpc: targetVpc,
-      subnet: targetSubnet,
-      sg: securityGroup,
-
+      service: targetService,
       desc: document.getElementById('set-policy-desc').value.trim()
     });
     localStorage.setItem('sandboxPolicies', JSON.stringify(policies));

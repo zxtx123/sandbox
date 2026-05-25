@@ -38,33 +38,13 @@
         </div>
       </div>
       <div class="form-group">
-        <label class="form-label">目标VPC <span class="required">*</span></label>
+        <label class="form-label">目标服务 <span class="required">*</span></label>
         <div class="form-control">
-          <select class="form-select" id="edit-target-vpc">
-            <option value="">请选择目标VPC</option>
-            <option value="vpc-01">vpc-01 (10.0.0.0/16)</option>
-            <option value="vpc-02">vpc-02 (172.16.0.0/16)</option>
-          </select>
-        </div>
-      </div>
-      <div class="form-group">
-        <label class="form-label">目标子网 <span class="required">*</span></label>
-        <div class="form-control">
-          <select class="form-select" id="edit-target-subnet">
-            <option value="">请选择目标子网</option>
-            <option value="subnet-01">subnet-01 (10.0.1.0/24)</option>
-            <option value="subnet-02">subnet-02 (10.0.2.0/24)</option>
-          </select>
-        </div>
-      </div>
-      <div class="form-group">
-        <label class="form-label">安全组 <span class="required">*</span></label>
-        <div class="form-control">
-          <select class="form-select" id="edit-security-group">
-            <option value="">请选择安全组</option>
-            <option value="sg-01">sg-01 (默认安全组)</option>
-            <option value="sg-02">sg-02 (Web安全组)</option>
-            <option value="sg-03">sg-03 (数据库安全组)</option>
+          <select class="form-select" id="edit-target-service">
+            <option value="">请选择目标服务</option>
+            <option value="endpoint-service-01">endpoint-service-01 (VPC endpoint service)</option>
+            <option value="endpoint-service-02">endpoint-service-02 (VPC endpoint service)</option>
+            <option value="endpoint-service-03">endpoint-service-03 (VPC endpoint service)</option>
           </select>
         </div>
       </div>
@@ -1421,41 +1401,33 @@
                 <th>策略ID</th>
                 <th>策略名称</th>
                 <th>访问源</th>
-                <th>目标VPC</th>
-                <th>目标子网</th>
-                <th>安全组</th>
+                <th>目标服务</th>
                 <th>备注</th>
                 <th>操作</th>
               </tr>
             </thead>
             <tbody id="policy-tbody">
-              <tr data-id="policy-001" data-name="开发环境访问策略" data-source="sandbox-dev-python" data-vpc="vpc-01" data-subnet="subnet-01" data-sg="sg-01" data-remark="开发环境默认访问策略">
+              <tr data-id="policy-001" data-name="开发环境访问策略" data-source="sandbox-dev-python" data-service="endpoint-service-01" data-remark="开发环境默认访问策略">
                 <td>policy-001</td>
                 <td>开发环境访问策略</td>
                 <td>sandbox-dev-python</td>
-                <td>vpc-01 (10.0.0.0/16)</td>
-                <td>subnet-01 (10.0.1.0/24)</td>
-                <td>sg-01 (默认安全组)</td>
+                <td>endpoint-service-01 (VPC endpoint service)</td>
                 <td>开发环境默认访问策略</td>
                 <td><a href="#" class="action-link edit-btn">编辑</a> <a href="#" class="action-link delete-btn">删除</a></td>
               </tr>
-              <tr data-id="policy-002" data-name="生产环境访问策略" data-source="sandbox-prod-java" data-vpc="vpc-01" data-subnet="subnet-02" data-sg="sg-02" data-remark="生产环境Web服务访问">
+              <tr data-id="policy-002" data-name="生产环境访问策略" data-source="sandbox-prod-java" data-service="endpoint-service-02" data-remark="生产环境Web服务访问">
                 <td>policy-002</td>
                 <td>生产环境访问策略</td>
                 <td>sandbox-prod-java</td>
-                <td>vpc-01 (10.0.0.0/16)</td>
-                <td>subnet-02 (10.0.2.0/24)</td>
-                <td>sg-02 (Web安全组)</td>
+                <td>endpoint-service-02 (VPC endpoint service)</td>
                 <td>生产环境Web服务访问</td>
                 <td><a href="#" class="action-link edit-btn">编辑</a> <a href="#" class="action-link delete-btn">删除</a></td>
               </tr>
-              <tr data-id="policy-003" data-name="测试环境访问策略" data-source="sandbox-test-node" data-vpc="vpc-02" data-subnet="subnet-03" data-sg="sg-03" data-remark="测试环境数据库访问">
+              <tr data-id="policy-003" data-name="测试环境访问策略" data-source="sandbox-test-node" data-service="endpoint-service-03" data-remark="测试环境数据库访问">
                 <td>policy-003</td>
                 <td>测试环境访问策略</td>
                 <td>sandbox-test-node</td>
-                <td>vpc-02 (172.16.0.0/16)</td>
-                <td>subnet-03 (172.16.1.0/24)</td>
-                <td>sg-03 (数据库安全组)</td>
+                <td>endpoint-service-03 (VPC endpoint service)</td>
                 <td>测试环境数据库访问</td>
                 <td><a href="#" class="action-link edit-btn">编辑</a> <a href="#" class="action-link delete-btn">删除</a></td>
               </tr>
@@ -1517,33 +1489,13 @@
         </div>
       </div>
       <div class="form-group">
-        <label class="form-label">目标VPC <span class="required">*</span></label>
+        <label class="form-label">目标服务 <span class="required">*</span></label>
         <div class="form-control">
-          <select class="form-select" id="target-vpc">
-            <option value="">请选择目标VPC</option>
-            <option value="vpc-01">vpc-01 (10.0.0.0/16)</option>
-            <option value="vpc-02">vpc-02 (172.16.0.0/16)</option>
-          </select>
-        </div>
-      </div>
-      <div class="form-group">
-        <label class="form-label">目标子网 <span class="required">*</span></label>
-        <div class="form-control">
-          <select class="form-select" id="target-subnet">
-            <option value="">请选择目标子网</option>
-            <option value="subnet-01">subnet-01 (10.0.1.0/24)</option>
-            <option value="subnet-02">subnet-02 (10.0.2.0/24)</option>
-          </select>
-        </div>
-      </div>
-      <div class="form-group">
-        <label class="form-label">安全组 <span class="required">*</span></label>
-        <div class="form-control">
-          <select class="form-select" id="security-group">
-            <option value="">请选择安全组</option>
-            <option value="sg-01">sg-01 (默认安全组)</option>
-            <option value="sg-02">sg-02 (Web安全组)</option>
-            <option value="sg-03">sg-03 (数据库安全组)</option>
+          <select class="form-select" id="target-service">
+            <option value="">请选择目标服务</option>
+            <option value="endpoint-service-01">endpoint-service-01 (VPC endpoint service)</option>
+            <option value="endpoint-service-02">endpoint-service-02 (VPC endpoint service)</option>
+            <option value="endpoint-service-03">endpoint-service-03 (VPC endpoint service)</option>
           </select>
         </div>
       </div>
@@ -1825,16 +1777,12 @@
       tr.dataset.id = p.id;
       tr.dataset.name = p.name;
       tr.dataset.source = p.source;
-      tr.dataset.vpc = p.vpc;
-      tr.dataset.subnet = p.subnet;
-      tr.dataset.sg = p.sg;
+      tr.dataset.service = p.service;
       tr.dataset.remark = p.remark || '';
       tr.innerHTML = '<td>' + p.id + '</td>' +
         '<td>' + p.name + '</td>' +
         '<td>' + p.source + '</td>' +
-        '<td>' + (vpcLabels[p.vpc] || p.vpc) + '</td>' +
-        '<td>' + (subnetLabels[p.subnet] || p.subnet) + '</td>' +
-        '<td>' + (sgLabels[p.sg] || p.sg) + '</td>' +
+        '<td>' + (serviceLabels[p.service] || p.service) + '</td>' +
         '<td>' + (p.remark || '') + '</td>' +
         '<td><a href="#" class="action-link edit-btn">编辑</a> <a href="#" class="action-link delete-btn">删除</a></td>';
       tbody.appendChild(tr);
@@ -1857,17 +1805,14 @@
     // 清空表单
     document.getElementById('policy-name').value = '';
     document.getElementById('access-source').value = '';
-    document.getElementById('target-vpc').value = '';
-    document.getElementById('target-subnet').value = '';
-    document.getElementById('security-group').value = '';
+    document.getElementById('target-service').value = '';
     document.getElementById('policy-desc').value = '';
   }
 
   function createPolicy() {
     const policyName = document.getElementById('policy-name').value.trim();
     const accessSource = document.getElementById('access-source').value.trim();
-    const targetVpc = document.getElementById('target-vpc').value;
-    const securityGroup = document.getElementById('security-group').value;
+    const targetService = document.getElementById('target-service').value;
     
     if (!policyName) {
       alert('请输入策略名称');
@@ -1877,17 +1822,8 @@
       alert('请选择访问源');
       return;
     }
-    if (!targetVpc) {
-      alert('请选择目标VPC');
-      return;
-    }
-    const targetSubnet = document.getElementById('target-subnet').value;
-    if (!targetSubnet) {
-      alert('请选择目标子网');
-      return;
-    }
-    if (!securityGroup) {
-      alert('请选择安全组');
+    if (!targetService) {
+      alert('请选择目标服务');
       return;
     }
     
@@ -1907,9 +1843,7 @@
       document.getElementById('edit-policy-id').value = row.dataset.id;
       document.getElementById('edit-policy-name').value = row.dataset.name;
       document.getElementById('edit-access-source').value = row.dataset.source;
-      document.getElementById('edit-target-vpc').value = row.dataset.vpc;
-      document.getElementById('edit-target-subnet').value = row.dataset.subnet;
-      document.getElementById('edit-security-group').value = row.dataset.sg;
+      document.getElementById('edit-target-service').value = row.dataset.service;
       document.getElementById('edit-policy-remark').value = row.dataset.remark;
       document.getElementById('edit-policy-desc').value = '';
 
@@ -1925,36 +1859,26 @@
   function savePolicy() {
     const policyName = document.getElementById('edit-policy-name').value.trim();
     const accessSource = document.getElementById('edit-access-source').value;
-    const targetVpc = document.getElementById('edit-target-vpc').value;
-    const targetSubnet = document.getElementById('edit-target-subnet').value;
-    const securityGroup = document.getElementById('edit-security-group').value;
+    const targetService = document.getElementById('edit-target-service').value;
 
     if (!policyName) { alert('请输入策略名称'); return; }
     if (!accessSource) { alert('请选择访问源'); return; }
-    if (!targetVpc) { alert('请选择目标VPC'); return; }
-    if (!targetSubnet) { alert('请选择目标子网'); return; }
-    if (!securityGroup) { alert('请选择安全组'); return; }
+    if (!targetService) { alert('请选择目标服务'); return; }
 
     // 更新行数据和 data 属性
     const remark = document.getElementById('edit-policy-remark').value.trim();
-    const vpcLabels = {'vpc-01':'vpc-01 (10.0.0.0/16)','vpc-02':'vpc-02 (172.16.0.0/16)'};
-    const subnetLabels = {'subnet-01':'subnet-01 (10.0.1.0/24)','subnet-02':'subnet-02 (10.0.2.0/24)','subnet-03':'subnet-03 (172.16.1.0/24)'};
-    const sgLabels = {'sg-01':'sg-01 (默认安全组)','sg-02':'sg-02 (Web安全组)','sg-03':'sg-03 (数据库安全组)'};
+    const serviceLabels = {'endpoint-service-01':'endpoint-service-01 (VPC endpoint service)','endpoint-service-02':'endpoint-service-02 (VPC endpoint service)','endpoint-service-03':'endpoint-service-03 (VPC endpoint service)'};
 
     editingRow.dataset.name = policyName;
     editingRow.dataset.source = accessSource;
-    editingRow.dataset.vpc = targetVpc;
-    editingRow.dataset.subnet = targetSubnet;
-    editingRow.dataset.sg = securityGroup;
+    editingRow.dataset.service = targetService;
     editingRow.dataset.remark = remark;
 
     const cells = editingRow.querySelectorAll('td');
     cells[1].textContent = policyName;
     cells[2].textContent = accessSource;
-    cells[3].textContent = vpcLabels[targetVpc] || targetVpc;
-    cells[4].textContent = subnetLabels[targetSubnet] || targetSubnet;
-    cells[5].textContent = sgLabels[securityGroup] || securityGroup;
-    cells[6].textContent = remark;
+    cells[3].textContent = serviceLabels[targetService] || targetService;
+    cells[4].textContent = remark;
 
     alert('策略保存成功！');
     closeEditPolicyModal();
