@@ -1328,16 +1328,31 @@
             </thead>
             <tbody>
               <tr>
-                <td colspan="7" class="empty-state">
-                  <div class="empty-icon">
-                    <svg width="64" height="64" viewBox="0 0 64 64" fill="none">
-                      <rect x="12" y="20" width="40" height="28" rx="4" stroke="currentColor" stroke-width="2" fill="none"/>
-                      <path d="M12 28h40" stroke="currentColor" stroke-width="2"/>
-                      <path d="M20 20V16a4 4 0 014-4h16a4 4 0 014 4v4" stroke="currentColor" stroke-width="2" fill="none"/>
-                    </svg>
-                  </div>
-                  <div class="empty-text">暂无数据</div>
-                </td>
+                <td>policy-001</td>
+                <td>开发环境访问策略</td>
+                <td>sandbox-dev-python</td>
+                <td>vpc-01 (10.0.0.0/16)</td>
+                <td>subnet-01 (10.0.1.0/24)</td>
+                <td>sg-01 (默认安全组)</td>
+                <td><a href="#" class="action-link">详情</a> <a href="#" class="action-link">删除</a></td>
+              </tr>
+              <tr>
+                <td>policy-002</td>
+                <td>生产环境访问策略</td>
+                <td>sandbox-prod-java</td>
+                <td>vpc-01 (10.0.0.0/16)</td>
+                <td>subnet-02 (10.0.2.0/24)</td>
+                <td>sg-02 (Web安全组)</td>
+                <td><a href="#" class="action-link">详情</a> <a href="#" class="action-link">删除</a></td>
+              </tr>
+              <tr>
+                <td>policy-003</td>
+                <td>测试环境访问策略</td>
+                <td>sandbox-test-node</td>
+                <td>vpc-02 (172.16.0.0/16)</td>
+                <td>不限</td>
+                <td>sg-03 (数据库安全组)</td>
+                <td><a href="#" class="action-link">详情</a> <a href="#" class="action-link">删除</a></td>
               </tr>
             </tbody>
           </table>
@@ -1523,6 +1538,15 @@
   }
   .form-textarea {
     resize: vertical;
+  }
+  .action-link {
+    color: #0066FF;
+    text-decoration: none;
+    font-size: 13px;
+    margin-right: 8px;
+  }
+  .action-link:hover {
+    text-decoration: underline;
   }
 </style>
 
