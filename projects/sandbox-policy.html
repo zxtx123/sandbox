@@ -1391,6 +1391,38 @@
         <!-- 翻页组件 -->
         <div class="pagination-bar">
           <div class="pagination-left">共3条记录 第1/1页</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // 复制文本功能
+  function copyText(text) {
+    navigator.clipboard.writeText(text).then(() => {
+      alert('已复制: ' + text);
+    });
+  }
+
+  // 图标栏交互
+  document.querySelectorAll('.icon-item').forEach(item => {
+    item.addEventListener('click', function() {
+      document.querySelectorAll('.icon-item').forEach(i => i.classList.remove('active'));
+      this.classList.add('active');
+    });
+  });
+
+  // 一级菜单项点击切换图标状态
+  document.querySelectorAll('.menu-level-1 > .menu-item').forEach(item => {
+    item.addEventListener('click', function(e) {
+      e.stopPropagation();
+      // 切换选中状态
+      this.classList.toggle('selected');
+    });
+  });
+
+  // 子菜单项点击选中交互
   document.querySelectorAll('.submenu-expanded .menu-item').forEach(item => {
     item.addEventListener('click', function(e) {
       e.stopPropagation();
