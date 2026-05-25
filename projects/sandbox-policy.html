@@ -1393,48 +1393,60 @@
     </div>
     <div class="modal-body">
       <div class="form-group">
-        <label>策略名称 <span class="required">*</span></label>
-        <input type="text" class="form-input" id="policy-name" placeholder="请输入策略名称">
+        <label class="form-label">策略名称 <span class="required">*</span></label>
+        <div class="form-control">
+          <input type="text" class="form-input" id="policy-name" placeholder="请输入策略名称">
+        </div>
       </div>
       <div class="form-group">
-        <label>访问源 <span class="required">*</span></label>
-        <select class="form-select" id="access-source">
-          <option value="">请选择访问源</option>
-          <option value="sandbox-dev-python">sandbox-dev-python</option>
-          <option value="sandbox-prod-java">sandbox-prod-java</option>
-          <option value="sandbox-test-node">sandbox-test-node</option>
-          <option value="sandbox-staging-go">sandbox-staging-go</option>
-          <option value="sandbox-ci-rust">sandbox-ci-rust</option>
-        </select>
+        <label class="form-label">访问源 <span class="required">*</span></label>
+        <div class="form-control">
+          <select class="form-select" id="access-source">
+            <option value="">请选择访问源</option>
+            <option value="sandbox-dev-python">sandbox-dev-python</option>
+            <option value="sandbox-prod-java">sandbox-prod-java</option>
+            <option value="sandbox-test-node">sandbox-test-node</option>
+            <option value="sandbox-staging-go">sandbox-staging-go</option>
+            <option value="sandbox-ci-rust">sandbox-ci-rust</option>
+          </select>
+        </div>
       </div>
       <div class="form-group">
-        <label>目标VPC <span class="required">*</span></label>
-        <select class="form-select" id="target-vpc">
-          <option value="">请选择目标VPC</option>
-          <option value="vpc-01">vpc-01 (10.0.0.0/16)</option>
-          <option value="vpc-02">vpc-02 (172.16.0.0/16)</option>
-        </select>
+        <label class="form-label">目标VPC <span class="required">*</span></label>
+        <div class="form-control">
+          <select class="form-select" id="target-vpc">
+            <option value="">请选择目标VPC</option>
+            <option value="vpc-01">vpc-01 (10.0.0.0/16)</option>
+            <option value="vpc-02">vpc-02 (172.16.0.0/16)</option>
+          </select>
+        </div>
       </div>
       <div class="form-group">
-        <label>目标子网</label>
-        <select class="form-select" id="target-subnet">
-          <option value="">不限</option>
-          <option value="subnet-01">subnet-01 (10.0.1.0/24)</option>
-          <option value="subnet-02">subnet-02 (10.0.2.0/24)</option>
-        </select>
+        <label class="form-label">目标子网 <span class="required">*</span></label>
+        <div class="form-control">
+          <select class="form-select" id="target-subnet">
+            <option value="">请选择目标子网</option>
+            <option value="subnet-01">subnet-01 (10.0.1.0/24)</option>
+            <option value="subnet-02">subnet-02 (10.0.2.0/24)</option>
+          </select>
+        </div>
       </div>
       <div class="form-group">
-        <label>安全组 <span class="required">*</span></label>
-        <select class="form-select" id="security-group">
-          <option value="">请选择安全组</option>
-          <option value="sg-01">sg-01 (默认安全组)</option>
-          <option value="sg-02">sg-02 (Web安全组)</option>
-          <option value="sg-03">sg-03 (数据库安全组)</option>
-        </select>
+        <label class="form-label">安全组 <span class="required">*</span></label>
+        <div class="form-control">
+          <select class="form-select" id="security-group">
+            <option value="">请选择安全组</option>
+            <option value="sg-01">sg-01 (默认安全组)</option>
+            <option value="sg-02">sg-02 (Web安全组)</option>
+            <option value="sg-03">sg-03 (数据库安全组)</option>
+          </select>
+        </div>
       </div>
       <div class="form-group">
-        <label>描述</label>
-        <textarea class="form-textarea" id="policy-desc" placeholder="请输入策略描述（可选）" rows="3"></textarea>
+        <label class="form-label">描述</label>
+        <div class="form-control">
+          <textarea class="form-textarea" id="policy-desc" placeholder="请输入策略描述（可选）" rows="3"></textarea>
+        </div>
       </div>
     </div>
     <div class="modal-footer">
@@ -1464,7 +1476,7 @@
   .modal-dialog {
     background: #fff;
     border-radius: 8px;
-    width: 500px;
+    width: 560px;
     max-width: 90%;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
   }
@@ -1506,16 +1518,28 @@
     border-top: 1px solid #eee;
   }
   .form-group {
+    display: flex;
+    align-items: flex-start;
     margin-bottom: 16px;
   }
   .form-group:last-child {
     margin-bottom: 0;
   }
-  .form-group label {
-    display: block;
-    margin-bottom: 8px;
+  .form-label {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+    width: 80px;
+    margin-bottom: 0;
     font-size: 14px;
     color: #333;
+    line-height: 36px;
+    justify-content: flex-end;
+    padding-right: 12px;
+  }
+  .form-control {
+    flex: 1;
+    min-width: 0;
   }
   .required {
     color: #ff4d4f;
@@ -1688,6 +1712,11 @@
     }
     if (!targetVpc) {
       alert('请选择目标VPC');
+      return;
+    }
+    const targetSubnet = document.getElementById('target-subnet').value;
+    if (!targetSubnet) {
+      alert('请选择目标子网');
       return;
     }
     if (!securityGroup) {
