@@ -1504,19 +1504,6 @@
         </div>
       </div>
       <div class="form-group">
-        <label class="form-label">访问源 <span class="required">*</span></label>
-        <div class="form-control">
-          <select class="form-select" id="access-source">
-            <option value="">请选择沙箱</option>
-            <option value="sandbox-dev-python">sandbox-dev-python</option>
-            <option value="sandbox-prod-java">sandbox-prod-java</option>
-            <option value="sandbox-test-node">sandbox-test-node</option>
-            <option value="sandbox-staging-go">sandbox-staging-go</option>
-            <option value="sandbox-ci-rust">sandbox-ci-rust</option>
-          </select>
-        </div>
-      </div>
-      <div class="form-group">
         <label class="form-label">目标VPC <span class="required">*</span></label>
         <div class="form-control">
           <select class="form-select" id="target-vpc">
@@ -1533,17 +1520,6 @@
             <option value="">请选择目标子网</option>
             <option value="subnet-01">subnet-01 (10.0.1.0/24)</option>
             <option value="subnet-02">subnet-02 (10.0.2.0/24)</option>
-          </select>
-        </div>
-      </div>
-      <div class="form-group">
-        <label class="form-label">安全组 <span class="required">*</span></label>
-        <div class="form-control">
-          <select class="form-select" id="security-group">
-            <option value="">请选择安全组</option>
-            <option value="sg-01">sg-01 (默认安全组)</option>
-            <option value="sg-02">sg-02 (Web安全组)</option>
-            <option value="sg-03">sg-03 (数据库安全组)</option>
           </select>
         </div>
       </div>
@@ -1856,25 +1832,17 @@
     document.getElementById('create-policy-modal').classList.remove('active');
     // 清空表单
     document.getElementById('policy-name').value = '';
-    document.getElementById('access-source').value = '';
     document.getElementById('target-vpc').value = '';
     document.getElementById('target-subnet').value = '';
-    document.getElementById('security-group').value = '';
     document.getElementById('policy-desc').value = '';
   }
 
   function createPolicy() {
     const policyName = document.getElementById('policy-name').value.trim();
-    const accessSource = document.getElementById('access-source').value.trim();
     const targetVpc = document.getElementById('target-vpc').value;
-    const securityGroup = document.getElementById('security-group').value;
     
     if (!policyName) {
       alert('请输入策略名称');
-      return;
-    }
-    if (!accessSource) {
-      alert('请选择访问源');
       return;
     }
     if (!targetVpc) {
@@ -1884,10 +1852,6 @@
     const targetSubnet = document.getElementById('target-subnet').value;
     if (!targetSubnet) {
       alert('请选择目标子网');
-      return;
-    }
-    if (!securityGroup) {
-      alert('请选择安全组');
       return;
     }
     
