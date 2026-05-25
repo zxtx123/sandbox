@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>沙箱模板 - 360智汇云</title>
+  <title>网络策略 - 360智汇云</title>
   <style>
     * {
       margin: 0;
@@ -1246,6 +1246,14 @@
             </div>
             <a href="sandbox-playground.html"><span class="menu-text">试验场</span></a>
           </div>
+          <div class="menu-item active">
+            <div class="menu-icon">
+              <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
+                <path d="M3 12l3-3 3 3 4-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <span class="menu-text">网络策略</span>
+          </div>
           <div class="menu-item">
             <div class="menu-icon">
               <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
@@ -1284,14 +1292,6 @@
           <div class="menu-item">
             <div class="menu-icon">
               <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
-                <path d="M3 12l3-3 3 3 4-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </div>
-            <a href="sandbox-policy.html"><span class="menu-text">网络策略</span></a>
-          </div>
-          <div class="menu-item">
-            <div class="menu-icon">
-              <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
                 <rect x="2" y="2" width="12" height="12" rx="2" stroke="currentColor" stroke-width="1.5" fill="none"/>
                 <path d="M2 6h12M6 6v8" stroke="currentColor" stroke-width="1.5"/>
               </svg>
@@ -1306,7 +1306,7 @@
   <!-- 第三栏：右侧主内容 -->
   <div class="main-content">
     <div class="breadcrumb">
-      <span class="breadcrumb-left" id="menu-name-display">沙箱模板</span>
+      <span class="breadcrumb-left" id="menu-name-display">网络策略</span>
       <a class="breadcrumb-link" id="menu-link-display">Sandbox 帮助文档</a>
     </div>
     <div class="content-body">
@@ -1318,12 +1318,12 @@
               <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
                 <path d="M8 2v12M2 8h12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
               </svg>
-              创建模板
+              创建策略
             </button>
           </div>
           <div class="toolbar-right">
             <div class="search-box">
-              <input type="text" id="sandbox-search" placeholder="请输入模板ID">
+              <input type="text" id="sandbox-search" placeholder="请输入策略ID">
               <button class="search-btn">
                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
                   <circle cx="7" cy="7" r="5" stroke="currentColor" stroke-width="1.5" fill="none"/>
@@ -1346,42 +1346,42 @@
             <table>
             <thead>
               <tr>
-                <th>模板ID</th>
-                <th>模板名称</th>
-                <th>CPU</th>
-                <th>内存(Memory)</th>
-                <th>创建时间</th>
-                <th>更新时间</th>
-                <th>可见性</th>
+                <th>策略ID</th>
+                <th>策略名称</th>
+                <th>访问源</th>
+                <th>目标VPC</th>
+                <th>目标子网</th>
+                <th>安全组</th>
+                <th>操作</th>
               </tr>
             </thead>
             <tbody>
               <tr>
-                <td class="id-cell">zs47yil2jbkdf73nali2<span class="copy-icon" onclick="copyText('zs47yil2jbkdf73nali2')">📋</span></td>
-                <td class="template-name">code-interpreter-v1</td>
-                <td>2</td>
-                <td>1024MB</td>
-                <td>2025-09-12 17:24:45</td>
-                <td>2025-09-12 17:24:45</td>
-                <td><span class="visibility-badge">Public</span></td>
+                <td class="id-cell">policy-001<span class="copy-icon" onclick="copyText('policy-001')">📋</span></td>
+                <td>允许HTTP访问</td>
+                <td>0.0.0.0/0</td>
+                <td>vpc-default</td>
+                <td>subnet-01</td>
+                <td>sg-web</td>
+                <td><span class="action-link">编辑</span> <span class="action-link">删除</span></td>
               </tr>
               <tr>
-                <td class="id-cell">y0ad1vs1k72ijelq7jjy<span class="copy-icon" onclick="copyText('y0ad1vs1k72ijelq7jjy')">📋</span></td>
-                <td class="template-name">desktop</td>
-                <td>2</td>
-                <td>1024MB</td>
-                <td>2025-09-22 15:10:28</td>
-                <td>2025-09-22 15:10:28</td>
-                <td><span class="visibility-badge">Public</span></td>
+                <td class="id-cell">policy-002<span class="copy-icon" onclick="copyText('policy-002')">📋</span></td>
+                <td>内网互通策略</td>
+                <td>10.0.0.0/8</td>
+                <td>vpc-internal</td>
+                <td>subnet-02</td>
+                <td>sg-internal</td>
+                <td><span class="action-link">编辑</span> <span class="action-link">删除</span></td>
               </tr>
               <tr>
-                <td class="id-cell">kqepe5sjnv9hrcxzxe2g<span class="copy-icon" onclick="copyText('kqepe5sjnv9hrcxzxe2g')">📋</span></td>
-                <td class="template-name">chrome-template</td>
-                <td>2</td>
-                <td>1024MB</td>
-                <td>2025-11-12 15:36:52</td>
-                <td>2025-11-12 15:36:55</td>
-                <td><span class="visibility-badge">Public</span></td>
+                <td class="id-cell">policy-003<span class="copy-icon" onclick="copyText('policy-003')">📋</span></td>
+                <td>数据库访问策略</td>
+                <td>172.16.0.0/12</td>
+                <td>vpc-db</td>
+                <td>subnet-db</td>
+                <td>sg-database</td>
+                <td><span class="action-link">编辑</span> <span class="action-link">删除</span></td>
               </tr>
             </tbody>
           </table>
@@ -1391,38 +1391,6 @@
         <!-- 翻页组件 -->
         <div class="pagination-bar">
           <div class="pagination-left">共3条记录 第1/1页</div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<script>
-  // 复制文本功能
-  function copyText(text) {
-    navigator.clipboard.writeText(text).then(() => {
-      alert('已复制: ' + text);
-    });
-  }
-
-  // 图标栏交互
-  document.querySelectorAll('.icon-item').forEach(item => {
-    item.addEventListener('click', function() {
-      document.querySelectorAll('.icon-item').forEach(i => i.classList.remove('active'));
-      this.classList.add('active');
-    });
-  });
-
-  // 一级菜单项点击切换图标状态
-  document.querySelectorAll('.menu-level-1 > .menu-item').forEach(item => {
-    item.addEventListener('click', function(e) {
-      e.stopPropagation();
-      // 切换选中状态
-      this.classList.toggle('selected');
-    });
-  });
-
-  // 子菜单项点击选中交互
   document.querySelectorAll('.submenu-expanded .menu-item').forEach(item => {
     item.addEventListener('click', function(e) {
       e.stopPropagation();
