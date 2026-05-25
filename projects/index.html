@@ -1399,7 +1399,7 @@
 
 <!-- 设置策略弹窗 -->
 <div class="modal-overlay" id="set-policy-modal">
-  <div class="modal-dialog">
+  <div class="modal-dialog" style="width:500px;">
     <div class="modal-header">
       <h3 class="modal-title">设置策略</h3>
       <button class="modal-close" onclick="closeSetPolicyModal()">&times;</button>
@@ -1412,53 +1412,17 @@
         </div>
       </div>
       <div class="form-group">
-        <label class="form-label">策略名称 <span class="required">*</span></label>
+        <label class="form-label">网络策略 <span class="required">*</span></label>
         <div class="form-control">
-          <input type="text" class="form-input" id="set-policy-name" placeholder="请输入策略名称">
-        </div>
-      </div>
-      <div class="form-group">
-        <label class="form-label">目标VPC <span class="required">*</span></label>
-        <div class="form-control">
-          <select class="form-select" id="set-target-vpc">
-            <option value="">请选择目标VPC</option>
-            <option value="vpc-01">vpc-01 (10.0.0.0/16)</option>
-            <option value="vpc-02">vpc-02 (172.16.0.0/16)</option>
-          </select>
-        </div>
-      </div>
-      <div class="form-group">
-        <label class="form-label">目标子网 <span class="required">*</span></label>
-        <div class="form-control">
-          <select class="form-select" id="set-target-subnet">
-            <option value="">请选择目标子网</option>
-            <option value="subnet-01">subnet-01 (10.0.1.0/24)</option>
-            <option value="subnet-02">subnet-02 (10.0.2.0/24)</option>
-          </select>
-        </div>
-      </div>
-      <div class="form-group">
-        <label class="form-label">安全组 <span class="required">*</span></label>
-        <div class="form-control">
-          <select class="form-select" id="set-security-group">
-            <option value="">请选择安全组</option>
-            <option value="sg-01">sg-01 (默认安全组)</option>
-            <option value="sg-02">sg-02 (Web安全组)</option>
-            <option value="sg-03">sg-03 (数据库安全组)</option>
-          </select>
-        </div>
-      </div>
-
-      <div class="form-group">
-        <label class="form-label">描述</label>
-        <div class="form-control">
-          <textarea class="form-textarea" id="set-policy-desc" placeholder="请输入策略描述（可选）" rows="3"></textarea>
+          <div id="policy-radio-list" style="max-height:260px;overflow-y:auto;border:1px solid #ddd;border-radius:4px;padding:8px;">
+            <!-- 动态渲染 -->
+          </div>
         </div>
       </div>
     </div>
     <div class="modal-footer">
       <button class="btn btn-default" onclick="closeSetPolicyModal()">取消</button>
-      <button class="btn btn-primary" onclick="createPolicyFromSandbox()">创建</button>
+      <button class="btn btn-primary" onclick="confirmSetPolicy()">确定</button>
     </div>
   </div>
 </div>
@@ -1676,52 +1640,55 @@
 
   // 设置策略弹窗
   let currentSandboxName = '';
+  const staticPolicies = [
+    { id: 'policy-001', name: '开发环境访问策略', vpc: 'vpc-01', subnet: 'subnet-01 (10.0.1.0/24)', remark: '开发环境专用' },
+    { id: 'policy-002', name: '生产环境访问策略', vpc: 'vpc-01', subnet: 'subnet-02 (10.0.2.0/24)', remark: '生产环境专用' },
+    { id: 'policy-003', name: '测试环境访问策略', vpc: 'vpc-02', subnet: 'subnet-03 (172.16.1.0/24)', remark: '测试环境专用' }
+  ];
+
+  function getAllPolicies() {
+    const localPolicies = JSON.parse(localStorage.getItem('sandboxPolicies') || '[]');
+    return [...staticPolicies, ...localPolicies];
+  }
+
+  function renderPolicyRadioList() {
+    const container = document.getElementById('policy-radio-list');
+    const policies = getAllPolicies();
+    if (policies.length === 0) {
+      container.innerHTML = '<div style="color:#999;text-align:center;padding:20px;">暂无可选策略</div>';
+      return;
+    }
+    container.innerHTML = policies.map(p => `
+      <label style="display:flex;align-items:center;padding:8px 10px;cursor:pointer;border-bottom:1px solid #f0f0f0;" onmouseover="this.style.background='#f5f7fa'" onmouseout="this.style.background=''">
+        <input type="radio" name="policy-select" value="${p.id}" style="margin-right:10px;">
+        <div>
+          <div style="font-weight:500;">${p.name}</div>
+          <div style="font-size:12px;color:#999;margin-top:2px;">${p.id} | ${p.vpc} | ${p.subnet}</div>
+        </div>
+      </label>
+    `).join('');
+  }
+
   document.querySelectorAll('.set-policy-btn').forEach(btn => {
     btn.addEventListener('click', function(e) {
       e.preventDefault();
       currentSandboxName = this.dataset.sandbox;
       document.getElementById('set-sandbox-name').value = currentSandboxName;
+      renderPolicyRadioList();
       document.getElementById('set-policy-modal').classList.add('active');
     });
   });
 
   function closeSetPolicyModal() {
     document.getElementById('set-policy-modal').classList.remove('active');
-    document.getElementById('set-policy-name').value = '';
-    document.getElementById('set-target-vpc').value = '';
-    document.getElementById('set-target-subnet').value = '';
-    document.getElementById('set-security-group').value = '';
-
-    document.getElementById('set-policy-desc').value = '';
     currentSandboxName = '';
   }
 
-  function createPolicyFromSandbox() {
-    const policyName = document.getElementById('set-policy-name').value.trim();
-    const targetVpc = document.getElementById('set-target-vpc').value;
-    const targetSubnet = document.getElementById('set-target-subnet').value;
-    const securityGroup = document.getElementById('set-security-group').value;
-
-    if (!policyName) { alert('请输入策略名称'); return; }
-    if (!targetVpc) { alert('请选择目标VPC'); return; }
-    if (!targetSubnet) { alert('请选择目标子网'); return; }
-    if (!securityGroup) { alert('请选择安全组'); return; }
-
-    // 保存到 localStorage
-    const policies = JSON.parse(localStorage.getItem('sandboxPolicies') || '[]');
-    policies.push({
-      id: 'policy-' + String(policies.length + 4).padStart(3, '0'),
-      name: policyName,
-      source: currentSandboxName,
-      vpc: targetVpc,
-      subnet: targetSubnet,
-      sg: securityGroup,
-
-      desc: document.getElementById('set-policy-desc').value.trim()
-    });
-    localStorage.setItem('sandboxPolicies', JSON.stringify(policies));
-
-    alert('策略创建成功！');
+  function confirmSetPolicy() {
+    const selected = document.querySelector('input[name="policy-select"]:checked');
+    if (!selected) { alert('请选择一条网络策略'); return; }
+    const policyId = selected.value;
+    alert('策略设置成功！已为沙箱 ' + currentSandboxName + ' 绑定策略 ' + policyId);
     closeSetPolicyModal();
   }
 
