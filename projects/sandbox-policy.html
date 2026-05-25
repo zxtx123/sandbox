@@ -1377,7 +1377,7 @@
           </div>
           <div class="toolbar-right">
             <div class="search-box">
-              <input type="text" id="sandbox-search" placeholder="请输入策略ID">
+              <input type="text" id="sandbox-search" placeholder="请输入策略ID或策略名称">
               <button class="search-btn">
                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
                   <circle cx="7" cy="7" r="5" stroke="currentColor" stroke-width="1.5" fill="none"/>
@@ -1886,7 +1886,7 @@
     btn.addEventListener('click', function(e) {
       e.preventDefault();
       const row = this.closest('tr');
-      if (confirm('确定要删除策略 ' + row.dataset.id + ' 吗？')) {
+      if (confirm('确认删除' + row.dataset.name + '策略吗，删除后不可恢复。')) {
         row.remove();
       }
     });
