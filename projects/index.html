@@ -1414,7 +1414,8 @@
       <div class="form-group">
         <label class="form-label">网络策略 <span class="required">*</span></label>
         <div class="form-control">
-          <div id="policy-radio-list" style="max-height:260px;overflow-y:auto;border:1px solid #ddd;border-radius:4px;padding:8px;">
+          <input type="text" id="policy-search" class="form-input" placeholder="请输入策略ID或策略名称" style="margin-bottom:8px;" oninput="filterPolicyList()">
+          <div id="policy-radio-list" style="max-height:220px;overflow-y:auto;border:1px solid #ddd;border-radius:4px;padding:8px;">
             <!-- 动态渲染 -->
           </div>
         </div>
@@ -1651,11 +1652,15 @@
     return [...staticPolicies, ...localPolicies];
   }
 
-  function renderPolicyRadioList() {
+  function renderPolicyRadioList(keyword) {
     const container = document.getElementById('policy-radio-list');
-    const policies = getAllPolicies();
+    let policies = getAllPolicies();
+    if (keyword) {
+      const kw = keyword.toLowerCase();
+      policies = policies.filter(p => p.id.toLowerCase().includes(kw) || p.name.toLowerCase().includes(kw));
+    }
     if (policies.length === 0) {
-      container.innerHTML = '<div style="color:#999;text-align:center;padding:20px;">暂无可选策略</div>';
+      container.innerHTML = '<div style="color:#999;text-align:center;padding:20px;">暂无匹配策略</div>';
       return;
     }
     container.innerHTML = policies.map(p => `
@@ -1669,11 +1674,17 @@
     `).join('');
   }
 
+  function filterPolicyList() {
+    const keyword = document.getElementById('policy-search').value.trim();
+    renderPolicyRadioList(keyword);
+  }
+
   document.querySelectorAll('.set-policy-btn').forEach(btn => {
     btn.addEventListener('click', function(e) {
       e.preventDefault();
       currentSandboxName = this.dataset.sandbox;
       document.getElementById('set-sandbox-name').value = currentSandboxName;
+      document.getElementById('policy-search').value = '';
       renderPolicyRadioList();
       document.getElementById('set-policy-modal').classList.add('active');
     });
