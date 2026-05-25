@@ -38,6 +38,17 @@
         </div>
       </div>
       <div class="form-group">
+        <label class="form-label">HULK项目 <span class="required">*</span></label>
+        <div class="form-control">
+          <select class="form-select" id="edit-hulk-project">
+            <option value="">请选择HULK项目</option>
+            <option value="hulk-project-ai">hulk-project-ai</option>
+            <option value="hulk-project-ml">hulk-project-ml</option>
+            <option value="hulk-project-data">hulk-project-data</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
         <label class="form-label">目标服务 <span class="required">*</span></label>
         <div class="form-control inline-group">
           <select class="form-select" id="edit-target-service">
@@ -1402,32 +1413,36 @@
                 <th>策略ID</th>
                 <th>策略名称</th>
                 <th>访问源</th>
+                <th>HULK项目</th>
                 <th>目标服务</th>
                 <th>备注</th>
                 <th>操作</th>
               </tr>
             </thead>
             <tbody id="policy-tbody">
-              <tr data-id="policy-001" data-name="开发环境访问策略" data-source="sandbox-dev-python" data-service="endpoint-service-01" data-remark="开发环境默认访问策略">
+              <tr data-id="policy-001" data-name="开发环境访问策略" data-source="sandbox-dev-python" data-project="hulk-project-ai" data-service="endpoint-service-01" data-remark="开发环境默认访问策略">
                 <td>policy-001</td>
                 <td>开发环境访问策略</td>
                 <td>sandbox-dev-python</td>
+                <td>hulk-project-ai</td>
                 <td>endpoint-service-01 (VPC endpoint service)</td>
                 <td>开发环境默认访问策略</td>
                 <td><a href="#" class="action-link edit-btn">编辑</a> <a href="#" class="action-link delete-btn">删除</a></td>
               </tr>
-              <tr data-id="policy-002" data-name="生产环境访问策略" data-source="sandbox-prod-java" data-service="endpoint-service-02" data-remark="生产环境Web服务访问">
+              <tr data-id="policy-002" data-name="生产环境访问策略" data-source="sandbox-prod-java" data-project="hulk-project-ai" data-service="endpoint-service-02" data-remark="生产环境Web服务访问">
                 <td>policy-002</td>
                 <td>生产环境访问策略</td>
                 <td>sandbox-prod-java</td>
+                <td>hulk-project-ai</td>
                 <td>endpoint-service-02 (VPC endpoint service)</td>
                 <td>生产环境Web服务访问</td>
                 <td><a href="#" class="action-link edit-btn">编辑</a> <a href="#" class="action-link delete-btn">删除</a></td>
               </tr>
-              <tr data-id="policy-003" data-name="测试环境访问策略" data-source="sandbox-test-node" data-service="endpoint-service-03" data-remark="测试环境数据库访问">
+              <tr data-id="policy-003" data-name="测试环境访问策略" data-source="sandbox-test-node" data-project="hulk-project-ml" data-service="endpoint-service-03" data-remark="测试环境数据库访问">
                 <td>policy-003</td>
                 <td>测试环境访问策略</td>
                 <td>sandbox-test-node</td>
+                <td>hulk-project-ml</td>
                 <td>endpoint-service-03 (VPC endpoint service)</td>
                 <td>测试环境数据库访问</td>
                 <td><a href="#" class="action-link edit-btn">编辑</a> <a href="#" class="action-link delete-btn">删除</a></td>
@@ -1486,6 +1501,17 @@
             <option value="sandbox-test-node">sandbox-test-node</option>
             <option value="sandbox-staging-go">sandbox-staging-go</option>
             <option value="sandbox-ci-rust">sandbox-ci-rust</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">HULK项目 <span class="required">*</span></label>
+        <div class="form-control">
+          <select class="form-select" id="hulk-project" required>
+            <option value="">请选择HULK项目</option>
+            <option value="hulk-project-ai">hulk-project-ai</option>
+            <option value="hulk-project-ml">hulk-project-ml</option>
+            <option value="hulk-project-data">hulk-project-data</option>
           </select>
         </div>
       </div>
@@ -1768,9 +1794,8 @@
         document.getElementById('edit-policy-id').value = row.dataset.id;
         document.getElementById('edit-policy-name').value = row.dataset.name;
         document.getElementById('edit-access-source').value = row.dataset.source;
-        document.getElementById('edit-target-vpc').value = row.dataset.vpc;
-        document.getElementById('edit-target-subnet').value = row.dataset.subnet;
-        document.getElementById('edit-security-group').value = row.dataset.sg;
+        document.getElementById('edit-hulk-project').value = row.dataset.project || '';
+        document.getElementById('edit-target-service').value = row.dataset.service;
         document.getElementById('edit-policy-remark').value = row.dataset.remark || '';
         document.getElementById('edit-policy-desc').value = '';
         document.getElementById('edit-policy-modal').classList.add('active');
@@ -1796,11 +1821,14 @@
       tr.dataset.id = p.id;
       tr.dataset.name = p.name;
       tr.dataset.source = p.source;
+      tr.dataset.project = p.project || '';
       tr.dataset.service = p.service;
       tr.dataset.remark = p.remark || '';
+      const projectLabels = {'hulk-project-ai':'hulk-project-ai','hulk-project-ml':'hulk-project-ml','hulk-project-data':'hulk-project-data'};
       tr.innerHTML = '<td>' + p.id + '</td>' +
         '<td>' + p.name + '</td>' +
         '<td>' + p.source + '</td>' +
+        '<td>' + (projectLabels[p.project] || p.project || '') + '</td>' +
         '<td>' + (serviceLabels[p.service] || p.service) + '</td>' +
         '<td>' + (p.remark || '') + '</td>' +
         '<td><a href="#" class="action-link edit-btn">编辑</a> <a href="#" class="action-link delete-btn">删除</a></td>';
@@ -1831,6 +1859,7 @@
   function createPolicy() {
     const policyName = document.getElementById('policy-name').value.trim();
     const accessSource = document.getElementById('access-source').value.trim();
+    const hulkProject = document.getElementById('hulk-project').value;
     const targetService = document.getElementById('target-service').value;
     
     if (!policyName) {
@@ -1839,6 +1868,10 @@
     }
     if (!accessSource) {
       alert('请选择访问源');
+      return;
+    }
+    if (!hulkProject) {
+      alert('请选择HULK项目');
       return;
     }
     if (!targetService) {
@@ -1878,26 +1911,31 @@
   function savePolicy() {
     const policyName = document.getElementById('edit-policy-name').value.trim();
     const accessSource = document.getElementById('edit-access-source').value;
+    const hulkProject = document.getElementById('edit-hulk-project').value;
     const targetService = document.getElementById('edit-target-service').value;
 
     if (!policyName) { alert('请输入策略名称'); return; }
     if (!accessSource) { alert('请选择访问源'); return; }
+    if (!hulkProject) { alert('请选择HULK项目'); return; }
     if (!targetService) { alert('请选择目标服务'); return; }
 
     // 更新行数据和 data 属性
     const remark = document.getElementById('edit-policy-remark').value.trim();
     const serviceLabels = {'endpoint-service-01':'endpoint-service-01 (VPC endpoint service)','endpoint-service-02':'endpoint-service-02 (VPC endpoint service)','endpoint-service-03':'endpoint-service-03 (VPC endpoint service)'};
+    const projectLabels = {'hulk-project-ai':'hulk-project-ai','hulk-project-ml':'hulk-project-ml','hulk-project-data':'hulk-project-data'};
 
     editingRow.dataset.name = policyName;
     editingRow.dataset.source = accessSource;
+    editingRow.dataset.project = hulkProject;
     editingRow.dataset.service = targetService;
     editingRow.dataset.remark = remark;
 
     const cells = editingRow.querySelectorAll('td');
     cells[1].textContent = policyName;
     cells[2].textContent = accessSource;
-    cells[3].textContent = serviceLabels[targetService] || targetService;
-    cells[4].textContent = remark;
+    cells[3].textContent = projectLabels[hulkProject] || hulkProject;
+    cells[4].textContent = serviceLabels[targetService] || targetService;
+    cells[5].textContent = remark;
 
     alert('策略保存成功！');
     closeEditPolicyModal();
