@@ -1323,6 +1323,7 @@
                 <th>目标VPC</th>
                 <th>目标子网</th>
                 <th>安全组</th>
+                <th>备注</th>
                 <th>操作</th>
               </tr>
             </thead>
@@ -1334,7 +1335,8 @@
                 <td>vpc-01 (10.0.0.0/16)</td>
                 <td>subnet-01 (10.0.1.0/24)</td>
                 <td>sg-01 (默认安全组)</td>
-                <td><a href="#" class="action-link">详情</a> <a href="#" class="action-link">删除</a></td>
+                <td>开发环境默认访问策略</td>
+                <td><a href="#" class="action-link">编辑</a> <a href="#" class="action-link">删除</a></td>
               </tr>
               <tr>
                 <td>policy-002</td>
@@ -1343,16 +1345,18 @@
                 <td>vpc-01 (10.0.0.0/16)</td>
                 <td>subnet-02 (10.0.2.0/24)</td>
                 <td>sg-02 (Web安全组)</td>
-                <td><a href="#" class="action-link">详情</a> <a href="#" class="action-link">删除</a></td>
+                <td>生产环境Web服务访问</td>
+                <td><a href="#" class="action-link">编辑</a> <a href="#" class="action-link">删除</a></td>
               </tr>
               <tr>
                 <td>policy-003</td>
                 <td>测试环境访问策略</td>
                 <td>sandbox-test-node</td>
                 <td>vpc-02 (172.16.0.0/16)</td>
-                <td>不限</td>
+                <td>subnet-03 (172.16.1.0/24)</td>
                 <td>sg-03 (数据库安全组)</td>
-                <td><a href="#" class="action-link">详情</a> <a href="#" class="action-link">删除</a></td>
+                <td>测试环境数据库访问</td>
+                <td><a href="#" class="action-link">编辑</a> <a href="#" class="action-link">删除</a></td>
               </tr>
             </tbody>
           </table>
