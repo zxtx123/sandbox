@@ -25,6 +25,19 @@
         </div>
       </div>
       <div class="form-group">
+        <label class="form-label">访问源 <span class="required">*</span></label>
+        <div class="form-control">
+          <select class="form-select" id="edit-access-source">
+            <option value="">请选择沙箱</option>
+            <option value="sandbox-dev-python">sandbox-dev-python</option>
+            <option value="sandbox-prod-java">sandbox-prod-java</option>
+            <option value="sandbox-test-node">sandbox-test-node</option>
+            <option value="sandbox-staging-go">sandbox-staging-go</option>
+            <option value="sandbox-ci-rust">sandbox-ci-rust</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
         <label class="form-label">目标VPC <span class="required">*</span></label>
         <div class="form-control">
           <select class="form-select" id="edit-target-vpc">
@@ -41,6 +54,17 @@
             <option value="">请选择目标子网</option>
             <option value="subnet-01">subnet-01 (10.0.1.0/24)</option>
             <option value="subnet-02">subnet-02 (10.0.2.0/24)</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">安全组 <span class="required">*</span></label>
+        <div class="form-control">
+          <select class="form-select" id="edit-security-group">
+            <option value="">请选择安全组</option>
+            <option value="sg-01">sg-01 (默认安全组)</option>
+            <option value="sg-02">sg-02 (Web安全组)</option>
+            <option value="sg-03">sg-03 (数据库安全组)</option>
           </select>
         </div>
       </div>
@@ -77,52 +101,6 @@
     <div class="modal-footer">
       <button class="btn btn-default" onclick="closeDeletePolicyModal()">取消</button>
       <button class="btn btn-primary" style="background:#ff4d4f;border-color:#ff4d4f;" onclick="confirmDeletePolicy()">删除</button>
-    </div>
-  </div>
-</div>
-
-<div class="modal-overlay" id="bind-sandbox-modal">
-  <div class="modal-dialog" style="width: 480px;">
-    <div class="modal-header">
-      <h3 class="modal-title">绑定沙箱</h3>
-      <button class="modal-close" onclick="closeBindSandboxModal()">&times;</button>
-    </div>
-    <div class="modal-body">
-      <div class="form-group" style="display:flex;align-items:flex-start;margin-bottom:16px;">
-        <label class="form-label" style="width:80px;text-align:right;padding-right:10px;flex-shrink:0;line-height:34px;">选择沙箱<span style="color:#ff4d4f;">*</span></label>
-        <div class="multi-select-wrapper" id="sandbox-multi-select" style="flex:1;position:relative;">
-          <div class="multi-select-display" id="sandbox-select-display" onclick="toggleSandboxDropdown()" style="min-height:34px;padding:4px 28px 4px 8px;border:1px solid #d9d9d9;border-radius:4px;background:#fff;cursor:pointer;display:flex;flex-wrap:wrap;gap:4px;align-items:center;position:relative;">
-            <span class="multi-select-placeholder" style="color:#bfbfbf;font-size:13px;">请选择沙箱</span>
-            <span class="multi-select-arrow" style="position:absolute;right:8px;top:50%;transform:translateY(-50%);color:#bfbfbf;font-size:12px;">▼</span>
-          </div>
-          <div class="multi-select-dropdown" id="sandbox-dropdown" style="display:none;position:fixed;z-index:10000;background:#fff;border:1px solid #d9d9d9;border-radius:4px;box-shadow:0 2px 8px rgba(0,0,0,0.15);max-height:200px;overflow-y:auto;">
-            <div class="multi-select-option" data-value="sandbox-dev-python" onclick="toggleSandboxOption(this)" style="padding:8px 12px;cursor:pointer;display:flex;align-items:center;gap:8px;font-size:13px;">
-              <span class="multi-select-check" style="width:16px;height:16px;border:1px solid #d9d9d9;border-radius:3px;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;"></span>
-              <span>sandbox-dev-python</span>
-            </div>
-            <div class="multi-select-option" data-value="sandbox-prod-java" onclick="toggleSandboxOption(this)" style="padding:8px 12px;cursor:pointer;display:flex;align-items:center;gap:8px;font-size:13px;">
-              <span class="multi-select-check" style="width:16px;height:16px;border:1px solid #d9d9d9;border-radius:3px;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;"></span>
-              <span>sandbox-prod-java</span>
-            </div>
-            <div class="multi-select-option" data-value="sandbox-test-node" onclick="toggleSandboxOption(this)" style="padding:8px 12px;cursor:pointer;display:flex;align-items:center;gap:8px;font-size:13px;">
-              <span class="multi-select-check" style="width:16px;height:16px;border:1px solid #d9d9d9;border-radius:3px;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;"></span>
-              <span>sandbox-test-node</span>
-            </div>
-            <div class="multi-select-option" data-value="sandbox-staging-go" onclick="toggleSandboxOption(this)" style="padding:8px 12px;cursor:pointer;display:flex;align-items:center;gap:8px;font-size:13px;">
-              <span class="multi-select-check" style="width:16px;height:16px;border:1px solid #d9d9d9;border-radius:3px;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;"></span>
-              <span>sandbox-staging-go</span>
-            </div>
-            <div class="multi-select-option" data-value="sandbox-ci-rust" onclick="toggleSandboxOption(this)" style="padding:8px 12px;cursor:pointer;display:flex;align-items:center;gap:8px;font-size:13px;">
-              <span class="multi-select-check" style="width:16px;height:16px;border:1px solid #d9d9d9;border-radius:3px;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;"></span>
-              <span>sandbox-ci-rust</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="modal-footer">
-      <button class="btn btn-default" onclick="closeBindSandboxModal()">取消</button>
-      <button class="btn btn-primary" onclick="confirmBindSandbox()">确定</button>
     </div>
   </div>
 </div>
@@ -1442,8 +1420,10 @@
               <tr>
                 <th>策略ID</th>
                 <th>策略名称</th>
+                <th>访问源</th>
                 <th>目标VPC</th>
                 <th>目标子网</th>
+                <th>安全组</th>
                 <th>备注</th>
                 <th>操作</th>
               </tr>
@@ -1452,26 +1432,32 @@
               <tr data-id="policy-001" data-name="开发环境访问策略" data-source="sandbox-dev-python" data-vpc="vpc-01" data-subnet="subnet-01" data-sg="sg-01" data-remark="开发环境默认访问策略">
                 <td>policy-001</td>
                 <td>开发环境访问策略</td>
+                <td>sandbox-dev-python</td>
                 <td>vpc-01 (10.0.0.0/16)</td>
                 <td>subnet-01 (10.0.1.0/24)</td>
+                <td>sg-01 (默认安全组)</td>
                 <td>开发环境默认访问策略</td>
-                <td><a href="#" class="action-link edit-btn">编辑</a> <a href="#" class="action-link bind-btn">绑定沙箱</a> <a href="#" class="action-link delete-btn">删除</a></td>
+                <td><a href="#" class="action-link edit-btn">编辑</a> <a href="#" class="action-link delete-btn">删除</a></td>
               </tr>
               <tr data-id="policy-002" data-name="生产环境访问策略" data-source="sandbox-prod-java" data-vpc="vpc-01" data-subnet="subnet-02" data-sg="sg-02" data-remark="生产环境Web服务访问">
                 <td>policy-002</td>
                 <td>生产环境访问策略</td>
+                <td>sandbox-prod-java</td>
                 <td>vpc-01 (10.0.0.0/16)</td>
                 <td>subnet-02 (10.0.2.0/24)</td>
+                <td>sg-02 (Web安全组)</td>
                 <td>生产环境Web服务访问</td>
-                <td><a href="#" class="action-link edit-btn">编辑</a> <a href="#" class="action-link bind-btn">绑定沙箱</a> <a href="#" class="action-link delete-btn">删除</a></td>
+                <td><a href="#" class="action-link edit-btn">编辑</a> <a href="#" class="action-link delete-btn">删除</a></td>
               </tr>
               <tr data-id="policy-003" data-name="测试环境访问策略" data-source="sandbox-test-node" data-vpc="vpc-02" data-subnet="subnet-03" data-sg="sg-03" data-remark="测试环境数据库访问">
                 <td>policy-003</td>
                 <td>测试环境访问策略</td>
+                <td>sandbox-test-node</td>
                 <td>vpc-02 (172.16.0.0/16)</td>
                 <td>subnet-03 (172.16.1.0/24)</td>
+                <td>sg-03 (数据库安全组)</td>
                 <td>测试环境数据库访问</td>
-                <td><a href="#" class="action-link edit-btn">编辑</a> <a href="#" class="action-link bind-btn">绑定沙箱</a> <a href="#" class="action-link delete-btn">删除</a></td>
+                <td><a href="#" class="action-link edit-btn">编辑</a> <a href="#" class="action-link delete-btn">删除</a></td>
               </tr>
             </tbody>
           </table>
@@ -1518,6 +1504,19 @@
         </div>
       </div>
       <div class="form-group">
+        <label class="form-label">访问源 <span class="required">*</span></label>
+        <div class="form-control">
+          <select class="form-select" id="access-source">
+            <option value="">请选择沙箱</option>
+            <option value="sandbox-dev-python">sandbox-dev-python</option>
+            <option value="sandbox-prod-java">sandbox-prod-java</option>
+            <option value="sandbox-test-node">sandbox-test-node</option>
+            <option value="sandbox-staging-go">sandbox-staging-go</option>
+            <option value="sandbox-ci-rust">sandbox-ci-rust</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
         <label class="form-label">目标VPC <span class="required">*</span></label>
         <div class="form-control">
           <select class="form-select" id="target-vpc">
@@ -1534,6 +1533,17 @@
             <option value="">请选择目标子网</option>
             <option value="subnet-01">subnet-01 (10.0.1.0/24)</option>
             <option value="subnet-02">subnet-02 (10.0.2.0/24)</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">安全组 <span class="required">*</span></label>
+        <div class="form-control">
+          <select class="form-select" id="security-group">
+            <option value="">请选择安全组</option>
+            <option value="sg-01">sg-01 (默认安全组)</option>
+            <option value="sg-02">sg-02 (Web安全组)</option>
+            <option value="sg-03">sg-03 (数据库安全组)</option>
           </select>
         </div>
       </div>
@@ -1667,42 +1677,6 @@
   .action-link:hover {
     text-decoration: underline;
   }
-  .multi-select-tag {
-    display: inline-flex;
-    align-items: center;
-    background: #f0f5ff;
-    border: 1px solid #adc6ff;
-    border-radius: 3px;
-    padding: 1px 6px;
-    font-size: 12px;
-    color: #1890ff;
-    line-height: 20px;
-    gap: 4px;
-  }
-  .multi-select-tag-close {
-    cursor: pointer;
-    font-size: 12px;
-    color: #1890ff;
-    line-height: 1;
-  }
-  .multi-select-tag-close:hover {
-    color: #ff4d4f;
-  }
-  .multi-select-option:hover {
-    background: #f5f5f5;
-  }
-  .multi-select-option.selected {
-    background: #e6f7ff;
-  }
-  .multi-select-option.selected .multi-select-check {
-    background: #1890ff;
-    border-color: #1890ff;
-    color: #fff;
-  }
-  .multi-select-option.selected .multi-select-check::after {
-    content: '✓';
-    font-size: 11px;
-  }
 </style>
 
 <script>
@@ -1811,6 +1785,7 @@
   // 标签映射
   const vpcLabels = {'vpc-01':'vpc-01 (10.0.0.0/16)','vpc-02':'vpc-02 (172.16.0.0/16)'};
   const subnetLabels = {'subnet-01':'subnet-01 (10.0.1.0/24)','subnet-02':'subnet-02 (10.0.2.0/24)','subnet-03':'subnet-03 (172.16.1.0/24)'};
+  const sgLabels = {'sg-01':'sg-01 (默认安全组)','sg-02':'sg-02 (Web安全组)','sg-03':'sg-03 (数据库安全组)'};
 
   // 绑定编辑/删除事件
   function bindRowEvents() {
@@ -1821,8 +1796,10 @@
         editingRow = row;
         document.getElementById('edit-policy-id').value = row.dataset.id;
         document.getElementById('edit-policy-name').value = row.dataset.name;
+        document.getElementById('edit-access-source').value = row.dataset.source;
         document.getElementById('edit-target-vpc').value = row.dataset.vpc;
         document.getElementById('edit-target-subnet').value = row.dataset.subnet;
+        document.getElementById('edit-security-group').value = row.dataset.sg;
         document.getElementById('edit-policy-remark').value = row.dataset.remark || '';
         document.getElementById('edit-policy-desc').value = '';
         document.getElementById('edit-policy-modal').classList.add('active');
@@ -1835,18 +1812,6 @@
         deletingRow = row;
         document.getElementById('delete-policy-msg').textContent = '确认删除' + row.dataset.name + '策略吗，删除后不可恢复。';
         document.getElementById('delete-policy-modal').classList.add('active');
-      };
-    });
-    document.querySelectorAll('.bind-btn').forEach(btn => {
-      btn.onclick = function(e) {
-        e.preventDefault();
-        bindingRow = this.closest('tr');
-        selectedSandboxes = [];
-        updateSandboxDisplay();
-        document.querySelectorAll('#sandbox-dropdown .multi-select-option').forEach(function(opt) {
-          opt.classList.remove('selected');
-        });
-        document.getElementById('bind-sandbox-modal').classList.add('active');
       };
     });
   }
@@ -1866,10 +1831,12 @@
       tr.dataset.remark = p.remark || '';
       tr.innerHTML = '<td>' + p.id + '</td>' +
         '<td>' + p.name + '</td>' +
+        '<td>' + p.source + '</td>' +
         '<td>' + (vpcLabels[p.vpc] || p.vpc) + '</td>' +
         '<td>' + (subnetLabels[p.subnet] || p.subnet) + '</td>' +
+        '<td>' + (sgLabels[p.sg] || p.sg) + '</td>' +
         '<td>' + (p.remark || '') + '</td>' +
-        '<td><a href="#" class="action-link edit-btn">编辑</a> <a href="#" class="action-link bind-btn">绑定沙箱</a> <a href="#" class="action-link delete-btn">删除</a></td>';
+        '<td><a href="#" class="action-link edit-btn">编辑</a> <a href="#" class="action-link delete-btn">删除</a></td>';
       tbody.appendChild(tr);
     });
     bindRowEvents();
@@ -1889,17 +1856,25 @@
     document.getElementById('create-policy-modal').classList.remove('active');
     // 清空表单
     document.getElementById('policy-name').value = '';
+    document.getElementById('access-source').value = '';
     document.getElementById('target-vpc').value = '';
     document.getElementById('target-subnet').value = '';
+    document.getElementById('security-group').value = '';
     document.getElementById('policy-desc').value = '';
   }
 
   function createPolicy() {
     const policyName = document.getElementById('policy-name').value.trim();
+    const accessSource = document.getElementById('access-source').value.trim();
     const targetVpc = document.getElementById('target-vpc').value;
+    const securityGroup = document.getElementById('security-group').value;
     
     if (!policyName) {
       alert('请输入策略名称');
+      return;
+    }
+    if (!accessSource) {
+      alert('请选择访问源');
       return;
     }
     if (!targetVpc) {
@@ -1909,6 +1884,10 @@
     const targetSubnet = document.getElementById('target-subnet').value;
     if (!targetSubnet) {
       alert('请选择目标子网');
+      return;
+    }
+    if (!securityGroup) {
+      alert('请选择安全组');
       return;
     }
     
@@ -1945,28 +1924,37 @@
 
   function savePolicy() {
     const policyName = document.getElementById('edit-policy-name').value.trim();
+    const accessSource = document.getElementById('edit-access-source').value;
     const targetVpc = document.getElementById('edit-target-vpc').value;
     const targetSubnet = document.getElementById('edit-target-subnet').value;
+    const securityGroup = document.getElementById('edit-security-group').value;
 
     if (!policyName) { alert('请输入策略名称'); return; }
+    if (!accessSource) { alert('请选择访问源'); return; }
     if (!targetVpc) { alert('请选择目标VPC'); return; }
     if (!targetSubnet) { alert('请选择目标子网'); return; }
+    if (!securityGroup) { alert('请选择安全组'); return; }
 
     // 更新行数据和 data 属性
     const remark = document.getElementById('edit-policy-remark').value.trim();
     const vpcLabels = {'vpc-01':'vpc-01 (10.0.0.0/16)','vpc-02':'vpc-02 (172.16.0.0/16)'};
     const subnetLabels = {'subnet-01':'subnet-01 (10.0.1.0/24)','subnet-02':'subnet-02 (10.0.2.0/24)','subnet-03':'subnet-03 (172.16.1.0/24)'};
+    const sgLabels = {'sg-01':'sg-01 (默认安全组)','sg-02':'sg-02 (Web安全组)','sg-03':'sg-03 (数据库安全组)'};
 
     editingRow.dataset.name = policyName;
+    editingRow.dataset.source = accessSource;
     editingRow.dataset.vpc = targetVpc;
     editingRow.dataset.subnet = targetSubnet;
+    editingRow.dataset.sg = securityGroup;
     editingRow.dataset.remark = remark;
 
     const cells = editingRow.querySelectorAll('td');
     cells[1].textContent = policyName;
-    cells[2].textContent = vpcLabels[targetVpc] || targetVpc;
-    cells[3].textContent = subnetLabels[targetSubnet] || targetSubnet;
-    cells[4].textContent = remark;
+    cells[2].textContent = accessSource;
+    cells[3].textContent = vpcLabels[targetVpc] || targetVpc;
+    cells[4].textContent = subnetLabels[targetSubnet] || targetSubnet;
+    cells[5].textContent = sgLabels[securityGroup] || securityGroup;
+    cells[6].textContent = remark;
 
     alert('策略保存成功！');
     closeEditPolicyModal();
@@ -1996,97 +1984,6 @@
     closeDeletePolicyModal();
   }
 
-  // 绑定沙箱弹窗
-  let bindingRow = null;
-  let selectedSandboxes = [];
-
-  function toggleSandboxDropdown() {
-    var dropdown = document.getElementById('sandbox-dropdown');
-    if (dropdown.style.display === 'none') {
-      var display = document.getElementById('sandbox-select-display');
-      var rect = display.getBoundingClientRect();
-      dropdown.style.top = (rect.bottom + 2) + 'px';
-      dropdown.style.left = rect.left + 'px';
-      dropdown.style.width = rect.width + 'px';
-      dropdown.style.display = 'block';
-    } else {
-      dropdown.style.display = 'none';
-    }
-  }
-
-  function toggleSandboxOption(el) {
-    var value = el.dataset.value;
-    var idx = selectedSandboxes.indexOf(value);
-    if (idx === -1) {
-      selectedSandboxes.push(value);
-      el.classList.add('selected');
-    } else {
-      selectedSandboxes.splice(idx, 1);
-      el.classList.remove('selected');
-    }
-    updateSandboxDisplay();
-  }
-
-  function removeSandboxTag(value) {
-    var idx = selectedSandboxes.indexOf(value);
-    if (idx !== -1) selectedSandboxes.splice(idx, 1);
-    var options = document.querySelectorAll('#sandbox-dropdown .multi-select-option');
-    options.forEach(function(opt) {
-      if (opt.dataset.value === value) opt.classList.remove('selected');
-    });
-    updateSandboxDisplay();
-  }
-
-  function updateSandboxDisplay() {
-    var display = document.getElementById('sandbox-select-display');
-    var arrow = display.querySelector('.multi-select-arrow');
-    // 清除旧标签和占位符
-    display.querySelectorAll('.multi-select-tag, .multi-select-placeholder').forEach(function(el) { el.remove(); });
-    if (selectedSandboxes.length === 0) {
-      var placeholder = document.createElement('span');
-      placeholder.className = 'multi-select-placeholder';
-      placeholder.style.cssText = 'color:#bfbfbf;font-size:13px;';
-      placeholder.textContent = '请选择沙箱';
-      display.insertBefore(placeholder, arrow);
-    } else {
-      selectedSandboxes.forEach(function(val) {
-        var tag = document.createElement('span');
-        tag.className = 'multi-select-tag';
-        tag.innerHTML = val + ' <span class="multi-select-tag-close" onclick="event.stopPropagation();removeSandboxTag(\'' + val + '\')">×</span>';
-        display.insertBefore(tag, arrow);
-      });
-    }
-  }
-
-  function closeBindSandboxModal() {
-    document.getElementById('bind-sandbox-modal').classList.remove('active');
-    document.getElementById('sandbox-dropdown').style.display = 'none';
-    bindingRow = null;
-    selectedSandboxes = [];
-    // 重置选中状态
-    document.querySelectorAll('#sandbox-dropdown .multi-select-option').forEach(function(opt) {
-      opt.classList.remove('selected');
-    });
-    updateSandboxDisplay();
-  }
-
-  function confirmBindSandbox() {
-    if (selectedSandboxes.length === 0) {
-      alert('请选择至少一个沙箱');
-      return;
-    }
-    closeBindSandboxModal();
-  }
-
-  // 点击外部关闭下拉框
-  document.addEventListener('click', function(e) {
-    var wrapper = document.getElementById('sandbox-multi-select');
-    var dropdown = document.getElementById('sandbox-dropdown');
-    if (wrapper && !wrapper.contains(e.target) && !dropdown.contains(e.target)) {
-      dropdown.style.display = 'none';
-    }
-  });
-
   // 点击弹窗背景关闭
   document.getElementById('create-policy-modal').addEventListener('click', function(e) {
     if (e.target === this) {
@@ -2101,11 +1998,6 @@
   document.getElementById('delete-policy-modal').addEventListener('click', function(e) {
     if (e.target === this) {
       closeDeletePolicyModal();
-    }
-  });
-  document.getElementById('bind-sandbox-modal').addEventListener('click', function(e) {
-    if (e.target === this) {
-      closeBindSandboxModal();
     }
   });
 </script>
