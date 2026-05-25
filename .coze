@@ -9,5 +9,13 @@ preview_enable = "enabled"
 build = ["bash", "scripts/coze-preview-build.sh"]
 run = ["bash", "scripts/coze-preview-run.sh"]
 
+[deploy]
+build = ["bash", "scripts/coze-deploy-build.sh"]
+run = ["bash", "scripts/coze-deploy-run.sh"]
+
+[deploy.profile]
+kind = "service"
+flavor = "web"
+
 [subprojects]
 path = ["projects"]
