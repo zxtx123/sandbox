@@ -1801,32 +1801,15 @@
       currentSandboxName = this.dataset.sandbox;
       document.getElementById('set-sandbox-name').value = currentSandboxName;
       
-      // 从 localStorage 加载网络策略列表
-      const policies = JSON.parse(localStorage.getItem('sandboxPolicies') || '[]');
-      const select = document.getElementById('set-policy-select');
-      select.innerHTML = '<option value="" disabled>请选择网络策略（可多选）</option>';
-      if (policies.length === 0) {
-        select.innerHTML += '<option value="" disabled>暂无网络策略，请先在网络策略页面创建</option>';
-      } else {
-        policies.forEach(p => {
-          const opt = document.createElement('option');
-          opt.value = p.id;
-          opt.textContent = p.name + ' - ' + p.service;
-          select.appendChild(opt);
-        });
-      }
-      
-      // 清空选择的服务展示
-      document.getElementById('selected-services-list').innerHTML = '';
-      document.getElementById('selected-services-group').style.display = 'none';
-      
-      document.getElementById('set-policy-modal').classList.add('active');
+      openSetPolicyModal();
     });
   });
 
   function closeSetPolicyModal() {
     document.getElementById('set-policy-modal').classList.remove('active');
     document.getElementById('set-policy-select').selectedIndex = 0;
+    selectedPolicyIds = [];
+    renderPolicyTags();
     document.getElementById('selected-services-list').innerHTML = '';
     document.getElementById('selected-services-group').style.display = 'none';
     currentSandboxName = '';
@@ -1877,6 +1860,7 @@
 
   function renderPolicyTags() {
     const container = document.getElementById('selected-policy-tags');
+    if (!container) return;
     if (selectedPolicyIds.length === 0) {
       container.innerHTML = '<span class="multi-select-placeholder">请选择网络策略</span>';
       return;
@@ -1890,6 +1874,7 @@
   }
 
   function renderPolicyOptions() {
+    if (!container) return;
     const container = document.getElementById('policy-options-list');
     const policies = JSON.parse(localStorage.getItem('sandboxPolicies') || '[]');
     if (policies.length === 0) {
@@ -1906,6 +1891,7 @@
     const container = document.getElementById('selected-services-list');
     const group = document.getElementById('selected-services-group');
     if (selectedPolicyIds.length === 0) {
+    if (!container || !group) return;
       container.innerHTML = '';
       group.style.display = 'none';
       return;
