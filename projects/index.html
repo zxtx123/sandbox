@@ -1406,12 +1406,6 @@
     </div>
     <div class="modal-body">
       <div class="form-group">
-        <label class="form-label">沙箱</label>
-        <div class="form-control">
-          <span class="sandbox-name-tag" id="set-sandbox-name"></span>
-        </div>
-      </div>
-      <div class="form-group">
         <label class="form-label">网络策略 <span class="required">*</span></label>
         <div class="form-control">
           <div class="multi-select-container" id="policy-multi-select">
@@ -1427,6 +1421,12 @@
               <div id="policy-options-list"></div>
             </div>
           </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">沙箱</label>
+        <div class="form-control">
+          <span class="sandbox-name-tag" id="set-sandbox-name"></span>
         </div>
       </div>
       <div class="form-group" id="selected-services-group" style="display:none;">
@@ -1633,8 +1633,6 @@
     top: 100%;
     left: 0;
     right: 0;
-    max-height: 240px;
-    overflow-y: auto;
     background: #fff;
     border: 1px solid #ddd;
     border-top: none;
