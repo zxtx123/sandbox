@@ -1412,27 +1412,18 @@
         </div>
       </div>
       <div class="form-group">
-        <label class="form-label">策略名称 <span class="required">*</span></label>
+        <label class="form-label">网络策略 <span class="required">*</span></label>
         <div class="form-control">
-          <input type="text" class="form-input" id="set-policy-name" placeholder="请输入策略名称">
-        </div>
-      </div>
-      <div class="form-group">
-        <label class="form-label">目标服务 <span class="required">*</span></label>
-        <div class="form-control">
-          <select class="form-select" id="set-target-service">
-            <option value="">请选择目标服务</option>
-            <option value="endpoint-service-01">endpoint-service-01 (VPC endpoint service)</option>
-            <option value="endpoint-service-02">endpoint-service-02 (VPC endpoint service)</option>
-            <option value="endpoint-service-03">endpoint-service-03 (VPC endpoint service)</option>
+          <select class="form-select" id="set-policy-select" multiple style="height:120px;">
+            <option value="" disabled>请选择网络策略（可多选）</option>
           </select>
+          <div class="form-tip">按住 Ctrl/Cmd 可多选</div>
         </div>
       </div>
-
-      <div class="form-group">
-        <label class="form-label">描述</label>
+      <div class="form-group" id="selected-services-group" style="display:none;">
+        <label class="form-label">目标服务</label>
         <div class="form-control">
-          <textarea class="form-textarea" id="set-policy-desc" placeholder="请输入策略描述（可选）" rows="3"></textarea>
+          <div id="selected-services-list" class="selected-services"></div>
         </div>
       </div>
     </div>
@@ -1530,22 +1521,31 @@
   .required {
     color: #ff4d4f;
   }
-  .form-input,
-  .form-select,
-  .form-textarea {
-    width: 100%;
-    padding: 8px 12px;
-    border: 1px solid #ddd;
+  .form-tip {
+    font-size: 12px;
+    color: #999;
+    margin-top: 4px;
+  }
+  .selected-services {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 8px;
+    background: #f5f5f5;
     border-radius: 4px;
-    font-size: 14px;
-    box-sizing: border-box;
+    min-height: 36px;
   }
-  .form-input:focus,
-  .form-select:focus,
-  .form-textarea:focus {
-    outline: none;
-    border-color: #1890ff;
+  .selected-services .service-tag {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 12px;
+    background: #e6f7ff;
+    border: 1px solid #91d5ff;
+    border-radius: 4px;
+    font-size: 13px;
+    color: #1890ff;
   }
+
   .form-textarea {
     resize: vertical;
   }
@@ -1661,37 +1661,59 @@
       e.preventDefault();
       currentSandboxName = this.dataset.sandbox;
       document.getElementById('set-sandbox-name').value = currentSandboxName;
+      
+      // 从 localStorage 加载网络策略列表
+      const policies = JSON.parse(localStorage.getItem('sandboxPolicies') || '[]');
+      const select = document.getElementById('set-policy-select');
+      select.innerHTML = '<option value="" disabled>请选择网络策略（可多选）</option>';
+      if (policies.length === 0) {
+        select.innerHTML += '<option value="" disabled>暂无网络策略，请先在网络策略页面创建</option>';
+      } else {
+        policies.forEach(p => {
+          const opt = document.createElement('option');
+          opt.value = p.id;
+          opt.textContent = p.name + ' - ' + p.service;
+          select.appendChild(opt);
+        });
+      }
+      
+      // 清空选择的服务展示
+      document.getElementById('selected-services-list').innerHTML = '';
+      document.getElementById('selected-services-group').style.display = 'none';
+      
       document.getElementById('set-policy-modal').classList.add('active');
     });
   });
 
   function closeSetPolicyModal() {
     document.getElementById('set-policy-modal').classList.remove('active');
-    document.getElementById('set-policy-name').value = '';
-    document.getElementById('set-target-service').value = '';
-    document.getElementById('set-policy-desc').value = '';
+    document.getElementById('set-policy-select').selectedIndex = 0;
+    document.getElementById('selected-services-list').innerHTML = '';
+    document.getElementById('selected-services-group').style.display = 'none';
     currentSandboxName = '';
   }
 
   function createPolicyFromSandbox() {
-    const policyName = document.getElementById('set-policy-name').value.trim();
-    const targetService = document.getElementById('set-target-service').value;
-
-    if (!policyName) { alert('请输入策略名称'); return; }
-    if (!targetService) { alert('请选择目标服务'); return; }
-
-    // 保存到 localStorage
+    const select = document.getElementById('set-policy-select');
+    const selectedIds = Array.from(select.selectedOptions).map(opt => opt.value).filter(v => v);
+    
+    if (selectedIds.length === 0) { alert('请选择网络策略'); return; }
+    
+    // 获取选中的策略名称
     const policies = JSON.parse(localStorage.getItem('sandboxPolicies') || '[]');
-    policies.push({
-      id: 'policy-' + String(policies.length + 4).padStart(3, '0'),
-      name: policyName,
-      source: currentSandboxName,
-      service: targetService,
-      desc: document.getElementById('set-policy-desc').value.trim()
+    const selectedPolicies = policies.filter(p => selectedIds.includes(p.id));
+    const policyNames = selectedPolicies.map(p => p.name).join(', ');
+    
+    // 保存到 localStorage（记录关联关系）
+    const sandboxPolicies = JSON.parse(localStorage.getItem('sandboxSandboxPolicies') || '[]');
+    sandboxPolicies.push({
+      sandbox: currentSandboxName,
+      policyIds: selectedIds,
+      policyNames: policyNames
     });
-    localStorage.setItem('sandboxPolicies', JSON.stringify(policies));
-
-    alert('策略创建成功！');
+    localStorage.setItem('sandboxSandboxPolicies', JSON.stringify(sandboxPolicies));
+    
+    alert('策略关联成功！');
     closeSetPolicyModal();
   }
 
