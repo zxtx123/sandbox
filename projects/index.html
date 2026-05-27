@@ -1414,10 +1414,19 @@
       <div class="form-group">
         <label class="form-label">网络策略 <span class="required">*</span></label>
         <div class="form-control">
-          <select class="form-select" id="set-policy-select" multiple style="height:120px;">
-            <option value="" disabled>请选择网络策略（可多选）</option>
-          </select>
-          <div class="form-tip">按住 Ctrl/Cmd 可多选</div>
+          <div class="multi-select-container" id="policy-multi-select">
+            <!-- 顶部已选标签栏 -->
+            <div class="multi-select-header" onclick="togglePolicyDropdown()">
+              <div class="multi-select-tags" id="selected-policy-tags">
+                <span class="multi-select-placeholder">请选择网络策略</span>
+              </div>
+              <span class="multi-select-arrow" id="policy-arrow">▲</span>
+            </div>
+            <!-- 下拉选项面板 -->
+            <div class="multi-select-dropdown" id="policy-dropdown">
+              <div id="policy-options-list"></div>
+            </div>
+          </div>
         </div>
       </div>
       <div class="form-group" id="selected-services-group" style="display:none;">
@@ -1548,6 +1557,136 @@
 
   .form-textarea {
     resize: vertical;
+  }
+  /* 自定义多选下拉框 */
+  .multi-select-container {
+    position: relative;
+    width: 100%;
+  }
+  .multi-select-header {
+    display: flex;
+    align-items: center;
+    min-height: 38px;
+    padding: 6px 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background: #fff;
+    cursor: pointer;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .multi-select-header:hover {
+    border-color: #3498db;
+  }
+  .multi-select-tags {
+    flex: 1;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    align-items: center;
+  }
+  .multi-select-placeholder {
+    color: #999;
+    font-size: 14px;
+  }
+  .multi-select-tag {
+    display: inline-flex;
+    align-items: center;
+    padding: 2px 8px;
+    background: #e8f4fc;
+    border-radius: 4px;
+    font-size: 13px;
+    color: #333;
+  }
+  .multi-select-tag .tag-close {
+    margin-left: 6px;
+    cursor: pointer;
+    color: #666;
+    font-size: 14px;
+    line-height: 1;
+  }
+  .multi-select-tag .tag-close:hover {
+    color: #333;
+  }
+  .multi-select-arrow {
+    font-size: 10px;
+    color: #666;
+    margin-left: 8px;
+    transition: transform 0.2s;
+  }
+  .multi-select-arrow.up {
+    transform: rotate(180deg);
+  }
+  .multi-select-dropdown {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    max-height: 240px;
+    overflow-y: auto;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-top: none;
+    border-radius: 0 0 4px 4px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    z-index: 100;
+  }
+  .multi-select-dropdown.open {
+    display: block;
+  }
+  .multi-select-option {
+    display: flex;
+    align-items: center;
+    padding: 10px 12px;
+    cursor: pointer;
+    font-size: 14px;
+    color: #333;
+  }
+  .multi-select-option:hover {
+    background: #f5f9fc;
+  }
+  .multi-select-option.selected {
+    background: #e8f4fc;
+  }
+  .multi-select-option .checkbox {
+    width: 16px;
+    height: 16px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    margin-right: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #fff;
+    flex-shrink: 0;
+  }
+  .multi-select-option.selected .checkbox {
+    background: #3498db;
+    border-color: #3498db;
+  }
+  .multi-select-option.selected .checkbox::after {
+    content: '✓';
+    color: #fff;
+    font-size: 12px;
+  }
+  .service-tag {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 10px;
+    background: #e8f4fc;
+    border-radius: 4px;
+    font-size: 13px;
+    color: #333;
+    margin: 2px;
+  }
+  .service-tag .tag-close {
+    margin-left: 6px;
+    cursor: pointer;
+    color: #666;
+  }
+  .service-tag .tag-close:hover {
+    color: #333;
   }
 </style>
 
@@ -1693,26 +1832,121 @@
     currentSandboxName = '';
   }
 
-  function createPolicyFromSandbox() {
-    const select = document.getElementById('set-policy-select');
-    const selectedIds = Array.from(select.selectedOptions).map(opt => opt.value).filter(v => v);
-    
-    if (selectedIds.length === 0) { alert('请选择网络策略'); return; }
-    
-    // 获取选中的策略名称
+  // 多选下拉框相关函数
+  let selectedPolicyIds = [];
+
+  function openSetPolicyModal() {
+    const modal = document.getElementById('set-policy-modal');
+    modal.classList.add('active');
+    selectedPolicyIds = [];
+    renderPolicyTags();
+    renderPolicyOptions();
+    document.getElementById('selected-services-list').innerHTML = '';
+    document.getElementById('selected-services-group').style.display = 'none';
+  }
+
+  function togglePolicyDropdown() {
+    const dropdown = document.getElementById('policy-dropdown');
+    const arrow = document.getElementById('policy-arrow');
+    dropdown.classList.toggle('open');
+    arrow.classList.toggle('up');
+  }
+
+  function selectPolicy(id, name) {
+    const idx = selectedPolicyIds.indexOf(id);
+    if (idx > -1) {
+      selectedPolicyIds.splice(idx, 1);
+    } else {
+      selectedPolicyIds.push(id);
+    }
+    renderPolicyTags();
+    renderPolicyOptions();
+    updateSelectedServices();
+  }
+
+  function removePolicy(id, e) {
+    if (e) e.stopPropagation();
+    const idx = selectedPolicyIds.indexOf(id);
+    if (idx > -1) {
+      selectedPolicyIds.splice(idx, 1);
+    }
+    renderPolicyTags();
+    renderPolicyOptions();
+    updateSelectedServices();
+  }
+
+  function renderPolicyTags() {
+    const container = document.getElementById('selected-policy-tags');
+    if (selectedPolicyIds.length === 0) {
+      container.innerHTML = '<span class="multi-select-placeholder">请选择网络策略</span>';
+      return;
+    }
     const policies = JSON.parse(localStorage.getItem('sandboxPolicies') || '[]');
-    const selectedPolicies = policies.filter(p => selectedIds.includes(p.id));
+    container.innerHTML = selectedPolicyIds.map(id => {
+      const policy = policies.find(p => p.id === id);
+      const name = policy ? policy.name : id;
+      return `<span class="multi-select-tag">${name}<span class="tag-close" onclick="removePolicy('${id}', event)">×</span></span>`;
+    }).join('');
+  }
+
+  function renderPolicyOptions() {
+    const container = document.getElementById('policy-options-list');
+    const policies = JSON.parse(localStorage.getItem('sandboxPolicies') || '[]');
+    if (policies.length === 0) {
+      container.innerHTML = '<div class="multi-select-option" style="color:#999;">暂无网络策略</div>';
+      return;
+    }
+    container.innerHTML = policies.map(p => {
+      const isSelected = selectedPolicyIds.includes(p.id);
+      return `<div class="multi-select-option ${isSelected ? 'selected' : ''}" onclick="selectPolicy('${p.id}', '${p.name}')"><span class="checkbox"></span>${p.name}</div>`;
+    }).join('');
+  }
+
+  function updateSelectedServices() {
+    const container = document.getElementById('selected-services-list');
+    const group = document.getElementById('selected-services-group');
+    if (selectedPolicyIds.length === 0) {
+      container.innerHTML = '';
+      group.style.display = 'none';
+      return;
+    }
+    const policies = JSON.parse(localStorage.getItem('sandboxPolicies') || '[]');
+    const selectedPolicies = policies.filter(p => selectedPolicyIds.includes(p.id));
+    const services = [...new Set(selectedPolicies.map(p => p.targetService).filter(Boolean))];
+    if (services.length === 0) {
+      container.innerHTML = '<span style="color:#999;">所选策略暂无目标服务</span>';
+    } else {
+      container.innerHTML = services.map(s => `<span class="service-tag">${s}</span>`).join('');
+    }
+    group.style.display = 'block';
+  }
+
+  // 点击外部关闭下拉框
+  document.addEventListener('click', function(e) {
+    const container = document.getElementById('policy-multi-select');
+    if (container && !container.contains(e.target)) {
+      const dropdown = document.getElementById('policy-dropdown');
+      const arrow = document.getElementById('policy-arrow');
+      if (dropdown) dropdown.classList.remove('open');
+      if (arrow) arrow.classList.remove('up');
+    }
+  });
+
+  function createPolicyFromSandbox() {
+    if (selectedPolicyIds.length === 0) { alert('请选择网络策略'); return; }
+
+    const policies = JSON.parse(localStorage.getItem('sandboxPolicies') || '[]');
+    const selectedPolicies = policies.filter(p => selectedPolicyIds.includes(p.id));
     const policyNames = selectedPolicies.map(p => p.name).join(', ');
-    
-    // 保存到 localStorage（记录关联关系）
+
     const sandboxPolicies = JSON.parse(localStorage.getItem('sandboxSandboxPolicies') || '[]');
     sandboxPolicies.push({
       sandbox: currentSandboxName,
-      policyIds: selectedIds,
+      policyIds: selectedPolicyIds.slice(),
       policyNames: policyNames
     });
     localStorage.setItem('sandboxSandboxPolicies', JSON.stringify(sandboxPolicies));
-    
+
     alert('策略关联成功！');
     closeSetPolicyModal();
   }
