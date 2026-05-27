@@ -1408,7 +1408,7 @@
       <div class="form-group">
         <label class="form-label">沙箱</label>
         <div class="form-control">
-          <input type="text" class="form-input" id="set-sandbox-name" readonly style="background:#f5f5f5;color:#999;">
+          <span class="sandbox-name-tag" id="set-sandbox-name"></span>
         </div>
       </div>
       <div class="form-group">
@@ -1557,6 +1557,16 @@
 
   .form-textarea {
     resize: vertical;
+  }
+  /* 沙箱名称标签 */
+  .sandbox-name-tag {
+    display: inline-block;
+    background: #e8f4fd;
+    color: #1890ff;
+    padding: 4px 12px;
+    border-radius: 4px;
+    font-size: 13px;
+    line-height: 20px;
   }
   /* 自定义多选下拉框 */
   .multi-select-container {
@@ -1826,6 +1836,8 @@
     renderPolicyOptions();
     document.getElementById('selected-services-list').innerHTML = '';
     document.getElementById('selected-services-group').style.display = 'none';
+    // 设置沙箱名称标签
+    document.getElementById('set-sandbox-name').textContent = currentSandboxName || '';
   }
 
   function togglePolicyDropdown() {
@@ -1874,8 +1886,8 @@
   }
 
   function renderPolicyOptions() {
-    if (!container) return;
     const container = document.getElementById('policy-options-list');
+    if (!container) return;
     const policies = JSON.parse(localStorage.getItem('sandboxPolicies') || '[]');
     if (policies.length === 0) {
       container.innerHTML = '<div class="multi-select-option" style="color:#999;">暂无网络策略</div>';
@@ -1890,8 +1902,8 @@
   function updateSelectedServices() {
     const container = document.getElementById('selected-services-list');
     const group = document.getElementById('selected-services-group');
-    if (selectedPolicyIds.length === 0) {
     if (!container || !group) return;
+    if (selectedPolicyIds.length === 0) {
       container.innerHTML = '';
       group.style.display = 'none';
       return;

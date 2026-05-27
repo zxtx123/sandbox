@@ -1639,6 +1639,20 @@
 </style>
 
 <script>
+  // 初始化：将静态策略数据写入 localStorage，供沙箱实例页面读取
+  (function() {
+    const staticPolicies = [
+      { id: 'policy-001', name: '开发环境访问策略', domain: 'vpce-01 (华北)', targetService: 'endpoint-service-01', desc: '开发环境网络策略' },
+      { id: 'policy-002', name: '生产环境访问策略', domain: 'vpce-02 (华南)', targetService: 'endpoint-service-02', desc: '生产环境网络策略' },
+      { id: 'policy-003', name: '测试环境访问策略', domain: 'vpce-03 (华东)', targetService: 'endpoint-service-03', desc: '测试环境网络策略' }
+    ];
+    const existing = JSON.parse(localStorage.getItem('sandboxPolicies') || '[]');
+    // 合并：保留已有的动态策略，补充静态策略
+    const existingIds = existing.map(p => p.id);
+    const merged = existing.concat(staticPolicies.filter(p => !existingIds.includes(p.id)));
+    localStorage.setItem('sandboxPolicies', JSON.stringify(merged));
+  })();
+
   // 图标栏交互
   document.querySelectorAll('.icon-item').forEach(item => {
     item.addEventListener('click', function() {
