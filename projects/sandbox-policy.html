@@ -47,12 +47,6 @@
         </div>
       </div>
       <div class="form-group">
-        <label class="form-label">备注</label>
-        <div class="form-control">
-          <input type="text" class="form-input" id="edit-policy-remark" placeholder="请输入备注（可选）">
-        </div>
-      </div>
-      <div class="form-group">
         <label class="form-label">描述</label>
         <div class="form-control">
           <textarea class="form-textarea" id="edit-policy-desc" placeholder="请输入策略描述（可选）" rows="3"></textarea>
@@ -1400,32 +1394,32 @@
                 <th>策略名称</th>
                 <th>目标服务</th>
                 <th>服务域名</th>
-                <th>备注</th>
+                <th>描述</th>
                 <th>操作</th>
               </tr>
             </thead>
             <tbody id="policy-tbody">
-              <tr data-id="policy-001" data-name="开发环境访问策略" data-domain="vpce-0123456789abcdef-abc123.vpce-svc-0123456789abcdef.cn-north-1.vpce.amazonaws.com.cn" data-service="endpoint-service-01" data-remark="开发环境默认访问策略">
+              <tr data-id="policy-001" data-name="开发环境访问策略" data-domain="vpce-01.vpce-svc.cn-north-1a" data-service="endpoint-service-01" data-desc="开发环境默认访问策略">
                 <td>policy-001</td>
                 <td>开发环境访问策略</td>
-                <td>endpoint-service-01 (VPC endpoint service)</td>
-                <td>vpce-0123456789abcdef-abc123.vpce-svc-0123456789abcdef.cn-north-1.vpce.amazonaws.com.cn</td>
+                <td>endpoint-service-01</td>
+                <td>vpce-01 (华北)</td>
                 <td>开发环境默认访问策略</td>
                 <td><a href="#" class="action-link edit-btn">编辑</a> <a href="#" class="action-link delete-btn">删除</a></td>
               </tr>
-              <tr data-id="policy-002" data-name="生产环境访问策略" data-domain="vpce-fedcba9876543210-xyz789.vpce-svc-fedcba9876543210.cn-north-1.vpce.amazonaws.com.cn" data-service="endpoint-service-02" data-remark="生产环境Web服务访问">
+              <tr data-id="policy-002" data-name="生产环境访问策略" data-domain="vpce-02.vpce-svc.cn-north-1b" data-service="endpoint-service-02" data-desc="生产环境Web服务访问">
                 <td>policy-002</td>
                 <td>生产环境访问策略</td>
-                <td>endpoint-service-02 (VPC endpoint service)</td>
-                <td>vpce-fedcba9876543210-xyz789.vpce-svc-fedcba9876543210.cn-north-1.vpce.amazonaws.com.cn</td>
+                <td>endpoint-service-02</td>
+                <td>vpce-02 (华南)</td>
                 <td>生产环境Web服务访问</td>
                 <td><a href="#" class="action-link edit-btn">编辑</a> <a href="#" class="action-link delete-btn">删除</a></td>
               </tr>
-              <tr data-id="policy-003" data-name="测试环境访问策略" data-domain="vpce-a1b2c3d4e5f6a1b2c-d4e5f6.vpce-svc-a1b2c3d4e5f6a1b2c.cn-north-1.vpce.amazonaws.com.cn" data-service="endpoint-service-03" data-remark="测试环境数据库访问">
+              <tr data-id="policy-003" data-name="测试环境访问策略" data-domain="vpce-03.vpce-svc.cn-east-1" data-service="endpoint-service-03" data-desc="测试环境数据库访问">
                 <td>policy-003</td>
                 <td>测试环境访问策略</td>
-                <td>endpoint-service-03 (VPC endpoint service)</td>
-                <td>vpce-a1b2c3d4e5f6a1b2c-d4e5f6.vpce-svc-a1b2c3d4e5f6a1b2c.cn-north-1.vpce.amazonaws.com.cn</td>
+                <td>endpoint-service-03</td>
+                <td>vpce-03 (华东)</td>
                 <td>测试环境数据库访问</td>
                 <td><a href="#" class="action-link edit-btn">编辑</a> <a href="#" class="action-link delete-btn">删除</a></td>
               </tr>
@@ -1763,7 +1757,7 @@
         document.getElementById('edit-policy-name').value = row.dataset.name;
         document.getElementById('edit-service-domain').value = row.dataset.domain;
         document.getElementById('edit-target-service').value = row.dataset.service;
-        document.getElementById('edit-policy-remark').value = row.dataset.remark || '';
+        document.getElementById('edit-policy-desc').value = row.dataset.desc || '';
         document.getElementById('edit-policy-desc').value = '';
         document.getElementById('edit-policy-modal').classList.add('active');
       };
@@ -1789,12 +1783,12 @@
       tr.dataset.name = p.name;
       tr.dataset.domain = p.domain;
       tr.dataset.service = p.service;
-      tr.dataset.remark = p.remark || '';
+      tr.dataset.desc = p.desc || '';
       tr.innerHTML = '<td>' + p.id + '</td>' +
         '<td>' + p.name + '</td>' +
         '<td>' + (serviceLabels[p.service] || p.service) + '</td>' +
-        '<td>' + p.domain + '</td>' +
-        '<td>' + (p.remark || '') + '</td>' +
+        '<td>' + (domainLabels[p.domain] || p.domain) + '</td>' +
+        '<td>' + (p.desc || '') + '</td>' +
         '<td><a href="#" class="action-link edit-btn">编辑</a> <a href="#" class="action-link delete-btn">删除</a></td>';
       tbody.appendChild(tr);
     });
@@ -1834,7 +1828,7 @@
       return;
     }
     if (!serviceDomain) {
-      alert('请输入服务域名');
+      alert('请选择服务域名');
       return;
     }
     
@@ -1855,8 +1849,7 @@
       document.getElementById('edit-policy-name').value = row.dataset.name;
       document.getElementById('edit-service-domain').value = row.dataset.domain;
       document.getElementById('edit-target-service').value = row.dataset.service;
-      document.getElementById('edit-policy-remark').value = row.dataset.remark;
-      document.getElementById('edit-policy-desc').value = '';
+      document.getElementById('edit-policy-desc').value = row.dataset.desc || '';
 
       document.getElementById('edit-policy-modal').classList.add('active');
     });
@@ -1873,23 +1866,24 @@
     const targetService = document.getElementById('edit-target-service').value;
 
     if (!policyName) { alert('请输入策略名称'); return; }
-    if (!serviceDomain) { alert('请输入服务域名'); return; }
+    if (!serviceDomain) { alert('请选择服务域名'); return; }
     if (!targetService) { alert('请选择目标服务'); return; }
 
     // 更新行数据和 data 属性
-    const remark = document.getElementById('edit-policy-remark').value.trim();
-    const serviceLabels = {'endpoint-service-01':'endpoint-service-01 (VPC endpoint service)','endpoint-service-02':'endpoint-service-02 (VPC endpoint service)','endpoint-service-03':'endpoint-service-03 (VPC endpoint service)'};
+    const desc = document.getElementById('edit-policy-desc').value.trim();
+    const domainLabels = {'vpce-01.vpce-svc.cn-north-1a':'vpce-01 (华北)','vpce-02.vpce-svc.cn-north-1b':'vpce-02 (华南)','vpce-03.vpce-svc.cn-east-1':'vpce-03 (华东)'};
+    const serviceLabels = {'endpoint-service-01':'endpoint-service-01','endpoint-service-02':'endpoint-service-02','endpoint-service-03':'endpoint-service-03'};
 
     editingRow.dataset.name = policyName;
     editingRow.dataset.domain = serviceDomain;
     editingRow.dataset.service = targetService;
-    editingRow.dataset.remark = remark;
+    editingRow.dataset.desc = desc;
 
     const cells = editingRow.querySelectorAll('td');
     cells[1].textContent = policyName;
     cells[2].textContent = serviceLabels[targetService] || targetService;
-    cells[3].textContent = serviceDomain;
-    cells[4].textContent = remark;
+    cells[3].textContent = domainLabels[serviceDomain] || serviceDomain;
+    cells[4].textContent = desc;
 
     alert('策略保存成功！');
     closeEditPolicyModal();
