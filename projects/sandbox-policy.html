@@ -1639,6 +1639,10 @@
 </style>
 
 <script>
+  // 全局映射表
+  var serviceLabels = {'endpoint-service-01':'endpoint-service-01','endpoint-service-02':'endpoint-service-02','endpoint-service-03':'endpoint-service-03'};
+  var domainLabels = {'vpce-01.vpce-svc.cn-north-1a':'vpce-01 (华北)','vpce-02.vpce-svc.cn-north-1b':'vpce-02 (华南)','vpce-03.vpce-svc.cn-east-1':'vpce-03 (华东)'};
+
   // 初始化：将静态策略数据写入 localStorage，供沙箱实例页面读取
   (function() {
     const staticPolicies = [
@@ -1789,9 +1793,11 @@
 
   // 从 localStorage 加载策略
   function loadPoliciesFromStorage() {
-    const policies = JSON.parse(localStorage.getItem('sandboxPolicies') || '[]');
-    const tbody = document.getElementById('policy-tbody');
-    policies.forEach(p => {
+    try {
+      const policies = JSON.parse(localStorage.getItem('sandboxPolicies') || '[]');
+      const tbody = document.getElementById('policy-tbody');
+      if (!tbody || !Array.isArray(policies)) return;
+      policies.forEach(p => {
       const tr = document.createElement('tr');
       tr.dataset.id = p.id;
       tr.dataset.name = p.name;
@@ -1805,8 +1811,11 @@
         '<td>' + (p.desc || '') + '</td>' +
         '<td><a href="#" class="action-link edit-btn">编辑</a> <a href="#" class="action-link delete-btn">删除</a></td>';
       tbody.appendChild(tr);
-    });
-    bindRowEvents();
+      });
+      bindRowEvents();
+    } catch(e) {
+      console.error('loadPoliciesFromStorage error:', e);
+    }
   }
 
   loadPoliciesFromStorage();
@@ -1885,8 +1894,6 @@
 
     // 更新行数据和 data 属性
     const desc = document.getElementById('edit-policy-desc').value.trim();
-    const domainLabels = {'vpce-01.vpce-svc.cn-north-1a':'vpce-01 (华北)','vpce-02.vpce-svc.cn-north-1b':'vpce-02 (华南)','vpce-03.vpce-svc.cn-east-1':'vpce-03 (华东)'};
-    const serviceLabels = {'endpoint-service-01':'endpoint-service-01','endpoint-service-02':'endpoint-service-02','endpoint-service-03':'endpoint-service-03'};
 
     editingRow.dataset.name = policyName;
     editingRow.dataset.domain = serviceDomain;
