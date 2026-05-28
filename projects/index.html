@@ -1841,10 +1841,23 @@
   function togglePolicyDropdown() {
     const dropdown = document.getElementById('policy-dropdown');
     const arrow = document.getElementById('policy-arrow');
-    const header = dropdown.previousElementSibling ? dropdown.previousElementSibling.parentElement.querySelector('.multi-select-header') : null;
-    dropdown.classList.toggle('open');
-    arrow.classList.toggle('up');
-    if (header) header.classList.toggle('open', dropdown.classList.contains('open'));
+    const container = document.getElementById('policy-multi-select');
+    const header = container.querySelector('.multi-select-header');
+    const isOpen = dropdown.classList.contains('open');
+    if (isOpen) {
+      dropdown.classList.remove('open');
+      arrow.classList.remove('up');
+      header.classList.remove('open');
+    } else {
+      // Calculate fixed position based on header's bounding rect
+      const rect = header.getBoundingClientRect();
+      dropdown.style.top = rect.bottom + 'px';
+      dropdown.style.left = rect.left + 'px';
+      dropdown.style.width = rect.width + 'px';
+      dropdown.classList.add('open');
+      arrow.classList.add('up');
+      header.classList.add('open');
+    }
   }
 
   function selectPolicy(id, name) {
@@ -1922,14 +1935,24 @@
   // 点击外部关闭下拉框
   document.addEventListener('click', function(e) {
     const container = document.getElementById('policy-multi-select');
-    if (container && !container.contains(e.target)) {
-      const dropdown = document.getElementById('policy-dropdown');
+    const dropdown = document.getElementById('policy-dropdown');
+    if (container && !container.contains(e.target) && dropdown && !dropdown.contains(e.target)) {
       const arrow = document.getElementById('policy-arrow');
-      const header = document.querySelector('.multi-select-header');
-      if (dropdown) dropdown.classList.remove('open');
+      const header = container.querySelector('.multi-select-header');
+      if (dropdown) { dropdown.classList.remove('open'); dropdown.style.cssText = 'display:none;'; }
       if (arrow) arrow.classList.remove('up');
       if (header) header.classList.remove('open');
     }
+  });
+
+  // 窗口变化时关闭下拉框
+  window.addEventListener('resize', function() {
+    const dropdown = document.getElementById('policy-dropdown');
+    const arrow = document.getElementById('policy-arrow');
+    const header = document.querySelector('.multi-select-header');
+    if (dropdown) { dropdown.classList.remove('open'); dropdown.style.cssText = 'display:none;'; }
+    if (arrow) arrow.classList.remove('up');
+    if (header) header.classList.remove('open');
   });
 
   function createPolicyFromSandbox() {
