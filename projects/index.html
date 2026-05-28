@@ -1841,8 +1841,10 @@
   function togglePolicyDropdown() {
     const dropdown = document.getElementById('policy-dropdown');
     const arrow = document.getElementById('policy-arrow');
+    const header = dropdown.previousElementSibling ? dropdown.previousElementSibling.parentElement.querySelector('.multi-select-header') : null;
     dropdown.classList.toggle('open');
     arrow.classList.toggle('up');
+    if (header) header.classList.toggle('open', dropdown.classList.contains('open'));
   }
 
   function selectPolicy(id, name) {
@@ -1923,8 +1925,10 @@
     if (container && !container.contains(e.target)) {
       const dropdown = document.getElementById('policy-dropdown');
       const arrow = document.getElementById('policy-arrow');
+      const header = document.querySelector('.multi-select-header');
       if (dropdown) dropdown.classList.remove('open');
       if (arrow) arrow.classList.remove('up');
+      if (header) header.classList.remove('open');
     }
   });
 
