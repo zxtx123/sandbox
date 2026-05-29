@@ -1914,8 +1914,8 @@
         document.getElementById('edit-policy-desc').value = '';
         // 设置访问类型
         selectedEditAccessType = row.dataset.accesstype || 'sandbox-intranet';
-        document.querySelectorAll('#edit-policy-modal .access-type-option').forEach(opt => opt.classList.remove('selected'));
-        const editTypeOpt = document.querySelector('#edit-policy-modal .access-type-option[data-value="' + selectedEditAccessType + '"]');
+        document.querySelectorAll('#edit-policy-modal .access-type-item').forEach(opt => opt.classList.remove('selected'));
+        const editTypeOpt = document.querySelector('#edit-policy-modal .access-type-item[data-value="' + selectedEditAccessType + '"]');
         if (editTypeOpt) editTypeOpt.classList.add('selected');
         document.getElementById('edit-access-type-desc').textContent = accessTypeDescs[selectedEditAccessType];
         document.getElementById('edit-policy-modal').classList.add('active');
@@ -1990,8 +1990,8 @@
     document.getElementById('vpc-network').value = '';
     document.getElementById('subnet').value = '';
     selectedAccessType = 'sandbox-intranet';
-    document.querySelectorAll('#create-policy-modal .access-type-option').forEach(opt => opt.classList.remove('selected'));
-    document.querySelector('#create-policy-modal .access-type-option[data-value="sandbox-intranet"]').classList.add('selected');
+    document.querySelectorAll('#create-policy-modal .access-type-item').forEach(opt => opt.classList.remove('selected'));
+    document.querySelector('#create-policy-modal .access-type-item[data-value="sandbox-intranet"]').classList.add('selected');
     document.getElementById('access-type-desc').textContent = '沙箱禁止访问公网服务或者VPC网络，适用于需高度安全隔离的场景。';
     selectAccessType('sandbox-intranet');
   }
@@ -2001,37 +2001,29 @@
 
   function selectAccessType(type) {
     selectedAccessType = type;
-    document.querySelectorAll('#create-policy-modal .access-type-option').forEach(opt => opt.classList.remove('selected'));
-    document.querySelector('#create-policy-modal .access-type-option[data-value="' + type + '"]').classList.add('selected');
+    document.querySelectorAll('#create-policy-modal .access-type-item').forEach(opt => opt.classList.remove('selected'));
+    document.querySelector('#create-policy-modal .access-type-item[data-value="' + type + '"]').classList.add('selected');
     document.getElementById('access-type-desc').textContent = accessTypeDescs[type];
     // 根据访问类型显示/隐藏字段
-    var targetServiceGroup = document.getElementById('target-service-group');
-    var serviceDomainGroup = document.getElementById('service-domain-group');
-    var vpcNetworkGroup = document.getElementById('vpc-network-group');
-    var subnetGroup = document.getElementById('subnet-group');
+    var privateFields = document.querySelectorAll('#create-policy-modal .create-private-fields');
+    var vpcFields = document.querySelectorAll('#create-policy-modal .create-vpc-fields');
     if (type === 'sandbox-intranet' || type === 'public-network') {
-      targetServiceGroup.style.display = 'none';
-      serviceDomainGroup.style.display = 'none';
-      vpcNetworkGroup.style.display = 'none';
-      subnetGroup.style.display = 'none';
+      privateFields.forEach(el => el.style.display = 'none');
+      vpcFields.forEach(el => el.style.display = 'none');
     } else if (type === 'vpc-network') {
-      targetServiceGroup.style.display = 'none';
-      serviceDomainGroup.style.display = 'none';
-      vpcNetworkGroup.style.display = 'flex';
-      subnetGroup.style.display = 'flex';
+      privateFields.forEach(el => el.style.display = 'none');
+      vpcFields.forEach(el => el.style.display = 'flex');
     } else if (type === 'private-connection') {
-      targetServiceGroup.style.display = 'flex';
-      serviceDomainGroup.style.display = 'flex';
-      vpcNetworkGroup.style.display = 'none';
-      subnetGroup.style.display = 'none';
+      privateFields.forEach(el => el.style.display = 'flex');
+      vpcFields.forEach(el => el.style.display = 'none');
     }
   }
 
   let selectedEditAccessType = 'sandbox-intranet';
   function selectEditAccessType(type) {
     selectedEditAccessType = type;
-    document.querySelectorAll('#edit-policy-modal .access-type-option').forEach(opt => opt.classList.remove('selected'));
-    document.querySelector('#edit-policy-modal .access-type-option[data-value="' + type + '"]').classList.add('selected');
+    document.querySelectorAll('#edit-policy-modal .access-type-item').forEach(opt => opt.classList.remove('selected'));
+    document.querySelector('#edit-policy-modal .access-type-item[data-value="' + type + '"]').classList.add('selected');
     document.getElementById('edit-access-type-desc').textContent = accessTypeDescs[type];
     // Show/hide fields based on access type
     const privateFields = document.querySelectorAll('.edit-private-fields');
@@ -2120,7 +2112,7 @@
       document.getElementById('edit-target-service').value = row.dataset.service;
       document.getElementById('edit-policy-desc').value = row.dataset.desc || '';
       selectedEditAccessType = row.dataset.accesstype || 'sandbox-intranet';
-      document.querySelectorAll('#edit-policy-modal .access-type-option').forEach(opt => opt.classList.remove('active'));
+      document.querySelectorAll('#edit-policy-modal .access-type-item').forEach(opt => opt.classList.remove('active'));
       const editTypeOpt = document.querySelector('#edit-policy-modal .access-type-option[data-type="' + selectedEditAccessType + '"]');
       if (editTypeOpt) editTypeOpt.classList.add('active');
       const editDesc = accessTypeDescs[selectedEditAccessType] || '';
@@ -2163,7 +2155,7 @@
       document.getElementById('edit-policy-desc').value = row.dataset.desc || '';
       // 设置访问类型
       selectedEditAccessType = row.dataset.accesstype || 'sandbox-intranet';
-      document.querySelectorAll('#edit-policy-modal .access-type-option').forEach(opt => opt.classList.remove('active'));
+      document.querySelectorAll('#edit-policy-modal .access-type-item').forEach(opt => opt.classList.remove('active'));
       const editTypeOpt = document.querySelector('#edit-policy-modal .access-type-option[data-type="' + selectedEditAccessType + '"]');
       if (editTypeOpt) editTypeOpt.classList.add('active');
       const editDesc = accessTypeDescs[selectedEditAccessType] || '';
