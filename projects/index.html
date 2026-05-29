@@ -1430,7 +1430,7 @@
         </div>
       </div>
       <div class="form-group" id="selected-services-group" style="display:none;">
-        <label class="form-label">目标服务</label>
+        <label class="form-label">访问对象</label>
         <div class="form-control">
           <div id="selected-services-list" class="selected-services"></div>
         </div>
@@ -1846,10 +1846,27 @@
   }
 
   function selectPolicy(id, name) {
+    const policies = JSON.parse(localStorage.getItem('sandboxPolicies') || '[]');
+    const targetPolicy = policies.find(p => p.id === id);
+    if (!targetPolicy) return;
+
     const idx = selectedPolicyIds.indexOf(id);
     if (idx > -1) {
+      // 取消选中，直接移除
       selectedPolicyIds.splice(idx, 1);
     } else {
+      // 选中前校验互斥
+      const targetType = targetPolicy.accessType;
+      const isIsolated = (targetType === 'sandbox-intranet' || targetType === 'public-network');
+      // 检查已选策略中是否有冲突
+      const selectedPolicies = policies.filter(p => selectedPolicyIds.includes(p.id));
+      for (const sp of selectedPolicies) {
+        const spIsIsolated = (sp.accessType === 'sandbox-intranet' || sp.accessType === 'public-network');
+        if (isIsolated !== spIsIsolated) {
+          alert('沙箱内网或公网类型策略不能与VPC网络或私网连接类型策略同时选择');
+          return;
+        }
+      }
       selectedPolicyIds.push(id);
     }
     renderPolicyTags();
@@ -1908,12 +1925,20 @@
     }
     const policies = JSON.parse(localStorage.getItem('sandboxPolicies') || '[]');
     const selectedPolicies = policies.filter(p => selectedPolicyIds.includes(p.id));
-    const services = [...new Set(selectedPolicies.map(p => p.targetService).filter(Boolean))];
-    if (services.length === 0) {
-      container.innerHTML = '<span style="color:#999;">所选策略暂无目标服务</span>';
-    } else {
-      container.innerHTML = services.map(s => `<span class="service-tag">${s}</span>`).join('');
-    }
+    let html = '';
+    selectedPolicies.forEach(p => {
+      const accessType = p.accessType || 'sandbox-intranet';
+      let objContent = '';
+      if (accessType === 'sandbox-intranet' || accessType === 'public-network') {
+        objContent = '-';
+      } else if (accessType === 'vpc-network') {
+        objContent = (p.vpcnetwork || '') + '<br>' + (p.subnet || '');
+      } else if (accessType === 'private-connection') {
+        objContent = (p.service || '') + '<br>' + (p.domain || '');
+      }
+      html += '<div style="margin-bottom:8px;"><div style="font-weight:500;color:#333;margin-bottom:2px;">' + (p.name || '') + '</div><div style="color:#666;font-size:13px;padding-left:8px;">' + objContent + '</div></div>';
+    });
+    container.innerHTML = html || '<span style="color:#999;">暂无访问对象</span>';
     group.style.display = 'block';
   }
 
