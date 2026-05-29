@@ -19,6 +19,20 @@
         </div>
       </div>
       <div class="form-group">
+        <label class="form-label">访问类型 <span class="required">*</span></label>
+        <div class="form-control">
+          <div class="access-type-group" id="edit-access-type-group">
+            <div class="access-type-item" data-value="sandbox-intranet" onclick="selectEditAccessType(this)">
+              <span class="access-type-arrow">&#9654;</span>沙箱内网
+            </div>
+            <div class="access-type-item" data-value="public-network" onclick="selectEditAccessType(this)">公网</div>
+            <div class="access-type-item" data-value="vpc-network" onclick="selectEditAccessType(this)">VPC网络</div>
+            <div class="access-type-item" data-value="private-connection" onclick="selectEditAccessType(this)">私网连接</div>
+          </div>
+          <div class="access-type-desc" id="edit-access-type-desc">沙箱禁止访问公网服务或者VPC网络，适用于需高度安全隔离的场景。</div>
+        </div>
+      </div>
+      <div class="form-group">
         <label class="form-label">策略名称 <span class="required">*</span></label>
         <div class="form-control">
           <input type="text" class="form-input" id="edit-policy-name" placeholder="请输入策略名称">
@@ -1392,6 +1406,7 @@
               <tr>
                 <th>策略ID</th>
                 <th>策略名称</th>
+                <th>访问类型</th>
                 <th>目标服务</th>
                 <th>服务域名</th>
                 <th>描述</th>
@@ -1399,25 +1414,28 @@
               </tr>
             </thead>
             <tbody id="policy-tbody">
-              <tr data-id="policy-001" data-name="开发环境访问策略" data-domain="vpce-01.vpce-svc.cn-north-1a" data-service="endpoint-service-01" data-desc="开发环境默认访问策略">
+              <tr data-id="policy-001" data-name="开发环境访问策略" data-accesstype="sandbox-intranet" data-domain="vpce-01.vpce-svc.cn-north-1a" data-service="endpoint-service-01" data-desc="开发环境默认访问策略">
                 <td>policy-001</td>
                 <td>开发环境访问策略</td>
+                <td>沙箱内网</td>
                 <td>endpoint-service-01</td>
                 <td>vpce-01 (华北)</td>
                 <td>开发环境默认访问策略</td>
                 <td><a href="#" class="action-link edit-btn">编辑</a> <a href="#" class="action-link delete-btn">删除</a></td>
               </tr>
-              <tr data-id="policy-002" data-name="生产环境访问策略" data-domain="vpce-02.vpce-svc.cn-north-1b" data-service="endpoint-service-02" data-desc="生产环境Web服务访问">
+              <tr data-id="policy-002" data-name="生产环境访问策略" data-accesstype="public-network" data-domain="vpce-02.vpce-svc.cn-north-1b" data-service="endpoint-service-02" data-desc="生产环境Web服务访问">
                 <td>policy-002</td>
                 <td>生产环境访问策略</td>
+                <td>公网</td>
                 <td>endpoint-service-02</td>
                 <td>vpce-02 (华南)</td>
                 <td>生产环境Web服务访问</td>
                 <td><a href="#" class="action-link edit-btn">编辑</a> <a href="#" class="action-link delete-btn">删除</a></td>
               </tr>
-              <tr data-id="policy-003" data-name="测试环境访问策略" data-domain="vpce-03.vpce-svc.cn-east-1" data-service="endpoint-service-03" data-desc="测试环境数据库访问">
+              <tr data-id="policy-003" data-name="测试环境访问策略" data-accesstype="vpc-network" data-domain="vpce-03.vpce-svc.cn-east-1" data-service="endpoint-service-03" data-desc="测试环境数据库访问">
                 <td>policy-003</td>
                 <td>测试环境访问策略</td>
+                <td>VPC网络</td>
                 <td>endpoint-service-03</td>
                 <td>vpce-03 (华东)</td>
                 <td>测试环境数据库访问</td>
@@ -1465,6 +1483,30 @@
         <label class="form-label">策略名称 <span class="required">*</span></label>
         <div class="form-control">
           <input type="text" class="form-input" id="policy-name" placeholder="请输入策略名称">
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">访问类型 <span class="required">*</span></label>
+        <div class="form-control">
+          <div class="access-type-group" id="access-type-group">
+            <div class="access-type-item active" data-value="sandbox-intranet" onclick="selectAccessType(this)">
+              <span class="access-type-arrow">▶</span>
+              <span class="access-type-text">沙箱内网</span>
+            </div>
+            <div class="access-type-item" data-value="public-network" onclick="selectAccessType(this)">
+              <span class="access-type-arrow">▶</span>
+              <span class="access-type-text">公网</span>
+            </div>
+            <div class="access-type-item" data-value="vpc-network" onclick="selectAccessType(this)">
+              <span class="access-type-arrow">▶</span>
+              <span class="access-type-text">VPC网络</span>
+            </div>
+            <div class="access-type-item" data-value="private-connection" onclick="selectAccessType(this)">
+              <span class="access-type-arrow">▶</span>
+              <span class="access-type-text">私网连接</span>
+            </div>
+          </div>
+          <div class="access-type-desc" id="access-type-desc">沙箱禁止访问公网服务或者VPC网络，适用于需高度安全隔离的场景。</div>
         </div>
       </div>
       <div class="form-group">
@@ -1636,12 +1678,66 @@
   .action-link:hover {
     text-decoration: underline;
   }
+  .access-type-group {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .access-type-item {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 6px 14px;
+    border: 1px solid #d9d9d9;
+    border-radius: 4px;
+    cursor: pointer;
+    background: #fff;
+    transition: all 0.2s;
+    user-select: none;
+  }
+  .access-type-item:hover {
+    border-color: #1890ff;
+  }
+  .access-type-item.active {
+    background: #e6f7ff;
+    border-color: #91d5ff;
+  }
+  .access-type-item .access-type-arrow {
+    font-size: 10px;
+    color: #999;
+    display: none;
+  }
+  .access-type-item.active .access-type-arrow {
+    display: inline;
+    color: #1890ff;
+  }
+  .access-type-item .access-type-text {
+    font-size: 13px;
+    color: #666;
+  }
+  .access-type-item.active .access-type-text {
+    color: #1890ff;
+    font-weight: 500;
+  }
+  .access-type-desc {
+    margin-top: 6px;
+    font-size: 12px;
+    color: #999;
+    line-height: 1.5;
+  }
 </style>
 
 <script>
   // 全局映射表
   var serviceLabels = {'endpoint-service-01':'endpoint-service-01','endpoint-service-02':'endpoint-service-02','endpoint-service-03':'endpoint-service-03'};
   var domainLabels = {'vpce-01.vpce-svc.cn-north-1a':'vpce-01 (华北)','vpce-02.vpce-svc.cn-north-1b':'vpce-02 (华南)','vpce-03.vpce-svc.cn-east-1':'vpce-03 (华东)'};
+  var accessTypeLabels = {'sandbox-intranet':'沙箱内网','public-network':'公网','vpc-network':'VPC网络','private-connection':'私网连接'};
+  var accessTypeDescs = {
+    'sandbox-intranet': '沙箱禁止访问公网服务或者VPC网络，适用于需高度安全隔离的场景。',
+    'public-network': '允许沙箱访问公网服务，适用于需要下载外部资源的场景。',
+    'vpc-network': '允许沙箱访问VPC内网服务，适用于需要连接VPC内资源的场景。',
+    'private-connection': '通过私网连接访问服务，适用于需要安全访问内网服务的场景。'
+  };
 
   // 初始化：将静态策略数据写入 localStorage，供沙箱实例页面读取
   (function() {
@@ -1775,8 +1871,13 @@
         document.getElementById('edit-policy-name').value = row.dataset.name;
         document.getElementById('edit-service-domain').value = row.dataset.domain;
         document.getElementById('edit-target-service').value = row.dataset.service;
-        document.getElementById('edit-policy-desc').value = row.dataset.desc || '';
         document.getElementById('edit-policy-desc').value = '';
+        // 设置访问类型
+        selectedEditAccessType = row.dataset.accesstype || 'sandbox-intranet';
+        document.querySelectorAll('#edit-policy-modal .access-type-option').forEach(opt => opt.classList.remove('selected'));
+        const editTypeOpt = document.querySelector('#edit-policy-modal .access-type-option[data-value="' + selectedEditAccessType + '"]');
+        if (editTypeOpt) editTypeOpt.classList.add('selected');
+        document.getElementById('edit-access-type-desc').textContent = accessTypeDescs[selectedEditAccessType];
         document.getElementById('edit-policy-modal').classList.add('active');
       };
     });
@@ -1804,8 +1905,10 @@
       tr.dataset.domain = p.domain;
       tr.dataset.service = p.service;
       tr.dataset.desc = p.desc || '';
+      tr.dataset.accesstype = p.accessType || 'sandbox-intranet';
       tr.innerHTML = '<td>' + p.id + '</td>' +
         '<td>' + p.name + '</td>' +
+        '<td>' + (accessTypeLabels[p.accessType] || '沙箱内网') + '</td>' +
         '<td>' + (serviceLabels[p.service] || p.service) + '</td>' +
         '<td>' + (domainLabels[p.domain] || p.domain) + '</td>' +
         '<td>' + (p.desc || '') + '</td>' +
@@ -1835,15 +1938,55 @@
     document.getElementById('target-service').value = '';
     document.getElementById('service-domain').value = '';
     document.getElementById('policy-desc').value = '';
+    selectedAccessType = 'sandbox-intranet';
+    document.querySelectorAll('#create-policy-modal .access-type-option').forEach(opt => opt.classList.remove('selected'));
+    document.querySelector('#create-policy-modal .access-type-option[data-value="sandbox-intranet"]').classList.add('selected');
+    document.getElementById('access-type-desc').textContent = '沙箱禁止访问公网服务或者VPC网络，适用于需高度安全隔离的场景。';
+  }
+
+  // 访问类型选择
+  let selectedAccessType = 'sandbox-intranet';
+  const accessTypeDescs = {
+    'sandbox-intranet': '沙箱禁止访问公网服务或者VPC网络，适用于需高度安全隔离的场景。',
+    'public-network': '允许沙箱通过公网访问外部服务，适用于需要下载依赖或访问公网API的场景。',
+    'vpc-network': '允许沙箱访问指定VPC内的资源，适用于需要与云上内网资源通信的场景。',
+    'private-connection': '通过终端节点服务建立私有连接，安全访问VPC内的服务资源。'
+  };
+  const accessTypeLabels = {
+    'sandbox-intranet': '沙箱内网',
+    'public-network': '公网',
+    'vpc-network': 'VPC网络',
+    'private-connection': '私网连接'
+  };
+
+  function selectAccessType(type) {
+    selectedAccessType = type;
+    document.querySelectorAll('#create-policy-modal .access-type-option').forEach(opt => opt.classList.remove('selected'));
+    document.querySelector('#create-policy-modal .access-type-option[data-value="' + type + '"]').classList.add('selected');
+    document.getElementById('access-type-desc').textContent = accessTypeDescs[type];
+  }
+
+  let selectedEditAccessType = 'sandbox-intranet';
+  function selectEditAccessType(type) {
+    selectedEditAccessType = type;
+    document.querySelectorAll('#edit-policy-modal .access-type-option').forEach(opt => opt.classList.remove('selected'));
+    document.querySelector('#edit-policy-modal .access-type-option[data-value="' + type + '"]').classList.add('selected');
+    document.getElementById('edit-access-type-desc').textContent = accessTypeDescs[type];
   }
 
   function createPolicy() {
     const policyName = document.getElementById('policy-name').value.trim();
     const targetService = document.getElementById('target-service').value;
-    const serviceDomain = document.getElementById('service-domain').value.trim();
+    const serviceDomain = document.getElementById('service-domain').value;
+    const accessTypeEl = document.querySelector('#create-policy-modal .access-type-option.active');
+    const accessType = accessTypeEl ? accessTypeEl.dataset.type : '';
     
     if (!policyName) {
       alert('请输入策略名称');
+      return;
+    }
+    if (!accessType) {
+      alert('请选择访问类型');
       return;
     }
     if (!targetService) {
@@ -1855,6 +1998,64 @@
       return;
     }
     
+    // 生成新策略ID
+    const tbody = document.getElementById('policy-tbody');
+    const existingIds = Array.from(tbody.querySelectorAll('tr')).map(r => r.dataset.id);
+    let newId = 'policy-' + String(existingIds.length + 1).padStart(3, '0');
+    while (existingIds.includes(newId)) {
+      newId = 'policy-' + String(parseInt(newId.replace('policy-', '')) + 1).padStart(3, '0');
+    }
+
+    const newRow = document.createElement('tr');
+    newRow.dataset.id = newId;
+    newRow.dataset.name = policyName;
+    newRow.dataset.accesstype = accessType;
+    newRow.dataset.domain = serviceDomain;
+    newRow.dataset.service = targetService;
+    newRow.dataset.desc = '';
+
+    newRow.innerHTML = '<td>' + newId + '</td>' +
+      '<td>' + policyName + '</td>' +
+      '<td>' + (accessTypeLabels[accessType] || accessType) + '</td>' +
+      '<td>' + (serviceLabels[targetService] || targetService) + '</td>' +
+      '<td>' + (domainLabels[serviceDomain] || serviceDomain) + '</td>' +
+      '<td></td>' +
+      '<td><a href="#" class="action-link edit-btn">编辑</a> <a href="#" class="action-link delete-btn">删除</a></td>';
+
+    tbody.appendChild(newRow);
+
+    // 重新绑定编辑/删除事件
+    newRow.querySelector('.edit-btn').addEventListener('click', function(e) {
+      e.preventDefault();
+      const row = this.closest('tr');
+      editingRow = row;
+      document.getElementById('edit-policy-id').value = row.dataset.id;
+      document.getElementById('edit-policy-name').value = row.dataset.name;
+      document.getElementById('edit-service-domain').value = row.dataset.domain;
+      document.getElementById('edit-target-service').value = row.dataset.service;
+      document.getElementById('edit-policy-desc').value = row.dataset.desc || '';
+      selectedEditAccessType = row.dataset.accesstype || 'sandbox-intranet';
+      document.querySelectorAll('#edit-policy-modal .access-type-option').forEach(opt => opt.classList.remove('active'));
+      const editTypeOpt = document.querySelector('#edit-policy-modal .access-type-option[data-type="' + selectedEditAccessType + '"]');
+      if (editTypeOpt) editTypeOpt.classList.add('active');
+      const editDesc = accessTypeDescs[selectedEditAccessType] || '';
+      document.getElementById('edit-access-type-desc').textContent = editDesc;
+      document.getElementById('edit-policy-modal').classList.add('active');
+    });
+    newRow.querySelector('.delete-btn').addEventListener('click', function(e) {
+      e.preventDefault();
+      const row = this.closest('tr');
+      const policyName = row.dataset.name;
+      document.getElementById('delete-policy-name').textContent = policyName;
+      deletingRow = row;
+      document.getElementById('delete-policy-modal').classList.add('active');
+    });
+
+    // 保存到 localStorage
+    const policies = JSON.parse(localStorage.getItem('sandboxPolicies') || '[]');
+    policies.push({ id: newId, name: policyName, accessType: accessType, service: targetService, domain: serviceDomain, desc: '' });
+    localStorage.setItem('sandboxPolicies', JSON.stringify(policies));
+
     alert('策略创建成功！');
     closeCreatePolicyModal();
   }
@@ -1873,6 +2074,13 @@
       document.getElementById('edit-service-domain').value = row.dataset.domain;
       document.getElementById('edit-target-service').value = row.dataset.service;
       document.getElementById('edit-policy-desc').value = row.dataset.desc || '';
+      // 设置访问类型
+      selectedEditAccessType = row.dataset.accesstype || 'sandbox-intranet';
+      document.querySelectorAll('#edit-policy-modal .access-type-option').forEach(opt => opt.classList.remove('active'));
+      const editTypeOpt = document.querySelector('#edit-policy-modal .access-type-option[data-type="' + selectedEditAccessType + '"]');
+      if (editTypeOpt) editTypeOpt.classList.add('active');
+      const editDesc = accessTypeDescs[selectedEditAccessType] || '';
+      document.getElementById('edit-access-type-desc').textContent = editDesc;
 
       document.getElementById('edit-policy-modal').classList.add('active');
     });
@@ -1894,17 +2102,21 @@
 
     // 更新行数据和 data 属性
     const desc = document.getElementById('edit-policy-desc').value.trim();
+    const editAccessTypeEl = document.querySelector('#edit-policy-modal .access-type-option.active');
+    const accessType = editAccessTypeEl ? editAccessTypeEl.dataset.type : 'sandbox-intranet';
 
     editingRow.dataset.name = policyName;
+    editingRow.dataset.accesstype = accessType;
     editingRow.dataset.domain = serviceDomain;
     editingRow.dataset.service = targetService;
     editingRow.dataset.desc = desc;
 
     const cells = editingRow.querySelectorAll('td');
     cells[1].textContent = policyName;
-    cells[2].textContent = serviceLabels[targetService] || targetService;
-    cells[3].textContent = domainLabels[serviceDomain] || serviceDomain;
-    cells[4].textContent = desc;
+    cells[2].textContent = accessTypeLabels[accessType] || accessType;
+    cells[3].textContent = serviceLabels[targetService] || targetService;
+    cells[4].textContent = domainLabels[serviceDomain] || serviceDomain;
+    cells[5].textContent = desc;
 
     alert('策略保存成功！');
     closeEditPolicyModal();
