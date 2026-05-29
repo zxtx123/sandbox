@@ -1946,18 +1946,6 @@
 
   // 访问类型选择
   let selectedAccessType = 'sandbox-intranet';
-  const accessTypeDescs = {
-    'sandbox-intranet': '沙箱禁止访问公网服务或者VPC网络，适用于需高度安全隔离的场景。',
-    'public-network': '允许沙箱通过公网访问外部服务，适用于需要下载依赖或访问公网API的场景。',
-    'vpc-network': '允许沙箱访问指定VPC内的资源，适用于需要与云上内网资源通信的场景。',
-    'private-connection': '通过终端节点服务建立私有连接，安全访问VPC内的服务资源。'
-  };
-  const accessTypeLabels = {
-    'sandbox-intranet': '沙箱内网',
-    'public-network': '公网',
-    'vpc-network': 'VPC网络',
-    'private-connection': '私网连接'
-  };
 
   function selectAccessType(type) {
     selectedAccessType = type;
