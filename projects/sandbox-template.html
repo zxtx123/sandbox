@@ -1408,31 +1408,18 @@
       <div class="form-group">
         <label class="form-label">基础镜像 <span class="required">*</span></label>
         <div class="form-control">
-          <input type="text" class="form-input" id="base-image" value="harbor.qihoo.net/e2b-infra/code-interpreter:latest" placeholder="请输入基础镜像地址">
+          <input type="text" class="form-input" id="base-image" value="harbor.qihoo.net/e2b-infra/code-interpreter:latest" readonly style="background:#f5f5f5;color:#666;">
         </div>
       </div>
       <div class="form-group">
         <label class="form-label">安装包</label>
         <div class="form-control" style="flex-direction:column;align-items:stretch;">
-          <div class="pkg-tabs">
-            <div class="pkg-tab active" data-type="apt" onclick="switchPkgTab(this)">apt</div>
-            <div class="pkg-tab" data-type="cargo" onclick="switchPkgTab(this)">cargo</div>
-            <div class="pkg-tab" data-type="gem" onclick="switchPkgTab(this)">gem</div>
-            <div class="pkg-tab" data-type="go" onclick="switchPkgTab(this)">go</div>
-            <div class="pkg-tab" data-type="npm" onclick="switchPkgTab(this)">npm</div>
-            <div class="pkg-tab" data-type="pip" onclick="switchPkgTab(this)">pip</div>
-          </div>
-          <div class="pkg-content">
-            <div class="pkg-add-row">
-              <input type="text" class="form-input pkg-input" id="pkg-name-input" placeholder="请输入包名，多个包名用空格分隔">
-              <button class="btn btn-primary pkg-add-btn" onclick="addPackage()">添加</button>
-            </div>
-            <div class="pkg-list" id="pkg-list-apt"></div>
-            <div class="pkg-list" id="pkg-list-cargo" style="display:none;"></div>
-            <div class="pkg-list" id="pkg-list-gem" style="display:none;"></div>
-            <div class="pkg-list" id="pkg-list-go" style="display:none;"></div>
-            <div class="pkg-list" id="pkg-list-npm" style="display:none;"></div>
-            <div class="pkg-list" id="pkg-list-pip" style="display:none;"></div>
+          <button class="btn btn-primary pkg-add-row-btn" onclick="addPkgRow()">
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 1v10M1 6h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+            添加安装包
+          </button>
+          <div class="pkg-rows" id="pkg-rows">
+            <!-- 动态行 -->
           </div>
         </div>
       </div>
@@ -1545,89 +1532,69 @@
   .form-input:focus {
     border-color: #0066FF;
   }
-  .pkg-tabs {
-    display: flex;
-    gap: 0;
-    border: 1px solid #D9D9D9;
-    border-radius: 4px 4px 0 0;
-    overflow: hidden;
-    margin-bottom: 0;
+  .pkg-add-row-btn {
+    height: 32px;
+    padding: 0 14px;
+    font-size: 14px;
+    margin-bottom: 12px;
   }
-  .pkg-tab {
+  .pkg-rows {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .pkg-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .pkg-row .form-select {
     flex: 1;
-    text-align: center;
-    padding: 8px 0;
-    font-size: 13px;
-    color: #666;
+    height: 32px;
+    padding: 0 10px;
+    border: 1px solid #D9D9D9;
+    border-radius: 4px;
+    font-size: 14px;
+    color: #333;
+    outline: none;
+    background: #fff;
     cursor: pointer;
-    background: #fafafa;
-    border-right: 1px solid #D9D9D9;
+    appearance: auto;
+  }
+  .pkg-row .form-select:focus {
+    border-color: #0066FF;
+  }
+  .pkg-row .form-select:disabled {
+    background: #f5f5f5;
+    color: #999;
+    cursor: not-allowed;
+  }
+  .pkg-del-btn {
+    width: 32px;
+    height: 32px;
+    border: 1px solid #D9D9D9;
+    border-radius: 4px;
+    background: #fff;
+    color: #999;
+    font-size: 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
     transition: all 0.2s;
   }
-  .pkg-tab:last-child {
-    border-right: none;
-  }
-  .pkg-tab:hover {
-    color: #0066FF;
-    background: #f0f5ff;
-  }
-  .pkg-tab.active {
-    color: #0066FF;
-    background: #fff;
-    font-weight: 500;
-    border-bottom: 2px solid #0066FF;
-  }
-  .pkg-content {
-    border: 1px solid #D9D9D9;
-    border-top: none;
-    border-radius: 0 0 4px 4px;
-    padding: 12px;
-  }
-  .pkg-add-row {
-    display: flex;
-    gap: 8px;
-    margin-bottom: 8px;
-  }
-  .pkg-input {
-    flex: 1;
-  }
-  .pkg-add-btn {
-    flex-shrink: 0;
-    height: 32px;
-    padding: 0 16px;
-    font-size: 13px;
-  }
-  .pkg-list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-    min-height: 28px;
-  }
-  .pkg-tag {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    padding: 2px 8px;
-    background: #e8f4fc;
-    color: #333;
-    border-radius: 3px;
-    font-size: 13px;
-    line-height: 1.6;
-  }
-  .pkg-tag .pkg-remove {
-    cursor: pointer;
-    color: #999;
-    font-size: 14px;
-    line-height: 1;
-    margin-left: 2px;
-  }
-  .pkg-tag .pkg-remove:hover {
+  .pkg-del-btn:hover {
+    border-color: #e53e3e;
     color: #e53e3e;
   }
-  .pkg-empty {
+  .pkg-del-btn.disabled {
+    cursor: not-allowed;
+    opacity: 0.4;
+  }
+  .pkg-del-btn.disabled:hover {
+    border-color: #D9D9D9;
     color: #999;
-    font-size: 13px;
-    line-height: 28px;
   }
 </style>
 
@@ -1698,77 +1665,125 @@
   });
 
   // 创建模板弹窗
-  let currentPkgType = 'apt';
-  const pkgData = { apt: [], cargo: [], gem: [], go: [], npm: [], pip: [] };
+  const PKG_TYPES = ['apt', 'cargo', 'gem', 'go', 'npm', 'pip'];
+  const PKG_VERSIONS = {
+    apt: ['最新版本', '1.0', '2.0', '3.0'],
+    cargo: ['最新版本', '0.1', '0.2', '1.0'],
+    gem: ['最新版本', '1.0', '2.0', '3.0'],
+    go: ['最新版本', '1.19', '1.20', '1.21', '1.22'],
+    npm: ['最新版本', '6.x', '8.x', '9.x', '10.x'],
+    pip: ['最新版本', '22.0', '23.0', '24.0']
+  };
+  let pkgRowCounter = 0;
 
   document.getElementById('create-template-btn').addEventListener('click', function() {
     document.getElementById('create-template-modal').classList.add('active');
     // 重置
-    document.getElementById('base-image').value = 'harbor.qihoo.net/e2b-infra/code-interpreter:latest';
-    Object.keys(pkgData).forEach(k => pkgData[k] = []);
-    currentPkgType = 'apt';
-    document.querySelectorAll('.pkg-tab').forEach(t => t.classList.remove('active'));
-    document.querySelector('.pkg-tab[data-type="apt"]').classList.add('active');
-    document.querySelectorAll('.pkg-list').forEach(l => l.innerHTML = '<span class="pkg-empty">暂无安装包</span>');
-    document.getElementById('pkg-name-input').value = '';
-    showPkgList('apt');
+    document.getElementById('pkg-rows').innerHTML = '';
+    pkgRowCounter = 0;
+    // 默认添加一行
+    addPkgRow();
   });
 
   function closeCreateTemplateModal() {
     document.getElementById('create-template-modal').classList.remove('active');
   }
 
-  function switchPkgTab(el) {
-    const type = el.getAttribute('data-type');
-    currentPkgType = type;
-    document.querySelectorAll('.pkg-tab').forEach(t => t.classList.remove('active'));
-    el.classList.add('active');
-    document.getElementById('pkg-name-input').value = '';
-    showPkgList(type);
+  function getUsedPkgTypes() {
+    const used = [];
+    document.querySelectorAll('#pkg-rows .pkg-type-select').forEach(sel => {
+      if (sel.value) used.push(sel.value);
+    });
+    return used;
   }
 
-  function showPkgList(type) {
-    document.querySelectorAll('.pkg-list').forEach(l => l.style.display = 'none');
-    const listEl = document.getElementById('pkg-list-' + type);
-    listEl.style.display = 'flex';
-    renderPkgList(type);
+  function updatePkgTypeOptions() {
+    const used = getUsedPkgTypes();
+    document.querySelectorAll('#pkg-rows .pkg-type-select').forEach(sel => {
+      const currentVal = sel.value;
+      PKG_TYPES.forEach(type => {
+        const opt = sel.querySelector('option[value="' + type + '"]');
+        if (opt) {
+          opt.disabled = (used.includes(type) && type !== currentVal);
+        }
+      });
+    });
   }
 
-  function renderPkgList(type) {
-    const listEl = document.getElementById('pkg-list-' + type);
-    if (pkgData[type].length === 0) {
-      listEl.innerHTML = '<span class="pkg-empty">暂无安装包</span>';
-    } else {
-      listEl.innerHTML = pkgData[type].map((pkg, i) =>
-        '<span class="pkg-tag">' + pkg + '<span class="pkg-remove" onclick="removePackage(\'' + type + '\',' + i + ')">×</span></span>'
-      ).join('');
+  function updateVersionOptions(typeSelect) {
+    const type = typeSelect.value;
+    const row = typeSelect.closest('.pkg-row');
+    const verSel = row.querySelector('.pkg-ver-select');
+    if (!type) {
+      verSel.innerHTML = '<option value="">请先选择安装包</option>';
+      verSel.disabled = true;
+      return;
+    }
+    verSel.disabled = false;
+    const versions = PKG_VERSIONS[type] || ['最新版本'];
+    verSel.innerHTML = versions.map(v => '<option value="' + v + '">' + v + '</option>').join('');
+  }
+
+  function addPkgRow() {
+    pkgRowCounter++;
+    const rowId = 'pkg-row-' + pkgRowCounter;
+    const used = getUsedPkgTypes();
+    const row = document.createElement('div');
+    row.className = 'pkg-row';
+    row.id = rowId;
+
+    let typeOpts = '<option value="">请选择安装包</option>';
+    PKG_TYPES.forEach(type => {
+      const disabled = used.includes(type) ? ' disabled' : '';
+      typeOpts += '<option value="' + type + '"' + disabled + '>' + type + '</option>';
+    });
+
+    row.innerHTML =
+      '<select class="form-select pkg-type-select" onchange="onPkgTypeChange(this)">' + typeOpts + '</select>' +
+      '<select class="form-select pkg-ver-select" disabled><option value="">请先选择安装包</option></select>' +
+      '<button class="pkg-del-btn" onclick="removePkgRow(\'' + rowId + '\')" title="删除">×</button>';
+
+    document.getElementById('pkg-rows').appendChild(row);
+    updateDelBtns();
+  }
+
+  function onPkgTypeChange(sel) {
+    updatePkgTypeOptions();
+    updateVersionOptions(sel);
+  }
+
+  function removePkgRow(rowId) {
+    const rows = document.querySelectorAll('#pkg-rows .pkg-row');
+    if (rows.length <= 1) return; // 最少保留一个
+    const row = document.getElementById(rowId);
+    if (row) {
+      row.remove();
+      updatePkgTypeOptions();
+      updateDelBtns();
     }
   }
 
-  function addPackage() {
-    const input = document.getElementById('pkg-name-input');
-    const val = input.value.trim();
-    if (!val) return;
-    // 支持空格分隔多个包名
-    const names = val.split(/\s+/).filter(n => n);
-    names.forEach(name => {
-      if (!pkgData[currentPkgType].includes(name)) {
-        pkgData[currentPkgType].push(name);
+  function updateDelBtns() {
+    const rows = document.querySelectorAll('#pkg-rows .pkg-row');
+    rows.forEach(row => {
+      const btn = row.querySelector('.pkg-del-btn');
+      if (rows.length <= 1) {
+        btn.classList.add('disabled');
+      } else {
+        btn.classList.remove('disabled');
       }
     });
-    input.value = '';
-    renderPkgList(currentPkgType);
-  }
-
-  function removePackage(type, idx) {
-    pkgData[type].splice(idx, 1);
-    renderPkgList(type);
   }
 
   function createTemplate() {
-    const baseImage = document.getElementById('base-image').value.trim();
-    if (!baseImage) {
-      alert('请输入基础镜像');
+    const rows = document.querySelectorAll('#pkg-rows .pkg-row');
+    let valid = true;
+    rows.forEach(row => {
+      const type = row.querySelector('.pkg-type-select').value;
+      if (!type) valid = false;
+    });
+    if (!valid) {
+      alert('请选择安装包类型');
       return;
     }
     alert('模板创建成功！');
@@ -1778,14 +1793,6 @@
   document.getElementById('create-template-modal').addEventListener('click', function(e) {
     if (e.target === this) {
       closeCreateTemplateModal();
-    }
-  });
-
-  // 回车添加安装包
-  document.getElementById('pkg-name-input').addEventListener('keydown', function(e) {
-    if (e.key === 'Enter') {
-      e.preventDefault();
-      addPackage();
     }
   });
 
