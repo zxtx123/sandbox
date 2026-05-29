@@ -1999,7 +1999,8 @@
   // 访问类型选择
   let selectedAccessType = 'sandbox-intranet';
 
-  function selectAccessType(type) {
+  function selectAccessType(el) {
+    var type = (typeof el === 'string') ? el : el.getAttribute('data-value');
     selectedAccessType = type;
     document.querySelectorAll('#create-policy-modal .access-type-item').forEach(opt => opt.classList.remove('selected'));
     document.querySelector('#create-policy-modal .access-type-item[data-value="' + type + '"]').classList.add('selected');
@@ -2020,7 +2021,8 @@
   }
 
   let selectedEditAccessType = 'sandbox-intranet';
-  function selectEditAccessType(type) {
+  function selectEditAccessType(el) {
+    var type = (typeof el === 'string') ? el : el.getAttribute('data-value');
     selectedEditAccessType = type;
     document.querySelectorAll('#edit-policy-modal .access-type-item').forEach(opt => opt.classList.remove('selected'));
     document.querySelector('#edit-policy-modal .access-type-item[data-value="' + type + '"]').classList.add('selected');
