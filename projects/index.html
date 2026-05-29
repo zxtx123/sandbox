@@ -1678,6 +1678,18 @@
     color: #fff;
     font-size: 12px;
   }
+  .multi-select-option.disabled {
+    color: #bbb;
+    cursor: not-allowed;
+    background: #fafafa;
+  }
+  .multi-select-option.disabled:hover {
+    background: #fafafa;
+  }
+  .multi-select-option.disabled .checkbox {
+    background: #f0f0f0;
+    border-color: #ddd;
+  }
   .service-tag {
     display: inline-flex;
     align-items: center;
@@ -1915,9 +1927,25 @@
       container.innerHTML = '<div class="multi-select-option" style="color:#999;">暂无网络策略</div>';
       return;
     }
+    // 判断当前是否已选了内网或公网策略
+    const selectedPolicies = policies.filter(p => selectedPolicyIds.includes(p.id));
+    const hasIsolated = selectedPolicies.some(sp => sp.accessType === 'sandbox-intranet' || sp.accessType === 'public-network');
     container.innerHTML = policies.map(p => {
       const isSelected = selectedPolicyIds.includes(p.id);
-      return `<div class="multi-select-option ${isSelected ? 'selected' : ''}" onclick="selectPolicy('${p.id}', '${p.name}')"><span class="checkbox"></span>${p.name}</div>`;
+      const isIsolated = (p.accessType === 'sandbox-intranet' || p.accessType === 'public-network');
+      let isDisabled = false;
+      if (hasIsolated && !isSelected) {
+        // 已选内网/公网时，其他所有选项禁用
+        isDisabled = true;
+      } else if (!hasIsolated && isIsolated && selectedPolicyIds.length > 0) {
+        // 已选了VPC/私网策略时，内网/公网选项禁用
+        isDisabled = true;
+      }
+      const cls = ['multi-select-option'];
+      if (isSelected) cls.push('selected');
+      if (isDisabled) cls.push('disabled');
+      const clickHandler = isDisabled ? '' : `onclick="selectPolicy('${p.id}', '${p.name}')"`;
+      return `<div class="${cls.join(' ')}" ${clickHandler}><span class="checkbox"></span>${p.name}</div>`;
     }).join('');
   }
 
