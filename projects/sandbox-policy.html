@@ -38,7 +38,7 @@
           <input type="text" class="form-input" id="edit-policy-name" placeholder="请输入策略名称">
         </div>
       </div>
-      <div class="form-group">
+      <div class="form-group edit-private-fields" style="display:none;">
         <label class="form-label">目标服务 <span class="required">*</span></label>
         <div class="form-control">
           <select class="form-select" id="edit-target-service">
@@ -49,7 +49,7 @@
           </select>
         </div>
       </div>
-      <div class="form-group">
+      <div class="form-group edit-private-fields" style="display:none;">
         <label class="form-label">服务域名 <span class="required">*</span></label>
         <div class="form-control">
           <select class="form-input" id="edit-service-domain">
@@ -57,6 +57,28 @@
             <option value="vpce-01.vpce-svc.cn-north-1a">vpce-01 (华北)</option>
             <option value="vpce-02.vpce-svc.cn-north-1b">vpce-02 (华南)</option>
             <option value="vpce-03.vpce-svc.cn-east-1">vpce-03 (华东)</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group edit-vpc-fields" style="display:none;">
+        <label class="form-label">VPC网络 <span class="required">*</span></label>
+        <div class="form-control">
+          <select class="form-select" id="edit-vpc-network">
+            <option value="">请选择VPC网络</option>
+            <option value="vpc-01">vpc-01 (华北)</option>
+            <option value="vpc-02">vpc-02 (华南)</option>
+            <option value="vpc-03">vpc-03 (华东)</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group edit-vpc-fields" style="display:none;">
+        <label class="form-label">子网 <span class="required">*</span></label>
+        <div class="form-control">
+          <select class="form-select" id="edit-subnet">
+            <option value="">请选择子网</option>
+            <option value="subnet-01">subnet-01 (172.16.0.0/24)</option>
+            <option value="subnet-02">subnet-02 (172.16.1.0/24)</option>
+            <option value="subnet-03">subnet-03 (172.16.2.0/24)</option>
           </select>
         </div>
       </div>
@@ -1505,7 +1527,7 @@
           <div class="access-type-desc" id="access-type-desc">沙箱禁止访问公网服务或者VPC网络，适用于需高度安全隔离的场景。</div>
         </div>
       </div>
-      <div class="form-group">
+      <div class="form-group" id="create-target-service-group">
         <label class="form-label">目标服务 <span class="required">*</span></label>
         <div class="form-control">
           <select class="form-select" id="target-service">
@@ -1516,7 +1538,7 @@
           </select>
         </div>
       </div>
-      <div class="form-group">
+      <div class="form-group" id="create-service-domain-group">
         <label class="form-label">服务域名 <span class="required">*</span></label>
         <div class="form-control">
           <select class="form-input" id="service-domain">
@@ -1524,6 +1546,28 @@
             <option value="vpce-01.vpce-svc.cn-north-1a">vpce-01 (华北)</option>
             <option value="vpce-02.vpce-svc.cn-north-1b">vpce-02 (华南)</option>
             <option value="vpce-03.vpce-svc.cn-east-1">vpce-03 (华东)</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group" id="create-vpc-network-group" style="display:none;">
+        <label class="form-label">VPC网络 <span class="required">*</span></label>
+        <div class="form-control">
+          <select class="form-select" id="create-vpc-network">
+            <option value="">请选择VPC网络</option>
+            <option value="vpc-01">vpc-01 (10.0.0.0/16)</option>
+            <option value="vpc-02">vpc-02 (172.16.0.0/16)</option>
+            <option value="vpc-03">vpc-03 (192.168.0.0/16)</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group" id="create-subnet-group" style="display:none;">
+        <label class="form-label">子网 <span class="required">*</span></label>
+        <div class="form-control">
+          <select class="form-select" id="create-subnet">
+            <option value="">请选择子网</option>
+            <option value="subnet-01">subnet-01 (10.0.1.0/24)</option>
+            <option value="subnet-02">subnet-02 (172.16.1.0/24)</option>
+            <option value="subnet-03">subnet-03 (192.168.1.0/24)</option>
           </select>
         </div>
       </div>
@@ -1901,12 +1945,21 @@
       tr.dataset.domain = p.domain;
       tr.dataset.service = p.service;
       tr.dataset.desc = p.desc || '';
+      tr.dataset.vpc = p.vpc || '';
+      tr.dataset.subnet = p.subnet || '';
       tr.dataset.accesstype = p.accessType || 'sandbox-intranet';
+      var serviceCol = '';
+      if (p.accessType === 'vpc-network') {
+        serviceCol = '<td>' + (p.vpc || '') + ' / ' + (p.subnet || '') + '</td><td>-</td>';
+      } else if (p.accessType === 'private-connection') {
+        serviceCol = '<td>' + (serviceLabels[p.service] || p.service) + '</td><td>' + (domainLabels[p.domain] || p.domain) + '</td>';
+      } else {
+        serviceCol = '<td>-</td><td>-</td>';
+      }
       tr.innerHTML = '<td>' + p.id + '</td>' +
         '<td>' + p.name + '</td>' +
         '<td>' + (accessTypeLabels[p.accessType] || '沙箱内网') + '</td>' +
-        '<td>' + (serviceLabels[p.service] || p.service) + '</td>' +
-        '<td>' + (domainLabels[p.domain] || p.domain) + '</td>' +
+        serviceCol +
         '<td>' + (p.desc || '') + '</td>' +
         '<td><a href="#" class="action-link edit-btn">编辑</a> <a href="#" class="action-link delete-btn">删除</a></td>';
       tbody.appendChild(tr);
@@ -1934,10 +1987,13 @@
     document.getElementById('target-service').value = '';
     document.getElementById('service-domain').value = '';
     document.getElementById('policy-desc').value = '';
+    document.getElementById('vpc-network').value = '';
+    document.getElementById('subnet').value = '';
     selectedAccessType = 'sandbox-intranet';
     document.querySelectorAll('#create-policy-modal .access-type-option').forEach(opt => opt.classList.remove('selected'));
     document.querySelector('#create-policy-modal .access-type-option[data-value="sandbox-intranet"]').classList.add('selected');
     document.getElementById('access-type-desc').textContent = '沙箱禁止访问公网服务或者VPC网络，适用于需高度安全隔离的场景。';
+    selectAccessType('sandbox-intranet');
   }
 
   // 访问类型选择
@@ -1948,6 +2004,27 @@
     document.querySelectorAll('#create-policy-modal .access-type-option').forEach(opt => opt.classList.remove('selected'));
     document.querySelector('#create-policy-modal .access-type-option[data-value="' + type + '"]').classList.add('selected');
     document.getElementById('access-type-desc').textContent = accessTypeDescs[type];
+    // 根据访问类型显示/隐藏字段
+    var targetServiceGroup = document.getElementById('target-service-group');
+    var serviceDomainGroup = document.getElementById('service-domain-group');
+    var vpcNetworkGroup = document.getElementById('vpc-network-group');
+    var subnetGroup = document.getElementById('subnet-group');
+    if (type === 'sandbox-intranet' || type === 'public-network') {
+      targetServiceGroup.style.display = 'none';
+      serviceDomainGroup.style.display = 'none';
+      vpcNetworkGroup.style.display = 'none';
+      subnetGroup.style.display = 'none';
+    } else if (type === 'vpc-network') {
+      targetServiceGroup.style.display = 'none';
+      serviceDomainGroup.style.display = 'none';
+      vpcNetworkGroup.style.display = 'flex';
+      subnetGroup.style.display = 'flex';
+    } else if (type === 'private-connection') {
+      targetServiceGroup.style.display = 'flex';
+      serviceDomainGroup.style.display = 'flex';
+      vpcNetworkGroup.style.display = 'none';
+      subnetGroup.style.display = 'none';
+    }
   }
 
   let selectedEditAccessType = 'sandbox-intranet';
@@ -1956,14 +2033,16 @@
     document.querySelectorAll('#edit-policy-modal .access-type-option').forEach(opt => opt.classList.remove('selected'));
     document.querySelector('#edit-policy-modal .access-type-option[data-value="' + type + '"]').classList.add('selected');
     document.getElementById('edit-access-type-desc').textContent = accessTypeDescs[type];
+    // Show/hide fields based on access type
+    const privateFields = document.querySelectorAll('.edit-private-fields');
+    const vpcFields = document.querySelectorAll('.edit-vpc-fields');
+    privateFields.forEach(f => f.style.display = (type === 'private-connection') ? 'flex' : 'none');
+    vpcFields.forEach(f => f.style.display = (type === 'vpc-network') ? 'flex' : 'none');
   }
 
   function createPolicy() {
     const policyName = document.getElementById('policy-name').value.trim();
-    const targetService = document.getElementById('target-service').value;
-    const serviceDomain = document.getElementById('service-domain').value;
-    const accessTypeEl = document.querySelector('#create-policy-modal .access-type-option.active');
-    const accessType = accessTypeEl ? accessTypeEl.dataset.type : '';
+    const accessType = selectedAccessType;
     
     if (!policyName) {
       alert('请输入策略名称');
@@ -1973,13 +2052,22 @@
       alert('请选择访问类型');
       return;
     }
-    if (!targetService) {
-      alert('请选择目标服务');
-      return;
-    }
-    if (!serviceDomain) {
-      alert('请选择服务域名');
-      return;
+    
+    let targetService = '';
+    let serviceDomain = '';
+    let vpcNetwork = '';
+    let subnet = '';
+    
+    if (accessType === 'private-connection') {
+      targetService = document.getElementById('target-service').value;
+      serviceDomain = document.getElementById('service-domain').value;
+      if (!targetService) { alert('请选择目标服务'); return; }
+      if (!serviceDomain) { alert('请选择服务域名'); return; }
+    } else if (accessType === 'vpc-network') {
+      vpcNetwork = document.getElementById('vpc-network').value;
+      subnet = document.getElementById('subnet').value;
+      if (!vpcNetwork) { alert('请选择VPC网络'); return; }
+      if (!subnet) { alert('请选择子网'); return; }
     }
     
     // 生成新策略ID
@@ -1996,13 +2084,26 @@
     newRow.dataset.accesstype = accessType;
     newRow.dataset.domain = serviceDomain;
     newRow.dataset.service = targetService;
+    newRow.dataset.vpcnetwork = vpcNetwork;
+    newRow.dataset.subnet = subnet;
     newRow.dataset.desc = '';
+
+    // Build cells based on access type
+    let detailCell = '';
+    if (accessType === 'private-connection') {
+      detailCell = '<td>' + (serviceLabels[targetService] || targetService) + '</td>' +
+        '<td>' + (domainLabels[serviceDomain] || serviceDomain) + '</td>';
+    } else if (accessType === 'vpc-network') {
+      detailCell = '<td>' + (vpcNetwork) + '</td>' +
+        '<td>' + (subnet) + '</td>';
+    } else {
+      detailCell = '<td>-</td><td>-</td>';
+    }
 
     newRow.innerHTML = '<td>' + newId + '</td>' +
       '<td>' + policyName + '</td>' +
       '<td>' + (accessTypeLabels[accessType] || accessType) + '</td>' +
-      '<td>' + (serviceLabels[targetService] || targetService) + '</td>' +
-      '<td>' + (domainLabels[serviceDomain] || serviceDomain) + '</td>' +
+      detailCell +
       '<td></td>' +
       '<td><a href="#" class="action-link edit-btn">编辑</a> <a href="#" class="action-link delete-btn">删除</a></td>';
 
@@ -2055,8 +2156,10 @@
 
       document.getElementById('edit-policy-id').value = row.dataset.id;
       document.getElementById('edit-policy-name').value = row.dataset.name;
-      document.getElementById('edit-service-domain').value = row.dataset.domain;
-      document.getElementById('edit-target-service').value = row.dataset.service;
+      document.getElementById('edit-target-service').value = row.dataset.service || '';
+      document.getElementById('edit-service-domain').value = row.dataset.domain || '';
+      document.getElementById('edit-vpc-network').value = row.dataset.vpcnetwork || '';
+      document.getElementById('edit-subnet').value = row.dataset.subnet || '';
       document.getElementById('edit-policy-desc').value = row.dataset.desc || '';
       // 设置访问类型
       selectedEditAccessType = row.dataset.accesstype || 'sandbox-intranet';
@@ -2065,6 +2168,8 @@
       if (editTypeOpt) editTypeOpt.classList.add('active');
       const editDesc = accessTypeDescs[selectedEditAccessType] || '';
       document.getElementById('edit-access-type-desc').textContent = editDesc;
+      // 根据访问类型显示/隐藏字段
+      selectEditAccessType(selectedEditAccessType);
 
       document.getElementById('edit-policy-modal').classList.add('active');
     });
@@ -2077,29 +2182,51 @@
 
   function savePolicy() {
     const policyName = document.getElementById('edit-policy-name').value.trim();
-    const serviceDomain = document.getElementById('edit-service-domain').value.trim();
-    const targetService = document.getElementById('edit-target-service').value;
-
-    if (!policyName) { alert('请输入策略名称'); return; }
-    if (!serviceDomain) { alert('请选择服务域名'); return; }
-    if (!targetService) { alert('请选择目标服务'); return; }
-
-    // 更新行数据和 data 属性
-    const desc = document.getElementById('edit-policy-desc').value.trim();
     const editAccessTypeEl = document.querySelector('#edit-policy-modal .access-type-option.active');
     const accessType = editAccessTypeEl ? editAccessTypeEl.dataset.type : 'sandbox-intranet';
+
+    if (!policyName) { alert('请输入策略名称'); return; }
+
+    let targetService = '';
+    let serviceDomain = '';
+    let vpcNetwork = '';
+    let subnet = '';
+
+    if (accessType === 'private-connection') {
+      targetService = document.getElementById('edit-target-service').value;
+      serviceDomain = document.getElementById('edit-service-domain').value;
+      if (!targetService) { alert('请选择目标服务'); return; }
+      if (!serviceDomain) { alert('请选择服务域名'); return; }
+    } else if (accessType === 'vpc-network') {
+      vpcNetwork = document.getElementById('edit-vpc-network').value;
+      subnet = document.getElementById('edit-subnet').value;
+      if (!vpcNetwork) { alert('请选择VPC网络'); return; }
+      if (!subnet) { alert('请选择子网'); return; }
+    }
+
+    const desc = document.getElementById('edit-policy-desc').value.trim();
 
     editingRow.dataset.name = policyName;
     editingRow.dataset.accesstype = accessType;
     editingRow.dataset.domain = serviceDomain;
     editingRow.dataset.service = targetService;
+    editingRow.dataset.vpcnetwork = vpcNetwork;
+    editingRow.dataset.subnet = subnet;
     editingRow.dataset.desc = desc;
 
     const cells = editingRow.querySelectorAll('td');
     cells[1].textContent = policyName;
     cells[2].textContent = accessTypeLabels[accessType] || accessType;
-    cells[3].textContent = serviceLabels[targetService] || targetService;
-    cells[4].textContent = domainLabels[serviceDomain] || serviceDomain;
+    if (accessType === 'private-connection') {
+      cells[3].textContent = serviceLabels[targetService] || targetService;
+      cells[4].textContent = domainLabels[serviceDomain] || serviceDomain;
+    } else if (accessType === 'vpc-network') {
+      cells[3].textContent = vpcNetwork;
+      cells[4].textContent = subnet;
+    } else {
+      cells[3].textContent = '-';
+      cells[4].textContent = '-';
+    }
     cells[5].textContent = desc;
 
     alert('策略保存成功！');
