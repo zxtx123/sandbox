@@ -1855,15 +1855,22 @@
       // 取消选中，直接移除
       selectedPolicyIds.splice(idx, 1);
     } else {
-      // 选中前校验互斥
+      // 选中前校验
       const targetType = targetPolicy.accessType;
       const isIsolated = (targetType === 'sandbox-intranet' || targetType === 'public-network');
-      // 检查已选策略中是否有冲突
+      // 已选策略中是否有内网或公网类型
       const selectedPolicies = policies.filter(p => selectedPolicyIds.includes(p.id));
-      for (const sp of selectedPolicies) {
-        const spIsIsolated = (sp.accessType === 'sandbox-intranet' || sp.accessType === 'public-network');
-        if (isIsolated !== spIsIsolated) {
-          alert('沙箱内网或公网类型策略不能与VPC网络或私网连接类型策略同时选择');
+      const hasIsolated = selectedPolicies.some(sp => sp.accessType === 'sandbox-intranet' || sp.accessType === 'public-network');
+      if (isIsolated) {
+        // 内网或公网策略只能单独选择，不能再选别的
+        if (selectedPolicyIds.length > 0) {
+          alert('沙箱内网或公网类型策略不支持与其他策略同时选择');
+          return;
+        }
+      } else {
+        // 已选内网或公网策略时，不能再选其他策略
+        if (hasIsolated) {
+          alert('沙箱内网或公网类型策略不支持与其他策略同时选择');
           return;
         }
       }
