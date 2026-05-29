@@ -1537,6 +1537,7 @@
     padding: 0 14px;
     font-size: 14px;
     margin-bottom: 12px;
+    width: fit-content;
   }
   .pkg-rows {
     display: flex;
@@ -1704,7 +1705,7 @@
       PKG_TYPES.forEach(type => {
         const opt = sel.querySelector('option[value="' + type + '"]');
         if (opt) {
-          opt.disabled = (used.includes(type) && type !== currentVal);
+          opt.hidden = (used.includes(type) && type !== currentVal);
         }
       });
     });
@@ -1734,8 +1735,9 @@
 
     let typeOpts = '<option value="">请选择安装包</option>';
     PKG_TYPES.forEach(type => {
-      const disabled = used.includes(type) ? ' disabled' : '';
-      typeOpts += '<option value="' + type + '"' + disabled + '>' + type + '</option>';
+      if (!used.includes(type)) {
+        typeOpts += '<option value="' + type + '">' + type + '</option>';
+      }
     });
 
     row.innerHTML =
