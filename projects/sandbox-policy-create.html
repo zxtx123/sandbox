@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>网络策略 - 360智汇云</title>
+  <title>创建网络策略 - 360智汇云</title>
   <!-- 编辑策略弹窗 -->
 <div class="modal-overlay" id="edit-policy-modal">
   <div class="modal-dialog">
@@ -1425,119 +1425,94 @@
   <!-- 第三栏：右侧主内容 -->
   <div class="main-content">
     <div class="breadcrumb">
-      <span class="breadcrumb-left" id="menu-name-display">网络策略</span>
+      <span class="breadcrumb-left" id="menu-name-display">网络策略 &gt; 创建策略</span>
       <a class="breadcrumb-link" id="menu-link-display">Sandbox 帮助文档</a>
     </div>
-    <div class="content-body">
-      <div class="product-list-page">
-        <!-- 工具栏 -->
-        <div class="product-toolbar">
-          <div class="toolbar-left">
-            <button class="btn btn-primary" id="create-policy-btn" onclick="window.location.href='sandbox-policy-create.html'">
-              <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
-                <path d="M8 2v12M2 8h12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-              </svg>
-              创建策略
-            </button>
-          </div>
-          <div class="toolbar-right">
-            <div class="search-box">
-              <input type="text" id="sandbox-search" placeholder="请输入策略ID或策略名称">
-              <button class="search-btn">
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                  <circle cx="7" cy="7" r="5" stroke="currentColor" stroke-width="1.5" fill="none"/>
-                  <path d="M11 11l3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-                </svg>
-              </button>
-              <button class="clear-btn" onclick="document.getElementById('sandbox-search').value=''" title="清除">C</button>
+    <div class="content-body policy-create-content">
+      <div class="policy-form-page" id="policy-form-page">
+        <div class="policy-form-panel">
+          <div class="policy-form-row policy-region-row">
+            <label class="policy-form-label">地域 <span class="required">*</span></label>
+            <div class="policy-form-content">
+              <label class="region-radio-option">
+                <input type="radio" id="policy-form-region" name="policy-form-region" value="beijing" checked>
+                <span>北京</span>
+              </label>
             </div>
-            <button class="refresh-btn" title="刷新">
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                <path d="M14 8A6 6 0 118 2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-                <path d="M14 2v4h-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </button>
           </div>
-        </div>
-
-        <!-- 表格 -->
-        <div class="product-table" id="policy-list-table">
-          <div class="table-wrapper">
-            <table>
-            <thead>
-              <tr>
-                <th>策略ID</th>
-                <th>策略名称</th>
-                <th>访问类型</th>
-                <th>访问对象</th>
-                <th>地域</th>
-                <th>操作</th>
-              </tr>
-            </thead>
-            <tbody id="policy-tbody">
-              <tr data-id="policy-001" data-name="开发环境访问策略" data-accesstype="sandbox-intranet" data-domain="" data-service="" data-vpcnetwork="" data-subnet="" data-desc="开发环境默认访问策略">
-                <td>policy-001</td>
-                <td>开发环境访问策略</td>
-                <td>沙箱内网</td>
-                <td>-</td>
-                <td>开发环境默认访问策略</td>
-                <td><a href="#" class="action-link edit-btn">编辑</a> <a href="#" class="action-link delete-btn">删除</a></td>
-              </tr>
-              <tr data-id="policy-002" data-name="生产环境访问策略" data-accesstype="public-network" data-domain="" data-service="" data-vpcnetwork="" data-subnet="" data-allowpublicoutbound="true" data-allowpublicinbound="true" data-desc="生产环境Web服务访问">
-                <td>policy-002</td>
-                <td>生产环境访问策略</td>
-                <td>公网</td>
-                <td>-</td>
-                <td>生产环境Web服务访问</td>
-                <td><a href="#" class="action-link edit-btn">编辑</a> <a href="#" class="action-link delete-btn">删除</a></td>
-              </tr>
-              <tr data-id="policy-003" data-name="测试环境访问策略" data-accesstype="vpc-network" data-domain="" data-service="" data-vpcnetwork="vpc-01" data-subnet="subnet-01" data-desc="测试环境数据库访问">
-                <td>policy-003</td>
-                <td>测试环境访问策略</td>
-                <td>VPC网络</td>
-                <td><div>vpc-01 (10.0.0.0/16)</div><div>subnet-01 (10.0.1.0/24)</div></td>
-                <td>测试环境数据库访问</td>
-                <td><a href="#" class="action-link edit-btn">编辑</a> <a href="#" class="action-link delete-btn">删除</a></td>
-              </tr>
-              <tr data-id="policy-004" data-name="数据同步访问策略" data-accesstype="private-connection" data-domain="vpce-01.vpce-svc.cn-north-1a" data-service="endpoint-service-01" data-vpcnetwork="" data-subnet="" data-desc="数据同步私网连接策略">
-                <td>policy-004</td>
-                <td>数据同步访问策略</td>
-                <td>私网连接</td>
-                <td><div>endpoint-service-01</div><div>vpce-01 (华北)</div></td>
-                <td>数据同步私网连接策略</td>
-                <td><a href="#" class="action-link edit-btn">编辑</a> <a href="#" class="action-link delete-btn">删除</a></td>
-              </tr>
-            </tbody>
-          </table>
+          <div class="policy-form-row policy-name-row">
+            <label class="policy-form-label">策略名称 <span class="required">*</span></label>
+            <div class="policy-form-content"><input type="text" class="form-input" id="policy-form-name" placeholder="请输入策略名称"></div>
           </div>
-        </div>
-        
-        <!-- 翻页组件 -->
-        <div class="pagination-bar" id="policy-list-pagination">
-          <div class="pagination-left">共4条记录 第1/1页</div>
-          <div class="pagination-right">
-            <div class="page-size-select">
-              10条/页
-              <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-                <path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
+          <div class="policy-access-group policy-access-outbound">
+            <div class="policy-access-group-title">允许访问（出）</div>
+            <div class="policy-rule-section">
+              <div class="policy-rule-head">
+                <div class="policy-rule-title">访问公网</div>
+                <div class="policy-rule-inline">
+                  <label class="public-access-option"><input type="checkbox" id="policy-form-public-outbound" checked><span>允许访问公网</span></label>
+                </div>
+              </div>
+              <div class="policy-rule-tip">勾选后，沙箱可访问公网服务。</div>
             </div>
-            <button class="page-btn disabled">&lt;</button>
-            <button class="page-btn active">1</button>
-            <button class="page-btn">2</button>
-            <button class="page-btn">3</button>
-            <button class="page-btn">4</button>
-            <span class="page-ellipsis">···</span>
-            <button class="page-btn">50</button>
-            <button class="page-btn">&gt;</button>
+            <div class="policy-rule-section">
+              <div class="policy-rule-head">
+                <div class="policy-rule-title">访问 VPC <span class="help-icon">?</span></div>
+                <label class="policy-switch"><input type="checkbox" id="policy-form-vpc-out-enabled" onchange="togglePolicyFormSection('vpc-out')"><span class="policy-switch-slider"></span><span class="policy-switch-text" id="policy-form-vpc-out-text">关</span></label>
+              </div>
+              <div class="policy-rule-tip">开启后，沙箱可访问指定 VPC 网络、子网和安全组。</div>
+              <div class="policy-rule-table-wrap" id="policy-form-vpc-out-wrap" style="display:none;"><table class="policy-rule-table"><thead><tr><th>VPC 网络</th><th>子网</th><th>安全组</th><th>操作</th></tr></thead><tbody id="policy-form-vpc-out-list"></tbody></table><button type="button" class="add-rule-btn" onclick="addPolicyFormVpcOutRule()">+ 添加策略</button></div>
+            </div>
+            <div class="policy-rule-section">
+              <div class="policy-rule-head">
+                <div class="policy-rule-title">访问终端节点服务 <span class="help-icon">?</span></div>
+                <label class="policy-switch"><input type="checkbox" id="policy-form-private-enabled" onchange="togglePolicyFormSection('private')"><span class="policy-switch-slider"></span><span class="policy-switch-text" id="policy-form-private-text">关</span></label>
+              </div>
+              <div class="policy-rule-tip">开启后，沙箱可通过终端节点服务访问指定服务域名。</div>
+              <div class="policy-rule-table-wrap" id="policy-form-private-wrap" style="display:none;"><table class="policy-rule-table"><thead><tr><th>终端节点服务</th><th>服务域名</th><th>操作</th></tr></thead><tbody id="policy-form-private-list"></tbody></table><button type="button" class="add-rule-btn" onclick="addPolicyFormPrivateRule()">+ 添加策略</button></div>
+            </div>
+          </div>
+          <div class="policy-access-group policy-access-inbound">
+            <div class="policy-access-group-title">允许被访问（入）</div>
+            <div class="policy-rule-section">
+              <div class="policy-rule-head">
+                <div class="policy-rule-title">被公网访问</div>
+                <div class="policy-rule-inline">
+                  <label class="public-access-option"><input type="checkbox" id="policy-form-public-inbound"><span>允许被公网访问</span></label>
+                </div>
+              </div>
+              <div class="policy-rule-tip">勾选后，公网可通过授权入口访问沙箱。</div>
+            </div>
+            <div class="policy-rule-section">
+              <div class="policy-rule-head">
+                <div class="policy-rule-title">被 VPC 访问 <span class="help-icon">?</span></div>
+                <label class="policy-switch"><input type="checkbox" id="policy-form-vpc-in-enabled" onchange="togglePolicyFormSection('vpc-in')"><span class="policy-switch-slider"></span><span class="policy-switch-text" id="policy-form-vpc-in-text">关</span></label>
+              </div>
+              <div class="policy-rule-tip">开启后，指定VPC可访问沙箱</div>
+              <div class="policy-rule-table-wrap" id="policy-form-vpc-in-wrap" style="display:none;"><table class="policy-rule-table"><thead><tr><th>VPC 网络</th><th>子网</th><th>操作</th></tr></thead><tbody id="policy-form-vpc-in-list"></tbody></table><button type="button" class="add-rule-btn" onclick="addPolicyFormVpcInRule()">+ 添加策略</button></div>
+            </div>
+            <div class="policy-rule-section">
+              <div class="policy-rule-head">
+                <div class="policy-rule-title">被IDC访问</div>
+                <div class="classic-network-control">
+                  <div class="classic-network-options">
+                    <label class="classic-network-option"><input type="radio" name="policy-form-classic-access" value="all" checked onchange="toggleClassicNetworkIp()"><span>全通</span></label>
+                    <label class="classic-network-option"><input type="radio" name="policy-form-classic-access" value="ip" onchange="toggleClassicNetworkIp()"><span>指定IP访问</span></label>
+                  </div>
+                  <div class="classic-network-ip" id="policy-form-classic-ip-wrap" style="display:none;">
+                    <input type="text" class="form-input" id="policy-form-classic-ip" placeholder="请输入允许访问的 IP，如 192.168.1.10">
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
+        <div class="policy-form-footer"><button class="btn btn-default" type="button" onclick="backToPolicyList()">取消</button><button class="btn btn-primary" type="button" id="policy-form-submit-btn" onclick="submitPolicyForm()">创建</button></div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- 创建策略弹窗 -->
 <div class="modal-overlay" id="create-policy-modal">
   <div class="modal-dialog">
     <div class="modal-header">
@@ -1733,18 +1708,22 @@
   .form-textarea {
     resize: vertical;
   }
+  .policy-create-content {
+    background: #f0f5f7 !important;
+  }
   .policy-form-page {
     flex: 1;
     display: flex;
     flex-direction: column;
     min-height: 0;
     background: #fff;
+    border: 1px solid #edf1f5;
   }
   .policy-form-header {
     display: flex;
     align-items: center;
     gap: 16px;
-    padding: 20px 24px 12px;
+    padding: 12px 40px 8px;
     border-bottom: 1px solid #eef2f6;
   }
   .policy-form-back {
@@ -1762,19 +1741,31 @@
   }
   .policy-form-heading h3 {
     margin: 0;
-    font-size: 20px;
+    font-size: 16px;
     font-weight: 600;
     color: #1f2329;
   }
   .policy-form-heading p {
-    margin: 6px 0 0;
-    font-size: 13px;
-    color: #8c9aae;
+    display: none;
   }
   .policy-form-panel {
     flex: 1;
+    display: flex;
+    flex-direction: column;
     overflow-y: auto;
-    padding: 24px;
+    padding: 22px 20px 26px 40px;
+  }
+  .policy-region-row {
+    order: 0;
+  }
+  .policy-name-row {
+    order: 1;
+  }
+  .policy-access-inbound {
+    order: 2;
+  }
+  .policy-access-outbound {
+    order: 3;
   }
   .policy-form-row {
     display: flex;
@@ -1782,39 +1773,113 @@
     margin-bottom: 20px;
   }
   .policy-form-label {
-    width: 96px;
+    width: 104px;
     flex-shrink: 0;
     padding-top: 8px;
     font-size: 14px;
     color: #333;
     text-align: right;
-    padding-right: 12px;
+    padding-right: 14px;
+  }
+  .policy-region-row .policy-form-label,
+  .policy-name-row .policy-form-label {
+    width: 96px;
+    text-align: left;
   }
   .policy-form-content {
     flex: 1;
     min-width: 0;
   }
-  .policy-rule-section {
+  #policy-form-name {
+    width: 480px;
+    max-width: 100%;
+  }
+  .region-radio-option {
+    min-height: 32px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 10px;
+    border: 1px solid #dce8f5;
+    border-radius: 3px;
+    background: #f7fbff;
+    color: #1f3854;
+    cursor: pointer;
+    user-select: none;
+  }
+  .region-radio-option:hover {
+    border-color: #bcd6fb;
+    background: #eef6ff;
+  }
+  .region-radio-option input {
+    accent-color: #0066ff;
+  }
+  .policy-access-group {
+    width: 100%;
+    max-width: 920px;
+    margin: 0 0 20px;
+    padding: 16px 18px 8px;
+    border: 1px solid #e3ebf3;
+    border-radius: 4px;
+    background: #fbfdff;
+  }
+  .policy-access-group:last-of-type {
     margin-bottom: 20px;
-    margin-left: 96px;
-    padding: 4px 0 0;
+  }
+  .policy-access-group-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0 0 12px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #edf2f7;
+    color: #1f2329;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 22px;
+  }
+  .policy-access-group-title::before {
+    content: '';
+    width: 4px;
+    height: 16px;
+    border-radius: 2px;
+    background: #0066ff;
+  }
+  .policy-rule-section {
+    margin: 0 0 10px;
+    padding: 12px 14px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    background: #fff;
+    max-width: 100%;
+    transition: border-color 0.16s ease, background-color 0.16s ease;
+  }
+  .policy-rule-section:hover {
+    border-color: #dce8f5;
+    background: #fcfeff;
   }
   .policy-rule-head {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: flex-start;
     gap: 16px;
-    margin-bottom: 8px;
+    min-height: 28px;
+    margin-bottom: 0;
   }
   .policy-rule-title {
     display: flex;
     align-items: center;
     gap: 6px;
-    font-size: 15px;
+    width: auto;
+    flex: 0 0 auto;
+    justify-content: flex-start;
+    padding-right: 0;
+    font-size: 14px;
+    font-weight: 500;
     color: #1f2329;
   }
   .help-icon {
-    display: inline-flex;
+    display: none;
     align-items: center;
     justify-content: center;
     width: 16px;
@@ -1827,53 +1892,137 @@
   .policy-rule-inline {
     display: flex;
     align-items: center;
+    justify-content: flex-start;
     flex-wrap: wrap;
-    gap: 28px;
+    gap: 16px;
+    min-width: 0;
   }
   .policy-rule-tip {
-    margin-bottom: 14px;
-    padding-left: 112px;
-    font-size: 13px;
+    margin: 4px 0 0;
+    padding-left: 0;
+    font-size: 12px;
     color: #8c9aae;
-    line-height: 1.7;
+    line-height: 1.5;
   }
   .policy-rule-table-wrap {
-    margin-left: 112px;
+    margin: 12px 0 0;
+    width: 100%;
+    max-width: 100%;
+  }
+  .policy-form-page .public-access-option {
+    min-height: 28px;
+    padding: 3px 10px;
+    border: 1px solid #dce8f5;
+    border-radius: 3px;
+    background: #f7fbff;
+    color: #1f3854;
+    font-size: 13px;
+  }
+  .policy-form-page .public-access-option:hover {
+    border-color: #bcd6fb;
+    background: #eef6ff;
+  }
+  .policy-form-page .public-access-option input {
+    accent-color: #0066ff;
+  }
+  .classic-network-options {
+    display: inline-flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .classic-network-control {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .classic-network-option {
+    min-height: 28px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 3px 10px;
+    border: 1px solid #dce8f5;
+    border-radius: 3px;
+    background: #f7fbff;
+    color: #1f3854;
+    font-size: 13px;
+    cursor: pointer;
+    user-select: none;
+  }
+  .classic-network-option:hover {
+    border-color: #bcd6fb;
+    background: #eef6ff;
+  }
+  .classic-network-option input {
+    accent-color: #0066ff;
+  }
+  .classic-network-ip {
+    margin: 0;
+    padding-left: 0;
+  }
+  .classic-network-ip .form-input {
+    width: 360px;
+    max-width: 100%;
   }
   .policy-rule-table {
     width: 100%;
     border-collapse: collapse;
-    border: 1px solid #e8edf3;
+    border: 1px solid #edf1f5;
     background: #fff;
+    table-layout: fixed;
+  }
+  .policy-rule-table th:last-child,
+  .policy-rule-table td:last-child {
+    width: 64px;
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+  #policy-form-vpc-out-wrap .policy-rule-table th:not(:last-child),
+  #policy-form-vpc-out-wrap .policy-rule-table td:not(:last-child) {
+    width: calc((100% - 64px) / 3);
+  }
+  #policy-form-vpc-in-wrap .policy-rule-table th:not(:last-child),
+  #policy-form-vpc-in-wrap .policy-rule-table td:not(:last-child),
+  #policy-form-private-wrap .policy-rule-table th:not(:last-child),
+  #policy-form-private-wrap .policy-rule-table td:not(:last-child) {
+    width: calc((100% - 64px) / 2);
   }
   .policy-rule-table th,
   .policy-rule-table td {
-    padding: 14px 16px;
-    border-bottom: 1px solid #e8edf3;
+    padding: 6px 12px;
+    border-bottom: 1px solid #edf1f5;
     text-align: left;
     vertical-align: middle;
+    height: 46px;
   }
   .policy-rule-table th {
-    background: #f8fafc;
-    color: #333;
+    background: #f5f8fb;
+    color: #4c5969;
     font-weight: 500;
+    font-size: 13px;
   }
   .policy-rule-table tbody tr:last-child td {
     border-bottom: none;
   }
   .policy-rule-table .form-input,
   .policy-rule-table .form-select {
+    width: 100%;
     height: 36px;
+    font-size: 13px;
+    border-color: #dce4ee;
+    min-width: 0;
   }
   .add-rule-btn {
-    margin-top: 12px;
-    height: 38px;
-    padding: 0 18px;
-    border: 1px dashed #85a5ff;
-    border-radius: 4px;
+    margin-top: 6px;
+    height: 24px;
+    padding: 0 10px;
+    border: 1px solid #c7dcff;
+    border-radius: 2px;
     background: #fff;
-    color: #1d5eff;
-    font-size: 14px;
+    color: #0066ff;
+    font-size: 13px;
     cursor: pointer;
   }
   .add-rule-btn:hover {
@@ -1883,7 +2032,7 @@
     position: relative;
     display: inline-flex;
     align-items: center;
-    gap: 10px;
+    gap: 8px;
     cursor: pointer;
     user-select: none;
   }
@@ -1893,41 +2042,41 @@
     pointer-events: none;
   }
   .policy-switch-slider {
-    width: 52px;
-    height: 28px;
-    border-radius: 14px;
-    background: #c7c9cc;
+    width: 38px;
+    height: 20px;
+    border-radius: 10px;
+    background: #c8ccd2;
     position: relative;
     transition: background 0.2s;
   }
   .policy-switch-slider::after {
     content: '';
     position: absolute;
-    top: 3px;
-    left: 3px;
-    width: 22px;
-    height: 22px;
+    top: 2px;
+    left: 2px;
+    width: 16px;
+    height: 16px;
     border-radius: 50%;
     background: #fff;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.18);
     transition: transform 0.2s;
   }
   .policy-switch input:checked + .policy-switch-slider {
-    background: #1677ff;
+    background: #0066ff;
   }
   .policy-switch input:checked + .policy-switch-slider::after {
-    transform: translateX(24px);
+    transform: translateX(18px);
   }
   .policy-switch-text {
     min-width: 14px;
-    font-size: 14px;
+    font-size: 13px;
     color: #666;
   }
   .policy-form-footer {
     display: flex;
     justify-content: flex-end;
     gap: 12px;
-    padding: 16px 24px 24px;
+    padding: 12px 24px 16px;
     border-top: 1px solid #eef2f6;
   }
   .action-link {
@@ -2103,26 +2252,6 @@
     background: #f5f5f5;
     color: #999;
   }
-  .access-type-tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-  }
-  .access-type-tag {
-    display: inline-flex;
-    align-items: center;
-    height: 24px;
-    padding: 0 8px;
-    border-radius: 3px;
-    background: #eef6ff;
-    color: #0066ff;
-    font-size: 12px;
-    white-space: nowrap;
-  }
-  .access-type-tag.muted {
-    background: #f5f7fa;
-    color: #8c9aae;
-  }
   .access-group-count {
     color: #666;
     font-size: 12px;
@@ -2196,62 +2325,6 @@
   .policy-detail-value {
     color: #202020;
     word-break: break-all;
-  }
-  .policy-detail-groups {
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
-  }
-  .policy-detail-group {
-    padding: 14px 16px;
-    border: 1px solid #e3ebf3;
-    border-radius: 4px;
-    background: #fbfdff;
-  }
-  .policy-detail-group-title {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 12px;
-    padding-bottom: 10px;
-    border-bottom: 1px solid #edf2f7;
-    color: #1f2329;
-    font-size: 16px;
-    font-weight: 600;
-  }
-  .policy-detail-group-title::before {
-    content: '';
-    width: 4px;
-    height: 16px;
-    border-radius: 2px;
-    background: #0066ff;
-  }
-  .policy-detail-capability {
-    padding: 10px 12px;
-    border: 1px solid transparent;
-    border-radius: 4px;
-    background: #fff;
-  }
-  .policy-detail-capability + .policy-detail-capability {
-    margin-top: 8px;
-  }
-  .policy-detail-capability-head {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    min-height: 26px;
-  }
-  .policy-detail-capability-title {
-    color: #1f2329;
-    font-size: 14px;
-    font-weight: 500;
-  }
-  .policy-detail-capability-body {
-    margin-top: 8px;
-  }
-  .policy-detail-capability-empty {
-    color: #8c9aae;
-    font-size: 13px;
   }
   .bind-sandbox-dialog {
     width: 520px;
@@ -2554,8 +2627,6 @@
     document.querySelectorAll('#policy-tbody tr').forEach(function(row) {
       const cells = row.querySelectorAll('td');
       if (cells.length < 4) return;
-      row.dataset.region = row.dataset.region || 'beijing';
-      if (cells[4]) cells[4].textContent = '北京';
       const wrapper = document.createElement('tr');
       wrapper.innerHTML = renderAccessObjectCell({
         accessType: row.dataset.accesstype || 'sandbox-intranet',
@@ -2564,8 +2635,6 @@
         outboundVpcPolicies: parseRowJson(row.dataset.vpcoutpolicies),
         inboundVpcPolicies: parseRowJson(row.dataset.vpcinpolicies),
         privatePolicies: parseRowJson(row.dataset.privatepolicies),
-        classicNetworkAccess: row.dataset.classicnetworkaccess || 'all',
-        classicNetworkIp: row.dataset.classicnetworkip || '',
         service: row.dataset.service || '',
         domain: row.dataset.domain || '',
         vpcPolicies: parseRowJson(row.dataset.vpcpolicies),
@@ -2579,14 +2648,13 @@
 
   function getRowPolicy(row) {
     return {
+      region: row.dataset.region || 'beijing',
       accessType: row.dataset.accesstype || 'sandbox-intranet',
       allowPublicOutbound: row.dataset.allowpublicoutbound === 'true',
       allowPublicInbound: row.dataset.allowpublicinbound === 'true',
       outboundVpcPolicies: parseRowJson(row.dataset.vpcoutpolicies),
       inboundVpcPolicies: parseRowJson(row.dataset.vpcinpolicies),
       privatePolicies: parseRowJson(row.dataset.privatepolicies),
-      classicNetworkAccess: row.dataset.classicnetworkaccess || 'all',
-      classicNetworkIp: row.dataset.classicnetworkip || '',
       service: row.dataset.service || '',
       domain: row.dataset.domain || '',
       vpcPolicies: parseRowJson(row.dataset.vpcpolicies),
@@ -2808,8 +2876,6 @@
           outboundVpcPolicies: p.outboundVpcPolicies || [],
           inboundVpcPolicies: p.inboundVpcPolicies || [],
           privatePolicies: p.privatePolicies || [],
-          classicNetworkAccess: p.classicNetworkAccess || 'all',
-          classicNetworkIp: p.classicNetworkIp || '',
           vpcPolicies: p.vpcPolicies || [],
           vpcnetwork: p.vpcnetwork || '',
           subnet: p.subnet || '',
@@ -2844,7 +2910,8 @@
   function openCreatePolicyPage() {
     policyFormMode = 'create';
     editingPolicyRow = null;
-    document.getElementById('policy-form-title').textContent = '创建网络策略';
+    const formTitle = document.getElementById('policy-form-title');
+    if (formTitle) formTitle.textContent = '创建网络策略';
     document.getElementById('policy-form-submit-btn').textContent = '创建';
     document.getElementById('policy-form-page').style.display = 'flex';
     document.getElementById('policy-list-table').style.display = 'none';
@@ -2855,7 +2922,8 @@
   function openEditPolicyPage(row) {
     policyFormMode = 'edit';
     editingPolicyRow = row;
-    document.getElementById('policy-form-title').textContent = '编辑网络策略';
+    const formTitle = document.getElementById('policy-form-title');
+    if (formTitle) formTitle.textContent = '编辑网络策略';
     document.getElementById('policy-form-submit-btn').textContent = '保存';
     document.getElementById('policy-form-page').style.display = 'flex';
     document.getElementById('policy-list-table').style.display = 'none';
@@ -2865,8 +2933,8 @@
   }
 
   function resetPolicyFormPage() {
+    document.getElementById('policy-form-region').checked = true;
     document.getElementById('policy-form-name').value = '';
-    document.getElementById('policy-form-desc').value = '';
     document.getElementById('policy-form-public-outbound').checked = true;
     document.getElementById('policy-form-public-inbound').checked = false;
     document.getElementById('policy-form-vpc-out-enabled').checked = false;
@@ -2875,6 +2943,11 @@
     document.getElementById('policy-form-vpc-out-list').innerHTML = '';
     document.getElementById('policy-form-vpc-in-list').innerHTML = '';
     document.getElementById('policy-form-private-list').innerHTML = '';
+    const classicAll = document.querySelector('input[name="policy-form-classic-access"][value="all"]');
+    if (classicAll) classicAll.checked = true;
+    const classicIp = document.getElementById('policy-form-classic-ip');
+    if (classicIp) classicIp.value = '';
+    if (typeof toggleClassicNetworkIp === 'function') toggleClassicNetworkIp();
     togglePolicyFormSection('vpc-out');
     togglePolicyFormSection('vpc-in');
     togglePolicyFormSection('private');
@@ -2904,6 +2977,15 @@
       setPolicyFormSwitchText('policy-form-private-text', enabled);
       if (enabled && !document.querySelector('#policy-form-private-list tr')) addPolicyFormPrivateRule();
     }
+  }
+
+  function toggleClassicNetworkIp() {
+    const selected = document.querySelector('input[name="policy-form-classic-access"]:checked');
+    const wrap = document.getElementById('policy-form-classic-ip-wrap');
+    const input = document.getElementById('policy-form-classic-ip');
+    const showIp = selected && selected.value === 'ip';
+    if (wrap) wrap.style.display = showIp ? 'block' : 'none';
+    if (!showIp && input) input.value = '';
   }
 
   function createPolicyFormVpcRow(includeSecurityGroup, values) {
@@ -2943,6 +3025,54 @@
     tr.innerHTML =
       '<td><select class="form-select policy-form-private-service">' +
         '<option value="">请选择 hulk 终端节点服务</option>' +
+        '<option value="endpoint-service-01">endpoint-service-01</option>' +
+        '<option value="endpoint-service-02">endpoint-service-02</option>' +
+        '<option value="endpoint-service-03">endpoint-service-03</option>' +
+      '</select></td>' +
+      '<td><input type="text" class="form-input policy-form-private-domain" placeholder="如 mysql.private.qihoo.net, kafka.partner.qihoo.net"></td>' +
+      '<td><a href="#" class="action-link" onclick="removePolicyFormRule(event, this)">删除</a></td>';
+    tr.querySelector('.policy-form-private-service').value = item.targetService;
+    tr.querySelector('.policy-form-private-domain').value = item.serviceDomain;
+    return tr;
+  }
+
+  function createPolicyFormVpcRow(includeSecurityGroup, values) {
+    const item = Object.assign({ vpcNetwork: '', subnet: '', securityGroup: '' }, values || {});
+    const tr = document.createElement('tr');
+    tr.innerHTML =
+      '<td><select class="form-select policy-form-vpc-network">' +
+        '<option value="">请选择 VPC</option>' +
+        '<option value="vpc-01">vpc-01 (10.0.0.0/16)</option>' +
+        '<option value="vpc-02">vpc-02 (172.16.0.0/16)</option>' +
+        '<option value="vpc-03">vpc-03 (192.168.0.0/16)</option>' +
+      '</select></td>' +
+      '<td><select class="form-select policy-form-vpc-subnet">' +
+        '<option value="">请选择子网</option>' +
+        '<option value="subnet-01">subnet-01 (10.0.1.0/24)</option>' +
+        '<option value="subnet-02">subnet-02 (172.16.1.0/24)</option>' +
+        '<option value="subnet-03">subnet-03 (192.168.1.0/24)</option>' +
+      '</select></td>' +
+      (includeSecurityGroup ? '<td><select class="form-select policy-form-vpc-sg">' +
+        '<option value="">请选择安全组</option>' +
+        '<option value="sg-01">sg-01 (默认安全组)</option>' +
+        '<option value="sg-02">sg-02 (Web 安全组)</option>' +
+        '<option value="sg-03">sg-03 (数据库安全组)</option>' +
+      '</select></td>' : '') +
+      '<td><a href="#" class="action-link" onclick="removePolicyFormRule(event, this)">删除</a></td>';
+    tr.querySelector('.policy-form-vpc-network').value = item.vpcNetwork;
+    tr.querySelector('.policy-form-vpc-subnet').value = item.subnet;
+    if (includeSecurityGroup && tr.querySelector('.policy-form-vpc-sg')) {
+      tr.querySelector('.policy-form-vpc-sg').value = item.securityGroup || '';
+    }
+    return tr;
+  }
+
+  function createPolicyFormPrivateRow(values) {
+    const item = Object.assign({ targetService: '', serviceDomain: '' }, values || {});
+    const tr = document.createElement('tr');
+    tr.innerHTML =
+      '<td><select class="form-select policy-form-private-service">' +
+        '<option value="">请选择终端节点服务</option>' +
         '<option value="endpoint-service-01">endpoint-service-01</option>' +
         '<option value="endpoint-service-02">endpoint-service-02</option>' +
         '<option value="endpoint-service-03">endpoint-service-03</option>' +
@@ -3021,8 +3151,8 @@
 
   function fillPolicyFormFromRow(row) {
     const policy = getRowPolicy(row);
+    document.getElementById('policy-form-region').checked = (policy.region || 'beijing') === 'beijing';
     document.getElementById('policy-form-name').value = row.dataset.name || '';
-    document.getElementById('policy-form-desc').value = row.dataset.desc || '';
 
     const legacyVpcPolicies = policy.vpcPolicies || [];
     const outboundPolicies = policy.outboundVpcPolicies && policy.outboundVpcPolicies.length
@@ -3094,15 +3224,24 @@
     if (inboundEnabled && !inboundVpcPolicies) return null;
     const privatePolicies = privateEnabled ? collectPolicyFormPrivateRules() : [];
     if (privateEnabled && !privatePolicies) return null;
+    const classicAccess = document.querySelector('input[name="policy-form-classic-access"]:checked')?.value || 'all';
+    const classicIp = document.getElementById('policy-form-classic-ip')?.value.trim() || '';
+    if (classicAccess === 'ip' && !classicIp) {
+      alert('请输入经典网络指定访问 IP');
+      return null;
+    }
 
     const payload = {
+      region: document.getElementById('policy-form-region').value || 'beijing',
       name: policyName,
-      desc: document.getElementById('policy-form-desc').value.trim(),
+      desc: '',
       allowPublicOutbound: allowPublicOutbound,
       allowPublicInbound: allowPublicInbound,
       outboundVpcPolicies: outboundVpcPolicies,
       inboundVpcPolicies: inboundVpcPolicies,
-      privatePolicies: privatePolicies
+      privatePolicies: privatePolicies,
+      classicNetworkAccess: classicAccess,
+      classicNetworkIp: classicIp
     };
     payload.accessType = inferPolicyAccessType(payload);
     payload.vpcPolicies = outboundVpcPolicies.map(function(item) {
@@ -3163,8 +3302,6 @@
     row.dataset.vpcoutpolicies = JSON.stringify(payload.outboundVpcPolicies || []);
     row.dataset.vpcinpolicies = JSON.stringify(payload.inboundVpcPolicies || []);
     row.dataset.privatepolicies = JSON.stringify(payload.privatePolicies || []);
-    row.dataset.classicnetworkaccess = payload.classicNetworkAccess || 'all';
-    row.dataset.classicnetworkip = payload.classicNetworkIp || '';
     row.dataset.vpcpolicies = JSON.stringify(payload.vpcPolicies || []);
     row.dataset.vpcnetwork = payload.vpcnetwork || '';
     row.dataset.subnet = payload.subnet || '';
@@ -3180,8 +3317,6 @@
       outboundVpcPolicies: payload.outboundVpcPolicies || [],
       inboundVpcPolicies: payload.inboundVpcPolicies || [],
       privatePolicies: payload.privatePolicies || [],
-      classicNetworkAccess: payload.classicNetworkAccess || 'all',
-      classicNetworkIp: payload.classicNetworkIp || '',
       service: payload.service || '',
       domain: payload.domain || '',
       vpcPolicies: payload.vpcPolicies || [],
@@ -3194,7 +3329,7 @@
       '<td>' + escapeHtml(payload.name) + '</td>' +
       '<td>' + escapeHtml(accessTypeLabels[payload.accessType] || payload.accessType) + '</td>' +
       accessObjCell +
-      '<td>' + (payload.region === 'beijing' || !payload.region ? '北京' : escapeHtml(payload.region)) + '</td>' +
+      '<td>' + escapeHtml(payload.desc || '') + '</td>' +
       '<td><a href="#" class="action-link edit-btn">编辑</a> <a href="#" class="action-link delete-btn">删除</a></td>';
   }
 
@@ -3204,7 +3339,7 @@
     if (editBtn) {
       editBtn.onclick = function(e) {
         e.preventDefault();
-        window.location.href = 'sandbox-policy-create.html?mode=edit&id=' + encodeURIComponent(row.dataset.id || '');
+        openEditPolicyPage(row);
       };
     }
     if (deleteBtn) {
@@ -3230,8 +3365,6 @@
       outboundVpcPolicies: payload.outboundVpcPolicies || [],
       inboundVpcPolicies: payload.inboundVpcPolicies || [],
       privatePolicies: payload.privatePolicies || [],
-      classicNetworkAccess: payload.classicNetworkAccess || 'all',
-      classicNetworkIp: payload.classicNetworkIp || '',
       vpcPolicies: payload.vpcPolicies || [],
       vpcnetwork: payload.vpcnetwork || '',
       subnet: payload.subnet || '',
@@ -3246,8 +3379,10 @@
   function persistPolicyRow(row, payload) {
     const policyId = row.dataset.id;
     const policies = JSON.parse(localStorage.getItem('sandboxPolicies') || '[]');
+    let updated = false;
     policies.forEach(function(policy) {
       if (policy.id === policyId) {
+        updated = true;
         policy.name = payload.name;
         policy.region = payload.region || 'beijing';
         policy.accessType = payload.accessType;
@@ -3257,8 +3392,6 @@
         policy.outboundVpcPolicies = payload.outboundVpcPolicies || [];
         policy.inboundVpcPolicies = payload.inboundVpcPolicies || [];
         policy.privatePolicies = payload.privatePolicies || [];
-        policy.classicNetworkAccess = payload.classicNetworkAccess || 'all';
-        policy.classicNetworkIp = payload.classicNetworkIp || '';
         policy.vpcPolicies = payload.vpcPolicies || [];
         policy.vpcnetwork = payload.vpcnetwork || '';
         policy.subnet = payload.subnet || '';
@@ -3267,6 +3400,27 @@
         policy.domain = payload.domain || '';
       }
     });
+    if (!updated) {
+      policies.push({
+        id: policyId,
+        name: payload.name,
+        region: payload.region || 'beijing',
+        accessType: payload.accessType,
+        desc: payload.desc || '',
+        allowPublicOutbound: payload.allowPublicOutbound,
+        allowPublicInbound: payload.allowPublicInbound,
+        outboundVpcPolicies: payload.outboundVpcPolicies || [],
+        inboundVpcPolicies: payload.inboundVpcPolicies || [],
+        privatePolicies: payload.privatePolicies || [],
+        vpcPolicies: payload.vpcPolicies || [],
+        vpcnetwork: payload.vpcnetwork || '',
+        subnet: payload.subnet || '',
+        securityGroup: payload.securityGroup || '',
+        service: payload.service || '',
+        domain: payload.domain || '',
+        boundSandboxes: parseRowJson(row.dataset.boundsandboxes)
+      });
+    }
     localStorage.setItem('sandboxPolicies', JSON.stringify(policies));
   }
 
@@ -3874,7 +4028,7 @@
     const wrapper = document.createElement('tr');
     wrapper.innerHTML = accessObjCell;
     cells[3].innerHTML = wrapper.children[0].innerHTML;
-    cells[4].textContent = '北京';
+    cells[4].textContent = desc;
 
     try {
       const policies = JSON.parse(localStorage.getItem('sandboxPolicies') || '[]');
@@ -3972,355 +4126,220 @@
       multiSelect.classList.remove('open');
     }
   });
-
-  function normalizePolicyListPresentation() {
-    const headers = document.querySelectorAll('#policy-list-table thead th');
-    if (headers[3]) headers[3].textContent = '策略内容';
-
-    const detailTitle = document.querySelector('#policy-detail-modal .modal-title');
-    if (detailTitle) detailTitle.textContent = '网络策略详情';
-
-    document.querySelectorAll('#policy-tbody .access-view-btn').forEach(function(btn) {
-      btn.textContent = '查看详情';
-    });
-    document.querySelectorAll('#policy-tbody .access-group-count').forEach(function(item) {
-      item.remove();
-    });
-
-    if (window.accessTypeLabels) {
-      window.accessTypeLabels['sandbox-intranet'] = '未配置';
-      window.accessTypeLabels['public-network'] = '公网访问';
-      window.accessTypeLabels['vpc-network'] = 'VPC 访问';
-      window.accessTypeLabels['private-connection'] = '私网连接';
-      window.accessTypeLabels['composite-network'] = '组合策略';
+</script>
+<script>
+  function backToPolicyList() { window.location.href = 'sandbox-policy.html'; }
+  window.addEventListener('DOMContentLoaded', function() {
+    var breadcrumb = document.getElementById('menu-name-display');
+    if (breadcrumb) breadcrumb.textContent = '网络策略 > 创建策略';
+    var title = document.getElementById('policy-form-title');
+    var submit = document.getElementById('policy-form-submit-btn');
+    var formPage = document.getElementById('policy-form-page');
+    if (title) title.textContent = '创建网络策略';
+    if (submit) submit.textContent = '创建';
+    if (formPage) formPage.style.display = 'flex';
+    if (typeof togglePolicyFormSection === 'function') {
+      togglePolicyFormSection('vpc-out');
+      togglePolicyFormSection('vpc-in');
+      togglePolicyFormSection('private');
     }
-
-    document.querySelectorAll('#policy-tbody tr').forEach(function(row) {
-      const cells = row.querySelectorAll('td');
-      if (cells.length < 3) return;
-      cells[2].innerHTML = renderAccessTypeDisplay(row);
-    });
-  }
-
-  function hasRowVpcPolicy(row) {
-    return parseRowJson(row.dataset.vpcoutpolicies).length > 0 ||
-      parseRowJson(row.dataset.vpcinpolicies).length > 0 ||
-      parseRowJson(row.dataset.vpcpolicies).length > 0 ||
-      !!row.dataset.vpcnetwork ||
-      !!row.dataset.subnet;
-  }
-
-  function hasRowPrivatePolicy(row) {
-    return parseRowJson(row.dataset.privatepolicies).length > 0 ||
-      !!row.dataset.service ||
-      !!row.dataset.domain;
-  }
-
-  function renderAccessTypeDisplay(row) {
-    const parts = [];
-    const accessType = row.dataset.accesstype || '';
-    const outboundVpcPolicies = parseRowJson(row.dataset.vpcoutpolicies);
-    const inboundVpcPolicies = parseRowJson(row.dataset.vpcinpolicies);
-    const vpcPolicies = parseRowJson(row.dataset.vpcpolicies);
-    if (accessType === 'public-network' || row.dataset.allowpublicoutbound === 'true' || row.dataset.allowpublicinbound === 'true') {
-      parts.push('公网');
-    }
-    if (outboundVpcPolicies.length ||
-      vpcPolicies.some(function(item) { return item.policyType === 'sandbox-to-vpc' || item.policyType === 'bidirectional'; }) ||
-      (accessType === 'vpc-network' && !inboundVpcPolicies.length && !vpcPolicies.length && hasRowVpcPolicy(row))) {
-      parts.push('访问 VPC');
-    }
-    if (inboundVpcPolicies.length ||
-      vpcPolicies.some(function(item) { return item.policyType === 'vpc-to-sandbox' || item.policyType === 'bidirectional'; })) {
-      parts.push('被 VPC 访问');
-    }
-    if (accessType === 'private-connection' || hasRowPrivatePolicy(row)) {
-      parts.push('私网连接访问');
-    }
-    if (!parts.length) {
-      return '<span class="access-type-tag muted">未配置</span>';
-    }
-    return '<div class="access-type-tags">' + parts.map(function(part) {
-      return '<span class="access-type-tag">' + part + '</span>';
-    }).join('') + '</div>';
-  }
-
-  function normalizeVpcPoliciesForDetail(policy) {
-    const outbound = (policy.outboundVpcPolicies || []).slice();
-    const inbound = (policy.inboundVpcPolicies || []).slice();
-    const legacy = (policy.vpcPolicies && policy.vpcPolicies.length)
-      ? policy.vpcPolicies
-      : (policy.vpcnetwork || policy.subnet || policy.securityGroup)
-        ? [{ policyType: 'sandbox-to-vpc', vpcNetwork: policy.vpcnetwork || '', subnet: policy.subnet || '', securityGroup: policy.securityGroup || '' }]
-        : [];
-
-    legacy.forEach(function(item) {
-      if (item.policyType === 'vpc-to-sandbox') {
-        inbound.push(item);
-      } else if (item.policyType === 'bidirectional') {
-        outbound.push(Object.assign({}, item, { policyType: 'sandbox-to-vpc' }));
-        inbound.push(Object.assign({}, item, { policyType: 'vpc-to-sandbox' }));
-      } else {
-        outbound.push(item);
-      }
-    });
-
-    return { outbound: outbound, inbound: inbound };
-  }
-
-  function renderVpcCapabilityDetail(title, policies, includeSecurityGroup) {
-    if (!policies || !policies.length) return '';
-    return '<div class="policy-detail-card"><div class="policy-detail-title">' + title + '</div>' +
-      renderVpcDetailList(policies, includeSecurityGroup, false) +
-      '</div>';
-  }
-
-  if (typeof renderPolicyDetailHtml === 'function') {
-    const originalRenderPolicyDetailHtml = renderPolicyDetailHtml;
-    renderPolicyDetailHtml = function(policy) {
-      if (policy.accessType === 'vpc-network') {
-        const normalized = normalizeVpcPoliciesForDetail(policy);
-        return [
-          renderVpcCapabilityDetail('访问 VPC', normalized.outbound, true),
-          renderVpcCapabilityDetail('被 VPC 访问', normalized.inbound, false)
-        ].join('') || '<div class="access-chip muted">暂无策略内容</div>';
-      }
-      if (policy.accessType === 'composite-network') {
-        const normalized = normalizeVpcPoliciesForDetail(policy);
-        const sections = [];
-        if (policy.allowPublicOutbound || policy.allowPublicInbound) {
-          const chips = [];
-          if (policy.allowPublicOutbound) chips.push('<span class="access-chip">允许访问公网</span>');
-          if (policy.allowPublicInbound) chips.push('<span class="access-chip">允许被公网访问</span>');
-          sections.push('<div class="policy-detail-card"><div class="policy-detail-title">公网</div><div class="access-chip-row">' + chips.join('') + '</div></div>');
-        }
-        sections.push(renderVpcCapabilityDetail('访问 VPC', normalized.outbound, true));
-        sections.push(renderVpcCapabilityDetail('被 VPC 访问', normalized.inbound, false));
-        if (policy.privatePolicies && policy.privatePolicies.length) {
-          sections.push('<div class="policy-detail-card"><div class="policy-detail-title">私网连接访问</div>' + renderPrivateDetailList(policy.privatePolicies) + '</div>');
-        }
-        return sections.filter(Boolean).join('') || '<div class="access-chip muted">暂无策略内容</div>';
-      }
-      return originalRenderPolicyDetailHtml(policy).replace(/双向访问/g, '访问 VPC');
-    };
-  }
-
-  function renderPolicyStatusChip(text, muted) {
-    return '<span class="access-chip' + (muted ? ' muted' : '') + '">' + escapeHtml(text) + '</span>';
-  }
-
-  function renderPolicyCapability(title, bodyHtml) {
-    return '<div class="policy-detail-capability">' +
-      '<div class="policy-detail-capability-head"><div class="policy-detail-capability-title">' + escapeHtml(title) + '</div></div>' +
-      '<div class="policy-detail-capability-body">' + bodyHtml + '</div>' +
-    '</div>';
-  }
-
-  function renderPolicyDetailGroup(title, capabilities) {
-    return '<div class="policy-detail-group">' +
-      '<div class="policy-detail-group-title">' + escapeHtml(title) + '</div>' +
-      capabilities.join('') +
-    '</div>';
-  }
-
-  function renderClassicNetworkDetail(policy) {
-    const access = policy.classicNetworkAccess || 'all';
-    if (access === 'ip') {
-      return '<div class="access-chip-row">' +
-        renderPolicyStatusChip('指定IP访问', false) +
-        renderPolicyStatusChip(policy.classicNetworkIp || '未填写IP', !policy.classicNetworkIp) +
-      '</div>';
-    }
-    return '<div class="access-chip-row">' + renderPolicyStatusChip('全通', false) + '</div>';
-  }
-
-  if (typeof renderPolicyDetailHtml === 'function') {
-    renderPolicyDetailHtml = function(policy) {
-      const normalized = normalizeVpcPoliciesForDetail(policy);
-      const privatePolicies = policy.privatePolicies && policy.privatePolicies.length
-        ? policy.privatePolicies
-        : (policy.service || policy.domain ? [{ targetService: policy.service || '', serviceDomain: policy.domain || '' }] : []);
-
-      const visitCapabilities = [
-        renderPolicyCapability('公网访问', '<div class="access-chip-row">' + (
-          policy.allowPublicOutbound
-            ? renderPolicyStatusChip('允许访问公网', false)
-            : renderPolicyStatusChip('未开启', true)
-        ) + '</div>'),
-        renderPolicyCapability('访问 VPC', normalized.outbound.length
-          ? renderVpcDetailList(normalized.outbound, true, false)
-          : '<div class="policy-detail-capability-empty">未开启</div>'),
-        renderPolicyCapability('私网连接访问', privatePolicies.length
-          ? renderPrivateDetailList(privatePolicies)
-          : '<div class="policy-detail-capability-empty">未开启</div>')
-      ];
-
-      const visitedCapabilities = [
-        renderPolicyCapability('公网访问', '<div class="access-chip-row">' + (
-          policy.allowPublicInbound
-            ? renderPolicyStatusChip('允许被公网访问', false)
-            : renderPolicyStatusChip('未开启', true)
-        ) + '</div>'),
-        renderPolicyCapability('被 VPC 访问', normalized.inbound.length
-          ? renderVpcDetailList(normalized.inbound, false, false)
-          : '<div class="policy-detail-capability-empty">未开启</div>'),
-        renderPolicyCapability('被经典网络访问', renderClassicNetworkDetail(policy))
-      ];
-
-      return '<div class="policy-detail-groups">' +
-        renderPolicyDetailGroup('访问', visitCapabilities) +
-        renderPolicyDetailGroup('被访问', visitedCapabilities) +
-      '</div>';
-    };
-  }
-
-  function normalizeDemoPolicyRows() {
-    const first = document.querySelector('#policy-tbody tr[data-id="policy-001"]');
-    if (first) {
-      first.dataset.accesstype = 'public-network';
-      first.dataset.allowpublicoutbound = 'true';
-      first.dataset.allowpublicinbound = 'false';
-      first.dataset.vpcoutpolicies = '[]';
-      first.dataset.vpcinpolicies = '[]';
-      first.dataset.vpcpolicies = '[]';
-      first.dataset.privatepolicies = '[]';
-      first.dataset.vpcnetwork = '';
-      first.dataset.subnet = '';
-      first.dataset.securitygroup = '';
-      first.dataset.service = '';
-      first.dataset.domain = '';
-      const cells = first.querySelectorAll('td');
-      if (cells[2]) cells[2].innerHTML = '<span class="access-type-tag">公网</span>';
-      if (cells[3]) cells[3].innerHTML = '<div class="access-summary"><div class="access-chip-row"><span class="access-chip">允许访问公网</span></div></div>';
-    }
-
-    const second = document.querySelector('#policy-tbody tr[data-id="policy-002"]');
-    if (second) {
-      const inbound = [{ vpcNetwork: 'vpc-01', subnet: 'subnet-01', securityGroup: '' }];
-      second.dataset.accesstype = 'vpc-network';
-      second.dataset.allowpublicoutbound = 'false';
-      second.dataset.allowpublicinbound = 'false';
-      second.dataset.vpcoutpolicies = '[]';
-      second.dataset.vpcinpolicies = JSON.stringify(inbound);
-      second.dataset.vpcpolicies = JSON.stringify([{ policyType: 'vpc-to-sandbox', vpcNetwork: 'vpc-01', subnet: 'subnet-01', securityGroup: '' }]);
-      second.dataset.privatepolicies = '[]';
-      second.dataset.vpcnetwork = 'vpc-01';
-      second.dataset.subnet = 'subnet-01';
-      second.dataset.securitygroup = '';
-      second.dataset.service = '';
-      second.dataset.domain = '';
-      const cells = second.querySelectorAll('td');
-      if (cells[2]) cells[2].innerHTML = '<span class="access-type-tag">被 VPC 访问</span>';
-      if (cells[3]) cells[3].innerHTML = '<div class="access-view-cell"><button type="button" class="access-view-btn" onclick="openPolicyDetailModal(this)">查看详情</button></div>';
-    }
-
-    const tbody = document.getElementById('policy-tbody');
-    if (tbody && !tbody.querySelector('tr[data-id="policy-005"]')) {
-      const combo = document.createElement('tr');
-      combo.dataset.id = 'policy-005';
-      combo.dataset.name = '混合访问策略';
-      combo.dataset.accesstype = 'composite-network';
-      combo.dataset.desc = '公网与 VPC 混合访问';
-      combo.dataset.region = 'beijing';
-      combo.dataset.allowpublicoutbound = 'true';
-      combo.dataset.allowpublicinbound = 'false';
-      combo.dataset.vpcoutpolicies = JSON.stringify([{ vpcNetwork: 'vpc-02', subnet: 'subnet-02', securityGroup: 'sg-02' }]);
-      combo.dataset.vpcinpolicies = '[]';
-      combo.dataset.vpcpolicies = JSON.stringify([{ policyType: 'sandbox-to-vpc', vpcNetwork: 'vpc-02', subnet: 'subnet-02', securityGroup: 'sg-02' }]);
-      combo.dataset.privatepolicies = '[]';
-      combo.dataset.vpcnetwork = 'vpc-02';
-      combo.dataset.subnet = 'subnet-02';
-      combo.dataset.securitygroup = 'sg-02';
-      combo.dataset.service = '';
-      combo.dataset.domain = '';
-      combo.dataset.boundsandboxes = '[]';
-      combo.innerHTML =
-        '<td>policy-005</td>' +
-        '<td>混合访问策略</td>' +
-        '<td><div class="access-type-tags"><span class="access-type-tag">公网</span><span class="access-type-tag">访问 VPC</span></div></td>' +
-        '<td><div class="access-view-cell"><button type="button" class="access-view-btn" onclick="openPolicyDetailModal(this)">查看详情</button></div></td>' +
-        '<td>北京</td>' +
-        '<td><a href="#" class="action-link edit-btn">编辑</a> <a href="#" class="action-link delete-btn">删除</a></td>';
-      tbody.appendChild(combo);
-      bindRowActions(combo);
-    }
-
-    const comboRow = document.querySelector('#policy-tbody tr[data-id="policy-005"]');
-    if (comboRow) {
-      const comboCells = comboRow.querySelectorAll('td');
-      comboRow.dataset.region = 'beijing';
-      if (comboCells[3]) {
-        comboCells[3].innerHTML = '<div class="access-view-cell"><button type="button" class="access-view-btn" onclick="openPolicyDetailModal(this)">查看详情</button></div>';
-      }
-      if (comboCells[4]) {
-        comboCells[4].textContent = '北京';
-      }
-    }
-  }
-
-  if (typeof renderVpcSummary === 'function') {
-    const originalRenderVpcSummary = renderVpcSummary;
-    renderVpcSummary = function(policy) {
-      return originalRenderVpcSummary(policy).replace(/<button([^>]*)>.*?<\/button>/, '<button$1>查看详情</button>');
-    };
-  }
-
-  if (typeof renderPrivateSummary === 'function') {
-    const originalRenderPrivateSummary = renderPrivateSummary;
-    renderPrivateSummary = function(policy) {
-      return originalRenderPrivateSummary(policy).replace(/<button([^>]*)>.*?<\/button>/, '<button$1>查看详情</button>');
-    };
-  }
-
-  if (typeof renderCompositeSummary === 'function') {
-    const originalRenderCompositeSummary = renderCompositeSummary;
-    renderCompositeSummary = function(policy) {
-      return originalRenderCompositeSummary(policy).replace(/<button([^>]*)>.*?<\/button>/, '<button$1>查看详情</button>');
-    };
-  }
-
-  if (typeof enhancePolicyTableRows === 'function') {
-    enhancePolicyTableRows();
-  }
-  normalizePolicyListPresentation();
-  normalizeDemoPolicyRows();
-  document.querySelectorAll('#policy-tbody .access-group-count').forEach(function(item) {
-    item.remove();
+    var vpcOutTip = document.querySelector('#policy-form-vpc-out-enabled')
+      ?.closest('.policy-rule-section')
+      ?.querySelector('.policy-rule-tip');
+    if (vpcOutTip) vpcOutTip.textContent = '开启后沙箱可访问指定的VPC网络';
+    var publicTip = document.querySelector('#policy-form-public-outbound')
+      ?.closest('.policy-rule-section')
+      ?.querySelector('.policy-rule-tip');
+    if (publicTip) publicTip.textContent = '勾选后沙箱可访问公网';
+    var panel = document.querySelector('.policy-form-panel');
+    if (panel) panel.scrollTop = 0;
   });
-  document.querySelectorAll('#policy-tbody .edit-btn').forEach(function(btn) {
-    btn.onclick = function(e) {
-      e.preventDefault();
-      const row = this.closest('tr');
+</script>
+<script>
+  (function() {
+    function getPolicyById(policyId) {
+      const defaults = {
+        'policy-001': {
+          id: 'policy-001',
+          name: '开发环境访问策略',
+          accessType: 'public-network',
+          desc: '开发环境网络策略',
+          allowPublicOutbound: true,
+          allowPublicInbound: false
+        },
+        'policy-002': {
+          id: 'policy-002',
+          name: '生产环境访问策略',
+          accessType: 'vpc-network',
+          desc: '生产环境网络策略',
+          allowPublicOutbound: false,
+          allowPublicInbound: false,
+          inboundVpcPolicies: [{ vpcNetwork: 'vpc-01', subnet: 'subnet-01', securityGroup: '' }],
+          vpcPolicies: [{ policyType: 'vpc-to-sandbox', vpcNetwork: 'vpc-01', subnet: 'subnet-01', securityGroup: '' }]
+        },
+        'policy-005': {
+          id: 'policy-005',
+          name: '混合访问策略',
+          accessType: 'composite-network',
+          desc: '公网与 VPC 混合访问',
+          allowPublicOutbound: true,
+          allowPublicInbound: false,
+          outboundVpcPolicies: [{ vpcNetwork: 'vpc-02', subnet: 'subnet-02', securityGroup: 'sg-02' }],
+          vpcPolicies: [{ policyType: 'sandbox-to-vpc', vpcNetwork: 'vpc-02', subnet: 'subnet-02', securityGroup: 'sg-02' }]
+        }
+      };
       try {
-        const policy = {
-          id: row?.dataset.id || '',
-          name: row?.dataset.name || row?.querySelectorAll('td')[1]?.textContent.trim() || '',
-          accessType: row?.dataset.accesstype || 'sandbox-intranet',
-          desc: row?.dataset.desc || row?.querySelectorAll('td')[4]?.textContent.trim() || '',
-          allowPublicOutbound: row?.dataset.allowpublicoutbound === 'true',
-          allowPublicInbound: row?.dataset.allowpublicinbound === 'true',
-          outboundVpcPolicies: parseRowJson(row?.dataset.vpcoutpolicies),
-          inboundVpcPolicies: parseRowJson(row?.dataset.vpcinpolicies),
-          privatePolicies: parseRowJson(row?.dataset.privatepolicies),
-          vpcPolicies: parseRowJson(row?.dataset.vpcpolicies),
-          vpcnetwork: row?.dataset.vpcnetwork || '',
-          subnet: row?.dataset.subnet || '',
-          securityGroup: row?.dataset.securitygroup || '',
-          service: row?.dataset.service || '',
-          domain: row?.dataset.domain || '',
-          boundSandboxes: parseRowJson(row?.dataset.boundsandboxes)
-        };
         const policies = JSON.parse(localStorage.getItem('sandboxPolicies') || '[]');
-        const index = policies.findIndex(function(item) { return item.id === policy.id; });
-        if (index >= 0) policies[index] = Object.assign({}, policies[index], policy);
-        else policies.push(policy);
-        localStorage.setItem('sandboxPolicies', JSON.stringify(policies));
-      } catch (err) {
-        console.error('prepare edit policy failed:', err);
+        const found = policies.find(function(policy) { return policy.id === policyId; }) || {};
+        const base = defaults[policyId] || {};
+        const merged = Object.assign({}, base, found);
+        if (!merged.name && base.name) merged.name = base.name;
+        if (!merged.desc && base.desc) merged.desc = base.desc;
+        if (!merged.accessType && base.accessType) merged.accessType = base.accessType;
+        if ((!merged.outboundVpcPolicies || !merged.outboundVpcPolicies.length) && base.outboundVpcPolicies) merged.outboundVpcPolicies = base.outboundVpcPolicies;
+        if ((!merged.inboundVpcPolicies || !merged.inboundVpcPolicies.length) && base.inboundVpcPolicies) merged.inboundVpcPolicies = base.inboundVpcPolicies;
+        if ((!merged.vpcPolicies || !merged.vpcPolicies.length) && base.vpcPolicies) merged.vpcPolicies = base.vpcPolicies;
+        return merged.id ? merged : null;
+      } catch (e) {
+        return defaults[policyId] || null;
       }
-      window.location.href = 'sandbox-policy-create.html?mode=edit&id=' + encodeURIComponent(row?.dataset.id || '');
+    }
+
+    function ensureEditRow(policy) {
+      let row = document.querySelector('#policy-tbody tr[data-id="' + policy.id + '"]');
+      if (!row) {
+        row = document.createElement('tr');
+        document.getElementById('policy-tbody')?.appendChild(row);
+      }
+      if (typeof applyPayloadToRow === 'function') {
+        applyPayloadToRow(row, policy.id, {
+          name: policy.name || '',
+          accessType: policy.accessType || 'sandbox-intranet',
+          desc: policy.desc || '',
+          allowPublicOutbound: !!policy.allowPublicOutbound,
+          allowPublicInbound: !!policy.allowPublicInbound,
+          outboundVpcPolicies: policy.outboundVpcPolicies || [],
+          inboundVpcPolicies: policy.inboundVpcPolicies || [],
+          privatePolicies: policy.privatePolicies || [],
+          vpcPolicies: policy.vpcPolicies || [],
+          vpcnetwork: policy.vpcnetwork || '',
+          subnet: policy.subnet || '',
+          securityGroup: policy.securityGroup || '',
+          service: policy.service || '',
+          domain: policy.domain || ''
+        });
+      }
+      return row;
+    }
+
+    function enterEditModeFromUrl() {
+      const params = new URLSearchParams(window.location.search);
+      if (params.get('mode') !== 'edit') return;
+      const policyId = params.get('id');
+      const policy = getPolicyById(policyId);
+      if (!policy) return;
+      const idDefaults = {
+        'policy-001': { name: '开发环境访问策略', desc: '开发环境网络策略' },
+        'policy-002': { name: '生产环境访问策略', desc: '生产环境网络策略' },
+        'policy-003': { name: '测试环境访问策略', desc: '测试环境网络策略' },
+        'policy-004': { name: '数据同步访问策略', desc: '数据同步私网连接策略' },
+        'policy-005': { name: '混合访问策略', desc: '公网与 VPC 混合访问' }
+      };
+      if (idDefaults[policyId]) {
+        if (!policy.name) policy.name = idDefaults[policyId].name;
+        if (!policy.desc) policy.desc = idDefaults[policyId].desc;
+      }
+
+      const row = ensureEditRow(policy);
+      if (typeof openEditPolicyPage === 'function') {
+        openEditPolicyPage(row);
+      }
+      const outboundPolicies = policy.outboundVpcPolicies || [];
+      const inboundPolicies = policy.inboundVpcPolicies || [];
+      const privatePolicies = policy.privatePolicies || [];
+      if (document.getElementById('policy-form-name')) document.getElementById('policy-form-name').value = policy.name || '';
+      if (document.getElementById('policy-form-desc')) document.getElementById('policy-form-desc').value = policy.desc || '';
+      document.getElementById('policy-form-public-outbound').checked = !!policy.allowPublicOutbound;
+      document.getElementById('policy-form-public-inbound').checked = !!policy.allowPublicInbound;
+      document.getElementById('policy-form-vpc-out-enabled').checked = outboundPolicies.length > 0;
+      document.getElementById('policy-form-vpc-in-enabled').checked = inboundPolicies.length > 0;
+      document.getElementById('policy-form-private-enabled').checked = privatePolicies.length > 0;
+      document.getElementById('policy-form-vpc-out-list').innerHTML = '';
+      document.getElementById('policy-form-vpc-in-list').innerHTML = '';
+      document.getElementById('policy-form-private-list').innerHTML = '';
+      if (outboundPolicies.length && typeof addPolicyFormVpcOutRule === 'function') outboundPolicies.forEach(addPolicyFormVpcOutRule);
+      if (inboundPolicies.length && typeof addPolicyFormVpcInRule === 'function') inboundPolicies.forEach(addPolicyFormVpcInRule);
+      if (privatePolicies.length && typeof addPolicyFormPrivateRule === 'function') privatePolicies.forEach(addPolicyFormPrivateRule);
+      if (typeof togglePolicyFormSection === 'function') {
+        togglePolicyFormSection('vpc-out');
+        togglePolicyFormSection('vpc-in');
+        togglePolicyFormSection('private');
+      }
+      const title = document.getElementById('policy-form-title');
+      const submit = document.getElementById('policy-form-submit-btn');
+      if (title) title.textContent = '编辑网络策略';
+      if (submit) submit.textContent = '保存';
+      window.policyFormMode = 'edit';
+      window.editingPolicyRow = row;
+    }
+
+    window.addEventListener('DOMContentLoaded', function() {
+      setTimeout(enterEditModeFromUrl, 80);
+    });
+  })();
+</script>
+<script>
+  (function() {
+    const editDefaults = {
+      'policy-001': { name: '\u5f00\u53d1\u73af\u5883\u8bbf\u95ee\u7b56\u7565', desc: '\u5f00\u53d1\u73af\u5883\u7f51\u7edc\u7b56\u7565', publicOut: true },
+      'policy-002': { name: '\u751f\u4ea7\u73af\u5883\u8bbf\u95ee\u7b56\u7565', desc: '\u751f\u4ea7\u73af\u5883\u7f51\u7edc\u7b56\u7565', vpcIn: true },
+      'policy-003': { name: '\u6d4b\u8bd5\u73af\u5883\u8bbf\u95ee\u7b56\u7565', desc: '\u6d4b\u8bd5\u73af\u5883\u7f51\u7edc\u7b56\u7565', vpcOut: true },
+      'policy-004': { name: '\u6570\u636e\u540c\u6b65\u8bbf\u95ee\u7b56\u7565', desc: '\u6570\u636e\u540c\u6b65\u79c1\u7f51\u8fde\u63a5\u7b56\u7565', privateAccess: true },
+      'policy-005': { name: '\u6df7\u5408\u8bbf\u95ee\u7b56\u7565', desc: '\u516c\u7f51\u4e0e VPC \u6df7\u5408\u8bbf\u95ee', publicOut: true, vpcOut: true }
     };
-  });
+
+    function applyFinalEditState() {
+      const params = new URLSearchParams(window.location.search);
+      if (params.get('mode') !== 'edit') return;
+      const policyId = params.get('id');
+      const fallback = editDefaults[policyId] || {};
+      let stored = {};
+      try {
+        stored = (JSON.parse(localStorage.getItem('sandboxPolicies') || '[]') || []).find(function(item) {
+          return item.id === policyId;
+        }) || {};
+      } catch (e) {}
+
+      const title = document.getElementById('policy-form-title');
+      const submit = document.getElementById('policy-form-submit-btn');
+      const name = document.getElementById('policy-form-name');
+      const desc = document.getElementById('policy-form-desc');
+      if (title) title.textContent = '\u7f16\u8f91\u7f51\u7edc\u7b56\u7565';
+      if (submit) submit.textContent = '\u4fdd\u5b58';
+      if (name) name.value = stored.name || fallback.name || '';
+      if (desc) desc.value = stored.desc || fallback.desc || '';
+
+      const publicOut = document.getElementById('policy-form-public-outbound');
+      const publicIn = document.getElementById('policy-form-public-inbound');
+      const vpcOut = document.getElementById('policy-form-vpc-out-enabled');
+      const vpcIn = document.getElementById('policy-form-vpc-in-enabled');
+      const privateAccess = document.getElementById('policy-form-private-enabled');
+      if (publicOut) publicOut.checked = stored.allowPublicOutbound !== undefined ? !!stored.allowPublicOutbound : !!fallback.publicOut;
+      if (publicIn) publicIn.checked = !!stored.allowPublicInbound;
+      if (vpcOut) vpcOut.checked = (stored.outboundVpcPolicies || []).length > 0 || !!fallback.vpcOut;
+      if (vpcIn) vpcIn.checked = (stored.inboundVpcPolicies || []).length > 0 || !!fallback.vpcIn;
+      if (privateAccess) privateAccess.checked = (stored.privatePolicies || []).length > 0 || !!fallback.privateAccess;
+      if (typeof togglePolicyFormSection === 'function') {
+        togglePolicyFormSection('vpc-out');
+        togglePolicyFormSection('vpc-in');
+        togglePolicyFormSection('private');
+      }
+    }
+
+    window.addEventListener('DOMContentLoaded', function() {
+      setTimeout(applyFinalEditState, 250);
+    });
+  })();
 </script>
 <script src="styles/ai-sandbox.js"></script>
 </body>

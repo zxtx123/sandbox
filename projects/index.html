@@ -226,11 +226,6 @@
       color: #fff;
     }
 
-    .icon-item.active {
-      background: #0066FF;
-      color: #fff;
-    }
-
     .icon-item .icon-svg {
       width: 18px;
       height: 18px;
@@ -1026,6 +1021,7 @@
       text-decoration: underline;
     }
   </style>
+  <link rel="stylesheet" href="styles/ai-sandbox.css">
 </head>
 <body>
 <!-- 顶部导航 -->
@@ -1077,7 +1073,7 @@
 <div class="container">
   <!-- 第一栏：左侧图标栏 -->
   <div class="icon-bar">
-    <div class="icon-item active" title="全部">
+    <div class="icon-item" title="全部">
       <div class="icon-svg">
         <svg width="20" height="20" viewBox="0 0 16 16" fill="none">
           <rect x="2" y="2" width="5" height="5" rx="1" fill="currentColor"/>
@@ -1257,7 +1253,16 @@
                 <circle cx="8" cy="8" r="2" stroke="currentColor" stroke-width="1.5" fill="none"/>
               </svg>
             </div>
-            <span class="menu-text">API密钥</span>
+            <a href="sandbox-apikeys.html"><span class="menu-text">API密钥</span></a>
+          </div>
+          <div class="menu-item">
+            <div class="menu-icon">
+              <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
+                <rect x="3" y="2.5" width="10" height="11" rx="1.5" stroke="currentColor" stroke-width="1.5" fill="none"/>
+                <path d="M5.5 6h5M5.5 9h3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <a href="sandbox-credentials.html"><span class="menu-text">访问凭证</span></a>
           </div>
           <div class="menu-item">
             <div class="menu-icon">
@@ -1465,6 +1470,7 @@
     width: 560px;
     max-width: 90%;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    overflow: visible;
   }
   .modal-header {
     display: flex;
@@ -1572,6 +1578,7 @@
   .multi-select-container {
     position: relative;
     width: 100%;
+    z-index: 20;
   }
   .multi-select-header {
     display: flex;
@@ -1587,6 +1594,10 @@
   }
   .multi-select-header:hover {
     border-color: #3498db;
+  }
+  .multi-select-header.open {
+    border-color: #3498db;
+    box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.12);
   }
   .multi-select-tags {
     flex: 1;
@@ -1631,14 +1642,16 @@
     display: none;
     position: absolute;
     top: 100%;
+    margin-top: 6px;
     left: 0;
     right: 0;
     background: #fff;
     border: 1px solid #ddd;
-    border-top: none;
-    border-radius: 0 0 4px 4px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    z-index: 100;
+    border-radius: 6px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+    z-index: 1200;
+    max-height: 220px;
+    overflow-y: auto;
   }
   .multi-select-dropdown.open {
     display: block;
@@ -1711,14 +1724,6 @@
 </style>
 
 <script>
-  // 图标栏交互
-  document.querySelectorAll('.icon-item').forEach(item => {
-    item.addEventListener('click', function() {
-      document.querySelectorAll('.icon-item').forEach(i => i.classList.remove('active'));
-      this.classList.add('active');
-    });
-  });
-
   // 一级菜单项点击切换图标状态
   document.querySelectorAll('.menu-level-1 > .menu-item').forEach(item => {
     item.addEventListener('click', function(e) {
@@ -1827,9 +1832,10 @@
 
   function closeSetPolicyModal() {
     document.getElementById('set-policy-modal').classList.remove('active');
-    document.getElementById('set-policy-select').selectedIndex = 0;
     selectedPolicyIds = [];
+    setPolicyDropdownState(false);
     renderPolicyTags();
+    renderPolicyOptions();
     document.getElementById('selected-services-list').innerHTML = '';
     document.getElementById('selected-services-group').style.display = 'none';
     currentSandboxName = '';
@@ -1842,6 +1848,7 @@
     const modal = document.getElementById('set-policy-modal');
     modal.classList.add('active');
     selectedPolicyIds = [];
+    setPolicyDropdownState(false);
     renderPolicyTags();
     renderPolicyOptions();
     document.getElementById('selected-services-list').innerHTML = '';
@@ -1850,11 +1857,19 @@
     document.getElementById('set-sandbox-name').textContent = currentSandboxName || '';
   }
 
-  function togglePolicyDropdown() {
+  function setPolicyDropdownState(isOpen) {
     const dropdown = document.getElementById('policy-dropdown');
     const arrow = document.getElementById('policy-arrow');
-    dropdown.classList.toggle('open');
-    arrow.classList.toggle('up');
+    const header = document.querySelector('#policy-multi-select .multi-select-header');
+    if (dropdown) dropdown.classList.toggle('open', isOpen);
+    if (arrow) arrow.classList.toggle('up', isOpen);
+    if (header) header.classList.toggle('open', isOpen);
+  }
+
+  function togglePolicyDropdown() {
+    const dropdown = document.getElementById('policy-dropdown');
+    if (!dropdown) return;
+    setPolicyDropdownState(!dropdown.classList.contains('open'));
   }
 
   function selectPolicy(id, name) {
@@ -1981,10 +1996,7 @@
   document.addEventListener('click', function(e) {
     const container = document.getElementById('policy-multi-select');
     if (container && !container.contains(e.target)) {
-      const dropdown = document.getElementById('policy-dropdown');
-      const arrow = document.getElementById('policy-arrow');
-      if (dropdown) dropdown.classList.remove('open');
-      if (arrow) arrow.classList.remove('up');
+      setPolicyDropdownState(false);
     }
   });
 
@@ -2013,5 +2025,6 @@
     }
   });
 </script>
+<script src="styles/ai-sandbox.js"></script>
 </body>
 </html>

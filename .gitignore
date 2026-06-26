@@ -88,3 +88,6 @@ logs/
 *.pptx
 *.xlsx
 *.csv
+
+# Local Netlify folder
+.netlify

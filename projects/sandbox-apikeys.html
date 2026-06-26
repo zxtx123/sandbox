@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>沙箱模板 - 360智汇云</title>
+  <title>API密钥 - 360智汇云</title>
   <style>
     * {
       margin: 0;
@@ -944,6 +944,54 @@
       color: #999;
     }
 
+    .key-summary {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 20px;
+      border-bottom: 1px solid #E9ECEF;
+      background: #fff;
+      color: #666;
+      font-size: 14px;
+      flex-shrink: 0;
+    }
+
+    .key-summary strong {
+      color: #202020;
+      font-weight: 500;
+    }
+
+    .key-badge {
+      display: inline-flex;
+      align-items: center;
+      height: 22px;
+      padding: 0 8px;
+      border-radius: 2px;
+      font-size: 12px;
+      white-space: nowrap;
+    }
+
+    .key-badge.enabled {
+      background: #F6FFED;
+      color: #52C41A;
+    }
+
+    .key-badge.disabled {
+      background: #F5F5F5;
+      color: #8C9AAE;
+    }
+
+    .key-code {
+      font-family: Consolas, Monaco, monospace;
+      color: #202020;
+      white-space: nowrap;
+    }
+
+    .key-desc {
+      max-width: 220px;
+      color: #666;
+    }
+
     .product-name {
       display: flex;
       align-items: center;
@@ -1017,34 +1065,13 @@
       color: #999;
     }
 
-    .id-cell {
-      font-family: monospace;
-      display: flex;
-      align-items: center;
-      gap: 4px;
+    .action-link {
+      color: #0066FF;
+      text-decoration: none;
+      font-size: 13px;
     }
-
-    .copy-icon {
-      cursor: pointer;
-      opacity: 0.5;
-      font-size: 12px;
-    }
-
-    .copy-icon:hover {
-      opacity: 1;
-    }
-
-    .template-name {
-      color: #333;
-    }
-
-    .visibility-badge {
-      display: inline-block;
-      padding: 2px 8px;
-      background: #E6F7EE;
-      color: #52C41A;
-      border-radius: 4px;
-      font-size: 12px;
+    .action-link:hover {
+      text-decoration: underline;
     }
   </style>
   <link rel="stylesheet" href="styles/ai-sandbox.css">
@@ -1218,7 +1245,7 @@
         
         <!-- 展开的子菜单：AI沙箱 Sandbox -->
         <div class="submenu-expanded">
-          <div class="menu-item">
+          <a href="index.html" class="menu-item">
             <div class="menu-icon">
               <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
                 <rect x="2" y="2" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.5" fill="none"/>
@@ -1227,9 +1254,9 @@
                 <rect x="9" y="9" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.5" fill="none"/>
               </svg>
             </div>
-            <a href="index.html"><span class="menu-text">沙箱实例</span></a>
-          </div>
-          <div class="menu-item active">
+            <span class="menu-text">沙箱实例</span>
+          </a>
+          <a href="sandbox-template.html" class="menu-item">
             <div class="menu-icon">
               <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
                 <rect x="2" y="2" width="12" height="12" rx="2" stroke="currentColor" stroke-width="1.5" fill="none"/>
@@ -1237,7 +1264,7 @@
               </svg>
             </div>
             <span class="menu-text">沙箱模板</span>
-          </div>
+          </a>
           <div class="menu-item">
             <div class="menu-icon">
               <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
@@ -1272,14 +1299,14 @@
             </div>
             <span class="menu-text">运行日志</span>
           </div>
-          <div class="menu-item">
+          <div class="menu-item active">
             <div class="menu-icon">
               <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
                 <path d="M7 3L3 6v5c0 2 2 3 4 3s4-1 4-3V6l-4-3z" stroke="currentColor" stroke-width="1.5" fill="none"/>
                 <circle cx="8" cy="8" r="2" stroke="currentColor" stroke-width="1.5" fill="none"/>
               </svg>
             </div>
-            <a href="sandbox-apikeys.html"><span class="menu-text">API密钥</span></a>
+            <span class="menu-text">API密钥</span>
           </div>
           <div class="menu-item">
             <div class="menu-icon">
@@ -1316,7 +1343,7 @@
   <!-- 第三栏：右侧主内容 -->
   <div class="main-content">
     <div class="breadcrumb">
-      <span class="breadcrumb-left" id="menu-name-display">沙箱模板</span>
+      <span class="breadcrumb-left" id="menu-name-display">API密钥</span>
       <a class="breadcrumb-link" id="menu-link-display">Sandbox 帮助文档</a>
     </div>
     <div class="content-body">
@@ -1324,22 +1351,23 @@
         <!-- 工具栏 -->
         <div class="product-toolbar">
           <div class="toolbar-left">
-            <a class="btn btn-primary" href="sandbox-template-create.html" style="display:inline-flex; align-items:center; gap:8px;">
+            <button class="btn btn-primary">
               <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
                 <path d="M8 2v12M2 8h12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
               </svg>
-              创建模板
-            </a>
+              创建APIKey
+            </button>
           </div>
           <div class="toolbar-right">
             <div class="search-box">
-              <input type="text" id="sandbox-search" placeholder="请输入模板ID">
+              <input type="text" id="sandbox-search" placeholder="请输入密钥名称">
               <button class="search-btn">
                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
                   <circle cx="7" cy="7" r="5" stroke="currentColor" stroke-width="1.5" fill="none"/>
                   <path d="M11 11l3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
                 </svg>
               </button>
+              <button class="clear-btn" onclick="document.getElementById('sandbox-search').value=''" title="清除">C</button>
             </div>
             <button class="refresh-btn" title="刷新">
               <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
@@ -1349,49 +1377,40 @@
             </button>
           </div>
         </div>
-        
         <!-- 表格 -->
         <div class="product-table">
           <div class="table-wrapper">
             <table>
             <thead>
               <tr>
-                <th>模板ID</th>
-                <th>模板名称</th>
-                <th>CPU</th>
-                <th>内存(Memory)</th>
+                <th style="width: 120px;">ID</th>
+                <th>APIKey</th>
+                <th>描述</th>
                 <th>创建时间</th>
-                <th>更新时间</th>
-                <th>可见性</th>
+                <th style="width: 160px;">操作</th>
               </tr>
             </thead>
             <tbody>
               <tr>
-                <td class="id-cell">zs47yil2jbkdf73nali2<span class="copy-icon" onclick="copyText('zs47yil2jbkdf73nali2')">📋</span></td>
-                <td class="template-name">code-interpreter-v1</td>
-                <td>2</td>
-                <td>1024MB</td>
-                <td>2025-09-12 17:24:45</td>
-                <td>2025-09-12 17:24:45</td>
-                <td><span class="visibility-badge">Public</span></td>
-              </tr>
-              <tr>
-                <td class="id-cell">y0ad1vs1k72ijelq7jjy<span class="copy-icon" onclick="copyText('y0ad1vs1k72ijelq7jjy')">📋</span></td>
-                <td class="template-name">desktop</td>
-                <td>2</td>
-                <td>1024MB</td>
-                <td>2025-09-22 15:10:28</td>
-                <td>2025-09-22 15:10:28</td>
-                <td><span class="visibility-badge">Public</span></td>
-              </tr>
-              <tr>
-                <td class="id-cell">kqepe5sjnv9hrcxzxe2g<span class="copy-icon" onclick="copyText('kqepe5sjnv9hrcxzxe2g')">📋</span></td>
-                <td class="template-name">chrome-template</td>
-                <td>2</td>
-                <td>1024MB</td>
-                <td>2025-11-12 15:36:52</td>
-                <td>2025-11-12 15:36:55</td>
-                <td><span class="visibility-badge">Public</span></td>
+                <td>28</td>
+                <td>
+                  <span class="key-code">****************************************</span>
+                  <a href="#" class="action-link" title="查看" style="margin-left:4px;">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="vertical-align:-3px;">
+                      <path d="M1.5 8s2.5-4 6.5-4 6.5 4 6.5 4-2.5 4-6.5 4-6.5-4-6.5-4z" stroke="currentColor" stroke-width="1.5" fill="none"/>
+                      <circle cx="8" cy="8" r="2" stroke="currentColor" stroke-width="1.5" fill="none"/>
+                    </svg>
+                  </a>
+                  <a href="#" class="action-link" title="复制" style="margin-left:6px;">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="vertical-align:-3px;">
+                      <rect x="5" y="3" width="8" height="10" rx="1" stroke="currentColor" stroke-width="1.5" fill="none"/>
+                      <path d="M3 5v8h7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                    </svg>
+                  </a>
+                </td>
+                <td>实验场自动生成</td>
+                <td>2025-11-19 10:53:29</td>
+                <td><a href="#" class="action-link">删除</a></td>
               </tr>
             </tbody>
           </table>
@@ -1400,49 +1419,76 @@
         
         <!-- 翻页组件 -->
         <div class="pagination-bar">
-          <div class="pagination-left">共3条记录 第1/1页</div>
+          <div class="pagination-left">共1条记录 第1/1页</div>
+          <div class="pagination-right">
+            <div class="page-size-select">
+              10条/页
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                <path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <button class="page-btn disabled">&lt;</button>
+            <button class="page-btn active">1</button>
+            <button class="page-btn">2</button>
+            <button class="page-btn">3</button>
+            <button class="page-btn">4</button>
+            <span class="page-ellipsis">···</span>
+            <button class="page-btn">50</button>
+            <button class="page-btn">&gt;</button>
+          </div>
         </div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- 创建模板弹窗 -->
-<div class="modal-overlay" id="create-template-modal">
+<!-- 设置策略弹窗 -->
+<div class="modal-overlay" id="set-policy-modal">
   <div class="modal-dialog">
     <div class="modal-header">
-      <h3 class="modal-title">创建模板</h3>
-      <button class="modal-close" onclick="closeCreateTemplateModal()">&times;</button>
+      <h3 class="modal-title">设置策略</h3>
+      <button class="modal-close" onclick="closeSetPolicyModal()">&times;</button>
     </div>
     <div class="modal-body">
       <div class="form-group">
-        <label class="form-label">基础镜像 <span class="required">*</span></label>
+        <label class="form-label">沙箱</label>
         <div class="form-control">
-          <input type="text" class="form-input" id="base-image" value="harbor.qihoo.net/e2b-infra/code-interpreter:latest" readonly style="background:#f5f5f5;color:#666;">
+          <span class="sandbox-name-tag" id="set-sandbox-name"></span>
         </div>
       </div>
       <div class="form-group">
-        <label class="form-label">安装包</label>
-        <div class="form-control" style="flex-direction:column;align-items:stretch;">
-          <button class="btn btn-primary pkg-add-row-btn" onclick="addPkgRow()">
-            <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 1v10M1 6h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
-            添加安装包
-          </button>
-          <div class="pkg-rows" id="pkg-rows">
-            <!-- 动态行 -->
+        <label class="form-label">网络策略 <span class="required">*</span></label>
+        <div class="form-control">
+          <div class="multi-select-container" id="policy-multi-select">
+            <!-- 顶部已选标签栏 -->
+            <div class="multi-select-header" onclick="togglePolicyDropdown()">
+              <div class="multi-select-tags" id="selected-policy-tags">
+                <span class="multi-select-placeholder">请选择网络策略</span>
+              </div>
+              <span class="multi-select-arrow" id="policy-arrow">▲</span>
+            </div>
+            <!-- 下拉选项面板 -->
+            <div class="multi-select-dropdown" id="policy-dropdown">
+              <div id="policy-options-list"></div>
+            </div>
           </div>
+        </div>
+      </div>
+      <div class="form-group" id="selected-services-group" style="display:none;">
+        <label class="form-label">访问对象</label>
+        <div class="form-control">
+          <div id="selected-services-list" class="selected-services"></div>
         </div>
       </div>
     </div>
     <div class="modal-footer">
-      <button class="btn btn-default" onclick="closeCreateTemplateModal()">取消</button>
-      <button class="btn btn-primary" onclick="createTemplate()">创建</button>
+      <button class="btn btn-default" onclick="closeSetPolicyModal()">取消</button>
+      <button class="btn btn-primary" onclick="createPolicyFromSandbox()">创建</button>
     </div>
   </div>
 </div>
 
 <style>
-  /* 弹窗样式 */
   .modal-overlay {
     position: fixed;
     top: 0;
@@ -1461,9 +1507,10 @@
   .modal-dialog {
     background: #fff;
     border-radius: 8px;
-    width: 600px;
+    width: 560px;
     max-width: 90%;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    overflow: visible;
   }
   .modal-header {
     display: flex;
@@ -1518,105 +1565,205 @@
     margin-bottom: 0;
     font-size: 14px;
     color: #333;
-  }
-  .form-label .required {
-    color: #e53e3e;
-    margin-left: 2px;
+    line-height: 36px;
+    justify-content: flex-end;
+    padding-right: 12px;
   }
   .form-control {
     flex: 1;
+    min-width: 0;
+  }
+  .required {
+    color: #ff4d4f;
+  }
+  .form-tip {
+    font-size: 12px;
+    color: #999;
+    margin-top: 4px;
+  }
+  .selected-services {
     display: flex;
-    align-items: center;
-  }
-  .form-input {
-    width: 100%;
-    height: 32px;
-    padding: 0 10px;
-    border: 1px solid #D9D9D9;
-    border-radius: 4px;
-    font-size: 14px;
-    color: #333;
-    outline: none;
-    transition: border-color 0.2s;
-  }
-  .form-input:focus {
-    border-color: #0066FF;
-  }
-  .pkg-add-row-btn {
-    height: 32px;
-    padding: 0 14px;
-    font-size: 14px;
-    margin-bottom: 12px;
-    width: fit-content;
-  }
-  .pkg-rows {
-    display: flex;
-    flex-direction: column;
+    flex-wrap: wrap;
     gap: 8px;
-  }
-  .pkg-row {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-  .pkg-row .form-select {
-    flex: 1;
-    height: 32px;
-    padding: 0 10px;
-    border: 1px solid #D9D9D9;
-    border-radius: 4px;
-    font-size: 14px;
-    color: #333;
-    outline: none;
-    background: #fff;
-    cursor: pointer;
-    appearance: auto;
-  }
-  .pkg-row .form-select:focus {
-    border-color: #0066FF;
-  }
-  .pkg-row .form-select:disabled {
+    padding: 8px;
     background: #f5f5f5;
-    color: #999;
-    cursor: not-allowed;
+    border-radius: 4px;
+    min-height: 36px;
   }
-  .pkg-del-btn {
-    width: 32px;
-    height: 32px;
-    border: 1px solid #D9D9D9;
+  .selected-services .service-tag {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 12px;
+    background: #e6f7ff;
+    border: 1px solid #91d5ff;
+    border-radius: 4px;
+    font-size: 13px;
+    color: #1890ff;
+  }
+
+  .form-textarea {
+    resize: vertical;
+  }
+  /* 沙箱名称标签 */
+  .sandbox-name-tag {
+    display: inline-block;
+    background: #e8f4fd;
+    color: #1890ff;
+    padding: 4px 12px;
+    border-radius: 4px;
+    font-size: 13px;
+    line-height: 20px;
+  }
+  /* 自定义多选下拉框 */
+  .multi-select-container {
+    position: relative;
+    width: 100%;
+    z-index: 20;
+  }
+  .multi-select-header {
+    display: flex;
+    align-items: center;
+    min-height: 38px;
+    padding: 6px 10px;
+    border: 1px solid #ddd;
     border-radius: 4px;
     background: #fff;
-    color: #999;
-    font-size: 16px;
     cursor: pointer;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .multi-select-header:hover {
+    border-color: #3498db;
+  }
+  .multi-select-header.open {
+    border-color: #3498db;
+    box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.12);
+  }
+  .multi-select-tags {
+    flex: 1;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    align-items: center;
+  }
+  .multi-select-placeholder {
+    color: #999;
+    font-size: 14px;
+  }
+  .multi-select-tag {
+    display: inline-flex;
+    align-items: center;
+    padding: 2px 8px;
+    background: #e8f4fc;
+    border-radius: 4px;
+    font-size: 13px;
+    color: #333;
+  }
+  .multi-select-tag .tag-close {
+    margin-left: 6px;
+    cursor: pointer;
+    color: #666;
+    font-size: 14px;
+    line-height: 1;
+  }
+  .multi-select-tag .tag-close:hover {
+    color: #333;
+  }
+  .multi-select-arrow {
+    font-size: 10px;
+    color: #666;
+    margin-left: 8px;
+    transition: transform 0.2s;
+  }
+  .multi-select-arrow.up {
+    transform: rotate(180deg);
+  }
+  .multi-select-dropdown {
+    display: none;
+    position: absolute;
+    top: 100%;
+    margin-top: 6px;
+    left: 0;
+    right: 0;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+    z-index: 1200;
+    max-height: 220px;
+    overflow-y: auto;
+  }
+  .multi-select-dropdown.open {
+    display: block;
+  }
+  .multi-select-option {
+    display: flex;
+    align-items: center;
+    padding: 10px 12px;
+    cursor: pointer;
+    font-size: 14px;
+    color: #333;
+  }
+  .multi-select-option:hover {
+    background: #f5f9fc;
+  }
+  .multi-select-option.selected {
+    background: #e8f4fc;
+  }
+  .multi-select-option .checkbox {
+    width: 16px;
+    height: 16px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    margin-right: 10px;
     display: flex;
     align-items: center;
     justify-content: center;
+    background: #fff;
     flex-shrink: 0;
-    transition: all 0.2s;
   }
-  .pkg-del-btn:hover {
-    border-color: #e53e3e;
-    color: #e53e3e;
+  .multi-select-option.selected .checkbox {
+    background: #3498db;
+    border-color: #3498db;
   }
-  .pkg-del-btn.disabled {
+  .multi-select-option.selected .checkbox::after {
+    content: '✓';
+    color: #fff;
+    font-size: 12px;
+  }
+  .multi-select-option.disabled {
+    color: #bbb;
     cursor: not-allowed;
-    opacity: 0.4;
+    background: #fafafa;
   }
-  .pkg-del-btn.disabled:hover {
-    border-color: #D9D9D9;
-    color: #999;
+  .multi-select-option.disabled:hover {
+    background: #fafafa;
+  }
+  .multi-select-option.disabled .checkbox {
+    background: #f0f0f0;
+    border-color: #ddd;
+  }
+  .service-tag {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 10px;
+    background: #e8f4fc;
+    border-radius: 4px;
+    font-size: 13px;
+    color: #333;
+    margin: 2px;
+  }
+  .service-tag .tag-close {
+    margin-left: 6px;
+    cursor: pointer;
+    color: #666;
+  }
+  .service-tag .tag-close:hover {
+    color: #333;
   }
 </style>
 
 <script>
-  // 复制文本功能
-  function copyText(text) {
-    navigator.clipboard.writeText(text).then(() => {
-      alert('已复制: ' + text);
-    });
-  }
-
   // 图标栏交互
   document.querySelectorAll('.icon-item').forEach(item => {
     item.addEventListener('click', function() {
@@ -1675,139 +1822,7 @@
     });
   });
 
-  // 创建模板弹窗
-  const PKG_TYPES = ['apt', 'cargo', 'gem', 'go', 'npm', 'pip'];
-  const PKG_VERSIONS = {
-    apt: ['最新版本', '1.0', '2.0', '3.0'],
-    cargo: ['最新版本', '0.1', '0.2', '1.0'],
-    gem: ['最新版本', '1.0', '2.0', '3.0'],
-    go: ['最新版本', '1.19', '1.20', '1.21', '1.22'],
-    npm: ['最新版本', '6.x', '8.x', '9.x', '10.x'],
-    pip: ['最新版本', '22.0', '23.0', '24.0']
-  };
-  let pkgRowCounter = 0;
-
-  document.getElementById('create-template-btn').addEventListener('click', function() {
-    document.getElementById('create-template-modal').classList.add('active');
-    // 重置
-    document.getElementById('pkg-rows').innerHTML = '';
-    pkgRowCounter = 0;
-    // 默认添加一行
-    addPkgRow();
-  });
-
-  function closeCreateTemplateModal() {
-    document.getElementById('create-template-modal').classList.remove('active');
-  }
-
-  function getUsedPkgTypes() {
-    const used = [];
-    document.querySelectorAll('#pkg-rows .pkg-type-select').forEach(sel => {
-      if (sel.value) used.push(sel.value);
-    });
-    return used;
-  }
-
-  function updatePkgTypeOptions() {
-    const used = getUsedPkgTypes();
-    document.querySelectorAll('#pkg-rows .pkg-type-select').forEach(sel => {
-      const currentVal = sel.value;
-      PKG_TYPES.forEach(type => {
-        const opt = sel.querySelector('option[value="' + type + '"]');
-        if (opt) {
-          opt.hidden = (used.includes(type) && type !== currentVal);
-        }
-      });
-    });
-  }
-
-  function updateVersionOptions(typeSelect) {
-    const type = typeSelect.value;
-    const row = typeSelect.closest('.pkg-row');
-    const verSel = row.querySelector('.pkg-ver-select');
-    if (!type) {
-      verSel.innerHTML = '<option value="">请先选择安装包</option>';
-      verSel.disabled = true;
-      return;
-    }
-    verSel.disabled = false;
-    const versions = PKG_VERSIONS[type] || ['最新版本'];
-    verSel.innerHTML = versions.map(v => '<option value="' + v + '">' + v + '</option>').join('');
-  }
-
-  function addPkgRow() {
-    pkgRowCounter++;
-    const rowId = 'pkg-row-' + pkgRowCounter;
-    const used = getUsedPkgTypes();
-    const row = document.createElement('div');
-    row.className = 'pkg-row';
-    row.id = rowId;
-
-    let typeOpts = '<option value="">请选择安装包</option>';
-    PKG_TYPES.forEach(type => {
-      if (!used.includes(type)) {
-        typeOpts += '<option value="' + type + '">' + type + '</option>';
-      }
-    });
-
-    row.innerHTML =
-      '<select class="form-select pkg-type-select" onchange="onPkgTypeChange(this)">' + typeOpts + '</select>' +
-      '<select class="form-select pkg-ver-select" disabled><option value="">请先选择安装包</option></select>' +
-      '<button class="pkg-del-btn" onclick="removePkgRow(\'' + rowId + '\')" title="删除">×</button>';
-
-    document.getElementById('pkg-rows').appendChild(row);
-    updateDelBtns();
-  }
-
-  function onPkgTypeChange(sel) {
-    updatePkgTypeOptions();
-    updateVersionOptions(sel);
-  }
-
-  function removePkgRow(rowId) {
-    const rows = document.querySelectorAll('#pkg-rows .pkg-row');
-    if (rows.length <= 1) return; // 最少保留一个
-    const row = document.getElementById(rowId);
-    if (row) {
-      row.remove();
-      updatePkgTypeOptions();
-      updateDelBtns();
-    }
-  }
-
-  function updateDelBtns() {
-    const rows = document.querySelectorAll('#pkg-rows .pkg-row');
-    rows.forEach(row => {
-      const btn = row.querySelector('.pkg-del-btn');
-      if (rows.length <= 1) {
-        btn.classList.add('disabled');
-      } else {
-        btn.classList.remove('disabled');
-      }
-    });
-  }
-
-  function createTemplate() {
-    const rows = document.querySelectorAll('#pkg-rows .pkg-row');
-    let valid = true;
-    rows.forEach(row => {
-      const type = row.querySelector('.pkg-type-select').value;
-      if (!type) valid = false;
-    });
-    if (!valid) {
-      alert('请选择安装包类型');
-      return;
-    }
-    alert('模板创建成功！');
-    closeCreateTemplateModal();
-  }
-
-  document.getElementById('create-template-modal').addEventListener('click', function(e) {
-    if (e.target === this) {
-      closeCreateTemplateModal();
-    }
-  });
-
+  // 菜单展开/收起交互
   document.querySelectorAll('.menu-item').forEach(item => {
     const arrow = item.querySelector('.menu-arrow');
     if (arrow) {
@@ -1848,6 +1863,213 @@
           return;
         }
       });
+    }
+  });
+
+  // 设置策略弹窗
+  let currentSandboxName = '';
+  document.querySelectorAll('.set-policy-btn').forEach(btn => {
+    btn.addEventListener('click', function(e) {
+      e.preventDefault();
+      currentSandboxName = this.dataset.sandbox;
+      document.getElementById('set-sandbox-name').value = currentSandboxName;
+      
+      openSetPolicyModal();
+    });
+  });
+
+  function closeSetPolicyModal() {
+    document.getElementById('set-policy-modal').classList.remove('active');
+    selectedPolicyIds = [];
+    setPolicyDropdownState(false);
+    renderPolicyTags();
+    renderPolicyOptions();
+    document.getElementById('selected-services-list').innerHTML = '';
+    document.getElementById('selected-services-group').style.display = 'none';
+    currentSandboxName = '';
+  }
+
+  // 多选下拉框相关函数
+  let selectedPolicyIds = [];
+
+  function openSetPolicyModal() {
+    const modal = document.getElementById('set-policy-modal');
+    modal.classList.add('active');
+    selectedPolicyIds = [];
+    setPolicyDropdownState(false);
+    renderPolicyTags();
+    renderPolicyOptions();
+    document.getElementById('selected-services-list').innerHTML = '';
+    document.getElementById('selected-services-group').style.display = 'none';
+    // 设置沙箱名称标签
+    document.getElementById('set-sandbox-name').textContent = currentSandboxName || '';
+  }
+
+  function setPolicyDropdownState(isOpen) {
+    const dropdown = document.getElementById('policy-dropdown');
+    const arrow = document.getElementById('policy-arrow');
+    const header = document.querySelector('#policy-multi-select .multi-select-header');
+    if (dropdown) dropdown.classList.toggle('open', isOpen);
+    if (arrow) arrow.classList.toggle('up', isOpen);
+    if (header) header.classList.toggle('open', isOpen);
+  }
+
+  function togglePolicyDropdown() {
+    const dropdown = document.getElementById('policy-dropdown');
+    if (!dropdown) return;
+    setPolicyDropdownState(!dropdown.classList.contains('open'));
+  }
+
+  function selectPolicy(id, name) {
+    const policies = JSON.parse(localStorage.getItem('sandboxPolicies') || '[]');
+    const targetPolicy = policies.find(p => p.id === id);
+    if (!targetPolicy) return;
+
+    const idx = selectedPolicyIds.indexOf(id);
+    if (idx > -1) {
+      // 取消选中，直接移除
+      selectedPolicyIds.splice(idx, 1);
+    } else {
+      // 选中前校验
+      const targetType = targetPolicy.accessType;
+      const isIsolated = (targetType === 'sandbox-intranet' || targetType === 'public-network');
+      // 已选策略中是否有内网或公网类型
+      const selectedPolicies = policies.filter(p => selectedPolicyIds.includes(p.id));
+      const hasIsolated = selectedPolicies.some(sp => sp.accessType === 'sandbox-intranet' || sp.accessType === 'public-network');
+      if (isIsolated) {
+        // 内网或公网策略只能单独选择，不能再选别的
+        if (selectedPolicyIds.length > 0) {
+          alert('沙箱内网或公网类型策略不支持与其他策略同时选择');
+          return;
+        }
+      } else {
+        // 已选内网或公网策略时，不能再选其他策略
+        if (hasIsolated) {
+          alert('沙箱内网或公网类型策略不支持与其他策略同时选择');
+          return;
+        }
+      }
+      selectedPolicyIds.push(id);
+    }
+    renderPolicyTags();
+    renderPolicyOptions();
+    updateSelectedServices();
+  }
+
+  function removePolicy(id, e) {
+    if (e) e.stopPropagation();
+    const idx = selectedPolicyIds.indexOf(id);
+    if (idx > -1) {
+      selectedPolicyIds.splice(idx, 1);
+    }
+    renderPolicyTags();
+    renderPolicyOptions();
+    updateSelectedServices();
+  }
+
+  function renderPolicyTags() {
+    const container = document.getElementById('selected-policy-tags');
+    if (!container) return;
+    if (selectedPolicyIds.length === 0) {
+      container.innerHTML = '<span class="multi-select-placeholder">请选择网络策略</span>';
+      return;
+    }
+    const policies = JSON.parse(localStorage.getItem('sandboxPolicies') || '[]');
+    container.innerHTML = selectedPolicyIds.map(id => {
+      const policy = policies.find(p => p.id === id);
+      const name = policy ? policy.name : id;
+      return `<span class="multi-select-tag">${name}<span class="tag-close" onclick="removePolicy('${id}', event)">×</span></span>`;
+    }).join('');
+  }
+
+  function renderPolicyOptions() {
+    const container = document.getElementById('policy-options-list');
+    if (!container) return;
+    const policies = JSON.parse(localStorage.getItem('sandboxPolicies') || '[]');
+    if (policies.length === 0) {
+      container.innerHTML = '<div class="multi-select-option" style="color:#999;">暂无网络策略</div>';
+      return;
+    }
+    // 判断当前是否已选了内网或公网策略
+    const selectedPolicies = policies.filter(p => selectedPolicyIds.includes(p.id));
+    const hasIsolated = selectedPolicies.some(sp => sp.accessType === 'sandbox-intranet' || sp.accessType === 'public-network');
+    container.innerHTML = policies.map(p => {
+      const isSelected = selectedPolicyIds.includes(p.id);
+      const isIsolated = (p.accessType === 'sandbox-intranet' || p.accessType === 'public-network');
+      let isDisabled = false;
+      if (hasIsolated && !isSelected) {
+        // 已选内网/公网时，其他所有选项禁用
+        isDisabled = true;
+      } else if (!hasIsolated && isIsolated && selectedPolicyIds.length > 0) {
+        // 已选了VPC/私网策略时，内网/公网选项禁用
+        isDisabled = true;
+      }
+      const cls = ['multi-select-option'];
+      if (isSelected) cls.push('selected');
+      if (isDisabled) cls.push('disabled');
+      const clickHandler = isDisabled ? '' : `onclick="selectPolicy('${p.id}', '${p.name}')"`;
+      return `<div class="${cls.join(' ')}" ${clickHandler}><span class="checkbox"></span>${p.name}</div>`;
+    }).join('');
+  }
+
+  function updateSelectedServices() {
+    const container = document.getElementById('selected-services-list');
+    const group = document.getElementById('selected-services-group');
+    if (!container || !group) return;
+    if (selectedPolicyIds.length === 0) {
+      container.innerHTML = '';
+      group.style.display = 'none';
+      return;
+    }
+    const policies = JSON.parse(localStorage.getItem('sandboxPolicies') || '[]');
+    const selectedPolicies = policies.filter(p => selectedPolicyIds.includes(p.id));
+    let html = '';
+    selectedPolicies.forEach(p => {
+      const accessType = p.accessType || 'sandbox-intranet';
+      let objContent = '';
+      if (accessType === 'sandbox-intranet' || accessType === 'public-network') {
+        objContent = '-';
+      } else if (accessType === 'vpc-network') {
+        objContent = (p.vpcnetwork || '') + '<br>' + (p.subnet || '');
+      } else if (accessType === 'private-connection') {
+        objContent = (p.service || '') + '<br>' + (p.domain || '');
+      }
+      html += '<div style="margin-bottom:8px;"><div style="font-weight:500;color:#333;margin-bottom:2px;">' + (p.name || '') + '</div><div style="color:#666;font-size:13px;padding-left:8px;">' + objContent + '</div></div>';
+    });
+    container.innerHTML = html || '<span style="color:#999;">暂无访问对象</span>';
+    group.style.display = 'block';
+  }
+
+  // 点击外部关闭下拉框
+  document.addEventListener('click', function(e) {
+    const container = document.getElementById('policy-multi-select');
+    if (container && !container.contains(e.target)) {
+      setPolicyDropdownState(false);
+    }
+  });
+
+  function createPolicyFromSandbox() {
+    if (selectedPolicyIds.length === 0) { alert('请选择网络策略'); return; }
+
+    const policies = JSON.parse(localStorage.getItem('sandboxPolicies') || '[]');
+    const selectedPolicies = policies.filter(p => selectedPolicyIds.includes(p.id));
+    const policyNames = selectedPolicies.map(p => p.name).join(', ');
+
+    const sandboxPolicies = JSON.parse(localStorage.getItem('sandboxSandboxPolicies') || '[]');
+    sandboxPolicies.push({
+      sandbox: currentSandboxName,
+      policyIds: selectedPolicyIds.slice(),
+      policyNames: policyNames
+    });
+    localStorage.setItem('sandboxSandboxPolicies', JSON.stringify(sandboxPolicies));
+
+    alert('策略关联成功！');
+    closeSetPolicyModal();
+  }
+
+  document.getElementById('set-policy-modal').addEventListener('click', function(e) {
+    if (e.target === this) {
+      closeSetPolicyModal();
     }
   });
 </script>

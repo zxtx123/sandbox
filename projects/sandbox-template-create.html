@@ -1316,129 +1316,135 @@
   <!-- 第三栏：右侧主内容 -->
   <div class="main-content">
     <div class="breadcrumb">
-      <span class="breadcrumb-left" id="menu-name-display">沙箱模板</span>
-      <a class="breadcrumb-link" id="menu-link-display">Sandbox 帮助文档</a>
+      <span class="breadcrumb-left" id="menu-name-display">
+        <a href="sandbox-template.html" style="color: #666; text-decoration: none;">沙箱模板</a>
+        <span style="margin: 0 8px; color: #999;">&gt;</span>
+        <span style="color: #333;">创建模板</span>
+      </span>
     </div>
     <div class="content-body">
-      <div class="product-list-page">
-        <!-- 工具栏 -->
-        <div class="product-toolbar">
-          <div class="toolbar-left">
-            <a class="btn btn-primary" href="sandbox-template-create.html" style="display:inline-flex; align-items:center; gap:8px;">
-              <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
-                <path d="M8 2v12M2 8h12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-              </svg>
-              创建模板
-            </a>
+      <div class="product-list-page" style="padding: 24px; background: #fff; border-radius: 4px; height: 100%; overflow-y: auto;">
+        
+        <div class="form-group" style="margin-bottom: 24px; display: flex; align-items: flex-start; width: 100%;">
+          <label class="form-label" style="width: 140px; flex-shrink: 0; margin-bottom: 0; font-weight: 500; line-height: 32px;">名称 <span class="required">*</span></label>
+          <div class="form-control" style="flex: 1; max-width: 100%;">
+            <input type="text" class="form-input" placeholder="sandbox-custom-ch3r8g" style="width: 100%;">
           </div>
-          <div class="toolbar-right">
-            <div class="search-box">
-              <input type="text" id="sandbox-search" placeholder="请输入模板ID">
-              <button class="search-btn">
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                  <circle cx="7" cy="7" r="5" stroke="currentColor" stroke-width="1.5" fill="none"/>
-                  <path d="M11 11l3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-                </svg>
+        </div>
+
+        <div class="form-group" style="margin-bottom: 24px; display: flex; align-items: flex-start; width: 100%;">
+          <label class="form-label" style="width: 140px; flex-shrink: 0; margin-bottom: 0; font-weight: 500; line-height: 32px;">描述</label>
+          <div class="form-control" style="flex: 1; max-width: 100%;">
+            <textarea class="form-input" placeholder="请描述此自定义沙箱的用途和使用场景" style="width: 100%; height: 80px; padding: 8px 10px; resize: vertical;"></textarea>
+          </div>
+        </div>
+
+        <div class="form-group" style="margin-bottom: 24px; display: flex; align-items: flex-start; width: 100%;">
+          <label class="form-label" style="width: 140px; flex-shrink: 0; margin-bottom: 0; font-weight: 500; line-height: 32px;">API密钥 <span class="required">*</span></label>
+          <div style="flex: 1; max-width: 100%;">
+            <div style="display: flex; gap: 8px;">
+              <select class="form-input" style="flex: 1; appearance: auto; background: #fff;">
+                <option value="">选择 API Key</option>
+              </select>
+              <button class="btn btn-default" style="width: 32px; padding: 0; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M14 8A6 6 0 118 2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M14 2v4h-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
               </button>
             </div>
-            <button class="refresh-btn" title="刷新">
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                <path d="M14 8A6 6 0 118 2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-                <path d="M14 2v4h-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </button>
           </div>
         </div>
-        
-        <!-- 表格 -->
-        <div class="product-table">
-          <div class="table-wrapper">
-            <table>
-            <thead>
-              <tr>
-                <th>模板ID</th>
-                <th>模板名称</th>
-                <th>CPU</th>
-                <th>内存(Memory)</th>
-                <th>创建时间</th>
-                <th>更新时间</th>
-                <th>可见性</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td class="id-cell">zs47yil2jbkdf73nali2<span class="copy-icon" onclick="copyText('zs47yil2jbkdf73nali2')">📋</span></td>
-                <td class="template-name">code-interpreter-v1</td>
-                <td>2</td>
-                <td>1024MB</td>
-                <td>2025-09-12 17:24:45</td>
-                <td>2025-09-12 17:24:45</td>
-                <td><span class="visibility-badge">Public</span></td>
-              </tr>
-              <tr>
-                <td class="id-cell">y0ad1vs1k72ijelq7jjy<span class="copy-icon" onclick="copyText('y0ad1vs1k72ijelq7jjy')">📋</span></td>
-                <td class="template-name">desktop</td>
-                <td>2</td>
-                <td>1024MB</td>
-                <td>2025-09-22 15:10:28</td>
-                <td>2025-09-22 15:10:28</td>
-                <td><span class="visibility-badge">Public</span></td>
-              </tr>
-              <tr>
-                <td class="id-cell">kqepe5sjnv9hrcxzxe2g<span class="copy-icon" onclick="copyText('kqepe5sjnv9hrcxzxe2g')">📋</span></td>
-                <td class="template-name">chrome-template</td>
-                <td>2</td>
-                <td>1024MB</td>
-                <td>2025-11-12 15:36:52</td>
-                <td>2025-11-12 15:36:55</td>
-                <td><span class="visibility-badge">Public</span></td>
-              </tr>
-            </tbody>
-          </table>
+
+        <div class="form-group" style="margin-bottom: 24px; display: flex; align-items: flex-start; width: 100%;">
+          <label class="form-label" style="width: 140px; flex-shrink: 0; margin-bottom: 0; font-weight: 500; line-height: 32px;">资源配置 <span class="required">*</span></label>
+          <div style="flex: 1; max-width: 100%; background: #F8F9FA; padding: 16px; border-radius: 4px; border: 1px solid #E6E6E6; display: flex; gap: 16px;">
+            <div style="flex: 1;">
+              <label style="display: block; margin-bottom: 8px; font-size: 12px; color: #666;">CPU核数</label>
+              <select class="form-input" style="width: 100%; appearance: auto; background: #fff;">
+                <option value="4">4 核</option>
+              </select>
+            </div>
+            <div style="flex: 1;">
+              <label style="display: block; margin-bottom: 8px; font-size: 12px; color: #666;">内存大小</label>
+              <select class="form-input" style="width: 100%; appearance: auto; background: #fff;">
+                <option value="8">8 GB</option>
+              </select>
+            </div>
+            <div style="flex: 1;">
+              <label style="display: block; margin-bottom: 8px; font-size: 12px; color: #666;">临时磁盘空间</label>
+              <select class="form-input" style="width: 100%; appearance: auto; background: #fff;">
+                <option value="10">10 GB</option>
+              </select>
+            </div>
           </div>
         </div>
-        
-        <!-- 翻页组件 -->
-        <div class="pagination-bar">
-          <div class="pagination-left">共3条记录 第1/1页</div>
+
+        <div class="form-group" style="margin-bottom: 24px; display: flex; align-items: flex-start; width: 100%;">
+          <label class="form-label" style="width: 140px; flex-shrink: 0; margin-bottom: 0; font-weight: 500; line-height: 32px;">自定义运行时环境 <span class="required">*</span></label>
+          <div style="flex: 1; max-width: 100%; background: #F8F9FA; padding: 16px; border-radius: 4px; border: 1px solid #E6E6E6;">
+            <div style="margin-bottom: 16px;">
+              <label style="display: block; margin-bottom: 8px; font-size: 12px; color: #666;">镜像仓库</label>
+              <div style="display: flex; gap: 8px;">
+                <select class="form-input" style="flex: 1; appearance: auto; background: #fff;">
+                  <option value="">选择镜像仓库</option>
+                </select>
+                <button class="btn btn-default" style="width: 32px; padding: 0; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                  <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M14 8A6 6 0 118 2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M14 2v4h-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </button>
+              </div>
+            </div>
+            <div style="margin-bottom: 16px;">
+              <label style="display: block; margin-bottom: 8px; font-size: 12px; color: #666;">选择镜像</label>
+              <div style="display: flex; gap: 8px;">
+                <select class="form-input" style="flex: 1; appearance: auto; background: #fff;">
+                  <option value="">选择镜像</option>
+                </select>
+                <button class="btn btn-default" style="width: 32px; padding: 0; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                  <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M14 8A6 6 0 118 2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M14 2v4h-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </button>
+              </div>
+            </div>
+            <div>
+              <label style="display: block; margin-bottom: 8px; font-size: 12px; color: #666;">选择版本</label>
+              <div style="display: flex; gap: 8px;">
+                <select class="form-input" style="flex: 1; appearance: auto; background: #fff;">
+                  <option value="">选择版本</option>
+                </select>
+              </div>
+            </div>
+          </div>
         </div>
+
+        <div class="form-group" style="margin-bottom: 24px; display: flex; align-items: flex-start; width: 100%;">
+          <label class="form-label" style="width: 140px; flex-shrink: 0; margin-bottom: 0; font-weight: 500; line-height: 32px;">启动配置</label>
+          <div style="flex: 1; max-width: 100%; background: #F8F9FA; padding: 16px; border-radius: 4px; border: 1px solid #E6E6E6; display: flex; gap: 16px;">
+            <div style="flex: 2;">
+              <label style="display: block; margin-bottom: 8px; font-size: 12px; color: #666;">启动命令</label>
+              <input type="text" class="form-input" placeholder="例如: ls -la /home/user" style="width: 100%; background: #fff;">
+            </div>
+            <div style="flex: 1;">
+              <label style="display: block; margin-bottom: 8px; font-size: 12px; color: #666;">端口</label>
+              <input type="text" class="form-input" value="5000" style="width: 100%; background: #fff;">
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group" style="margin-bottom: 24px; display: flex; align-items: flex-start; width: 100%;">
+          <label class="form-label" style="width: 140px; flex-shrink: 0; margin-bottom: 0; font-weight: 500; line-height: 32px;">包管理</label>
+          <div style="flex: 1; max-width: 100%; background: #F8F9FA; padding: 16px; border-radius: 4px; border: 1px solid #E6E6E6;">
+            <button type="button" class="btn btn-default pkg-add-row-btn" onclick="addPkgRow()">+ 添加包</button>
+            <div id="pkg-rows" class="pkg-rows"></div>
+          </div>
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 32px;">
+          <a href="sandbox-template.html" class="btn btn-default">取消</a>
+          <a href="sandbox-template.html" class="btn btn-primary">创建</a>
+        </div>
+
       </div>
     </div>
   </div>
 </div>
 
-<!-- 创建模板弹窗 -->
-<div class="modal-overlay" id="create-template-modal">
-  <div class="modal-dialog">
-    <div class="modal-header">
-      <h3 class="modal-title">创建模板</h3>
-      <button class="modal-close" onclick="closeCreateTemplateModal()">&times;</button>
-    </div>
-    <div class="modal-body">
-      <div class="form-group">
-        <label class="form-label">基础镜像 <span class="required">*</span></label>
-        <div class="form-control">
-          <input type="text" class="form-input" id="base-image" value="harbor.qihoo.net/e2b-infra/code-interpreter:latest" readonly style="background:#f5f5f5;color:#666;">
-        </div>
-      </div>
-      <div class="form-group">
-        <label class="form-label">安装包</label>
-        <div class="form-control" style="flex-direction:column;align-items:stretch;">
-          <button class="btn btn-primary pkg-add-row-btn" onclick="addPkgRow()">
-            <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 1v10M1 6h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
-            添加安装包
-          </button>
-          <div class="pkg-rows" id="pkg-rows">
-            <!-- 动态行 -->
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="modal-footer">
-      <button class="btn btn-default" onclick="closeCreateTemplateModal()">取消</button>
-      <button class="btn btn-primary" onclick="createTemplate()">创建</button>
-    </div>
-  </div>
 </div>
 
 <style>
@@ -1675,29 +1681,24 @@
     });
   });
 
-  // 创建模板弹窗
+
+
   const PKG_TYPES = ['apt', 'cargo', 'gem', 'go', 'npm', 'pip'];
   const PKG_VERSIONS = {
-    apt: ['最新版本', '1.0', '2.0', '3.0'],
-    cargo: ['最新版本', '0.1', '0.2', '1.0'],
-    gem: ['最新版本', '1.0', '2.0', '3.0'],
-    go: ['最新版本', '1.19', '1.20', '1.21', '1.22'],
-    npm: ['最新版本', '6.x', '8.x', '9.x', '10.x'],
-    pip: ['最新版本', '22.0', '23.0', '24.0']
+    apt: ['latest', 'stable'],
+    cargo: ['latest', '1.88', '1.87'],
+    gem: ['latest', '3.6', '3.5'],
+    go: ['latest', '1.24', '1.23'],
+    npm: ['latest', '11', '10'],
+    pip: ['latest', '25', '24']
   };
   let pkgRowCounter = 0;
 
-  document.getElementById('create-template-btn').addEventListener('click', function() {
-    document.getElementById('create-template-modal').classList.add('active');
-    // 重置
-    document.getElementById('pkg-rows').innerHTML = '';
-    pkgRowCounter = 0;
-    // 默认添加一行
-    addPkgRow();
-  });
-
   function closeCreateTemplateModal() {
-    document.getElementById('create-template-modal').classList.remove('active');
+    const modal = document.getElementById('create-template-modal');
+    if (modal) {
+      modal.classList.remove('active');
+    }
   }
 
   function getUsedPkgTypes() {
@@ -1779,6 +1780,7 @@
     const rows = document.querySelectorAll('#pkg-rows .pkg-row');
     rows.forEach(row => {
       const btn = row.querySelector('.pkg-del-btn');
+      if (!btn) return;
       if (rows.length <= 1) {
         btn.classList.add('disabled');
       } else {
@@ -1802,11 +1804,18 @@
     closeCreateTemplateModal();
   }
 
-  document.getElementById('create-template-modal').addEventListener('click', function(e) {
-    if (e.target === this) {
-      closeCreateTemplateModal();
-    }
-  });
+  const createTemplateModal = document.getElementById('create-template-modal');
+  if (createTemplateModal) {
+    createTemplateModal.addEventListener('click', function(e) {
+      if (e.target === this) {
+        closeCreateTemplateModal();
+      }
+    });
+  }
+
+  if (document.getElementById('pkg-rows')) {
+    addPkgRow();
+  }
 
   document.querySelectorAll('.menu-item').forEach(item => {
     const arrow = item.querySelector('.menu-arrow');
