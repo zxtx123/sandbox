@@ -3,18 +3,18 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>沙箱模板 - 360智汇云</title>
+  <title>创建沙箱实例 - 360智汇云</title>
   <style>
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
     }
-    
+
     a {
       text-decoration: none;
     }
-    
+
     body {
       font-family: "Microsoft YaHei", "PingFang SC", -apple-system, BlinkMacSystemFont, sans-serif;
       background: #F0F5F7;
@@ -626,28 +626,6 @@
       min-height: 0;
     }
 
-    .product-toolbar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 16px 20px;
-      border-bottom: 1px solid #E9ECEF;
-      gap: 12px;
-      flex-shrink: 0;
-    }
-
-    .toolbar-left {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .toolbar-right {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
     .btn {
       height: 32px;
       padding: 0 12px;
@@ -682,380 +660,104 @@
       color: #0066FF;
     }
 
-    .search-box {
+    /* ========== 沙箱类型选择卡片 ========== */
+    .sandbox-type-group {
       display: flex;
-      align-items: center;
-      border: 1px solid #D9D9D9;
-      border-radius: 4px;
-      padding: 0 12px;
-      background: #fff;
+      gap: 16px;
+      margin-bottom: 32px;
     }
 
-    .search-box input {
-      border: none;
-      outline: none;
-      padding: 8px 0;
-      font-size: 14px;
-      width: 200px;
-    }
-
-    .search-box input::placeholder {
-      color: #999;
-    }
-
-    .search-btn {
-      border: none;
-      background: none;
+    .sandbox-type-card {
+      flex: 1;
+      max-width: 240px;
+      border: 1px solid #E6E6E6;
+      border-radius: 6px;
+      padding: 16px;
       cursor: pointer;
-      color: #999;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 0;
-      margin-left: 8px;
-      height: 32px;
-    }
-
-    .search-btn:hover {
-      color: #0066FF;
-    }
-
-    .clear-btn {
-      border: none;
-      background: none;
-      cursor: pointer;
-      color: #999;
-      font-size: 14px;
-      padding: 0 0 0 8px;
-      margin-left: 4px;
-      height: 32px;
-      display: flex;
-      align-items: center;
-    }
-
-    .clear-btn:hover {
-      color: #666;
-    }
-
-    .refresh-btn {
-      width: 34px;
-      height: 34px;
-      border: 1px solid #D9D9D9;
-      background: #fff;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      color: #666;
-      border-radius: 4px;
-      margin-left: 8px;
-    }
-
-    .refresh-btn:hover {
-      border-color: #0066FF;
-      color: #0066FF;
-    }
-
-    .search-icon {
-      color: #999;
-      display: flex;
-      align-items: center;
-    }
-
-    .icon-btn {
-      width: 32px;
-      height: 32px;
-      border: 1px solid #D9D9D9;
-      border-radius: 4px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      background: #fff;
-      color: #666;
+      position: relative;
       transition: all 0.2s;
+      background: #fff;
     }
 
-    .icon-btn:hover {
+    .sandbox-type-card:hover {
       border-color: #0066FF;
-      color: #0066FF;
     }
 
-    .pagination-info {
+    .sandbox-type-card.active {
+      border-color: #0066FF;
+      background: #F0F5FF;
+    }
+
+    .sandbox-type-card.active::after {
+      content: '✓';
+      position: absolute;
+      top: 8px;
+      right: 10px;
+      color: #0066FF;
+      font-weight: 700;
+    }
+
+    .sandbox-type-card.disabled {
+      cursor: not-allowed;
+      opacity: 0.6;
+      background: #F8F9FA;
+    }
+
+    .sandbox-type-card.disabled:hover {
+      border-color: #E6E6E6;
+    }
+
+    .sandbox-type-card .type-title {
+      font-size: 15px;
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 6px;
       display: flex;
       align-items: center;
-      gap: 8px;
-      font-size: 14px;
-      color: #666;
+      gap: 6px;
     }
 
-    .product-table {
-      flex: 1;
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      min-height: 0;
+    .sandbox-type-card .type-desc {
+      font-size: 12px;
+      color: #888;
+      line-height: 1.5;
     }
 
-    .product-table .table-wrapper {
-      flex: 1;
-      overflow: auto;
-      min-height: 0;
-    }
-
-    .product-table table {
-      width: 100%;
-      border-collapse: collapse;
-    }
-
-    .product-table thead {
-      position: sticky;
-      top: 0;
-      z-index: 1;
-    }
-
-    .product-table th {
-      background: #F8F9FA;
-      padding: 12px 16px;
-      text-align: left;
-      font-size: 14px;
-      font-weight: 500;
-      color: #333;
-      border-bottom: 1px solid #E9ECEF;
-      white-space: nowrap;
-    }
-
-    .product-table th .filter-icon {
-      margin-left: 4px;
-      cursor: pointer;
+    .type-soon-badge {
+      position: absolute;
+      top: 10px;
+      right: 12px;
+      font-size: 11px;
       color: #999;
+      background: #EAECEF;
+      border-radius: 10px;
+      padding: 1px 8px;
     }
 
-    .product-table th .filter-icon:hover {
-      color: #0066FF;
-    }
-
-    .product-table td {
-      padding: 14px 16px;
-      font-size: 14px;
+    /* 表单区块标题 */
+    .form-section-title {
+      font-size: 15px;
+      font-weight: 600;
       color: #333;
+      margin-bottom: 20px;
+      padding-bottom: 12px;
       border-bottom: 1px solid #F0F0F0;
     }
 
-    .product-table tbody tr:hover {
-      background: #F8F9FA;
-    }
-
-    /* 空状态样式 */
-    .empty-state {
-      padding: 60px 0 !important;
-      text-align: center;
-    }
-
-    .empty-icon {
-      color: #D9D9D9;
-      margin-bottom: 16px;
-    }
-
-    .empty-text {
-      font-size: 14px;
-      color: #999;
-    }
-
-    /* 翻页组件样式 */
-    .pagination-bar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 12px 20px;
-      border-top: 1px solid #E9ECEF;
-      background: #fff;
-      flex-shrink: 0;
-    }
-
-    .pagination-left {
-      font-size: 14px;
-      color: #666;
-    }
-
-    .pagination-right {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .page-size-select {
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      padding: 0 8px;
-      height: 32px;
-      border: 1px solid #D9D9D9;
-      border-radius: 4px;
-      background: #fff;
-      font-size: 14px;
-      color: #333;
-      cursor: pointer;
-    }
-
-    .page-size-select:hover {
-      border-color: #0066FF;
-    }
-
-    .page-btn {
-      min-width: 32px;
-      height: 32px;
-      padding: 0 8px;
-      border: 1px solid #D9D9D9;
-      border-radius: 4px;
-      background: #fff;
-      font-size: 14px;
-      color: #333;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: all 0.2s;
-    }
-
-    .page-btn:hover:not(.disabled):not(.active) {
-      border-color: #0066FF;
-      color: #0066FF;
-    }
-
-    .page-btn.active {
-      background: #0066FF;
-      border-color: #0066FF;
-      color: #fff;
-    }
-
-    .page-btn.disabled {
-      color: #D9D9D9;
-      cursor: not-allowed;
-    }
-
-    .page-ellipsis {
-      min-width: 32px;
-      height: 32px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 14px;
-      color: #999;
-    }
-
-    .product-name {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .product-checkbox {
-      width: 16px;
-      height: 16px;
-      cursor: pointer;
-    }
-
-    .product-name-text {
-      color: #0066FF;
-      cursor: pointer;
-    }
-
-    .product-name-text:hover {
-      text-decoration: underline;
-    }
-
-    .product-id {
-      color: #999;
-      font-size: 12px;
-      margin-top: 2px;
-    }
-
-    .status-badge {
+    .input-suffix {
       display: inline-flex;
       align-items: center;
-      gap: 4px;
-      padding: 2px 8px;
-      border-radius: 4px;
-      font-size: 12px;
-    }
-
-    .status-normal {
-      background: #E6F7EE;
-      color: #52C41A;
-    }
-
-    .status-error {
-      background: #FFF1F0;
-      color: #FF4D4F;
-    }
-
-    .status-dot {
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-    }
-
-    .status-normal .status-dot {
-      background: #52C41A;
-    }
-
-    .status-error .status-dot {
-      background: #FF4D4F;
-    }
-
-    .tag {
-      display: inline-block;
-      padding: 2px 8px;
-      background: #F0F5FF;
-      color: #0066FF;
-      border-radius: 4px;
-      font-size: 12px;
-    }
-
-    .text-muted {
       color: #999;
+      font-size: 13px;
+      margin-left: 8px;
+      white-space: nowrap;
+      line-height: 32px;
     }
 
-    .id-cell {
-      font-family: monospace;
-      display: flex;
-      align-items: center;
-      gap: 4px;
-    }
-
-    .copy-icon {
-      cursor: pointer;
-      opacity: 0.5;
+    .field-hint {
       font-size: 12px;
-    }
-
-    .copy-icon:hover {
-      opacity: 1;
-    }
-
-    .template-name {
-      color: #333;
-    }
-
-    .visibility-badge {
-      display: inline-block;
-      padding: 2px 8px;
-      background: #E6F7EE;
-      color: #52C41A;
-      border-radius: 4px;
-      font-size: 12px;
-    }
-
-    .action-link {
-      color: #0066FF;
-      text-decoration: none;
-      margin-right: 12px;
-      cursor: pointer;
-    }
-
-    .action-link:hover {
-      text-decoration: underline;
+      color: #999;
+      margin-top: 6px;
     }
   </style>
   <link rel="stylesheet" href="styles/ai-sandbox.css">
@@ -1226,10 +928,10 @@
           <span class="menu-text">AI沙箱 Sandbox</span>
           <span class="menu-arrow"><svg class="star-icon" width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9,0 L6.21763372,5.92433023 L0,6.87455368 L4.5,11.4870539 L3.43727684,18 L9,14.9243307 L14.5627232,18 L13.5,11.4870539 L18,6.87455368 L11.7803574,5.92433023 L9,0 Z" stroke="currentColor" stroke-width="1.5"/></svg></span>
         </div>
-        
+
         <!-- 展开的子菜单：AI沙箱 Sandbox -->
         <div class="submenu-expanded">
-          <div class="menu-item">
+          <div class="menu-item active">
             <div class="menu-icon">
               <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
                 <rect x="2" y="2" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.5" fill="none"/>
@@ -1240,14 +942,14 @@
             </div>
             <a href="index.html"><span class="menu-text">沙箱实例</span></a>
           </div>
-          <div class="menu-item active">
+          <div class="menu-item">
             <div class="menu-icon">
               <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
                 <rect x="2" y="2" width="12" height="12" rx="2" stroke="currentColor" stroke-width="1.5" fill="none"/>
                 <path d="M6 6l2 2 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
               </svg>
             </div>
-            <span class="menu-text">沙箱模板</span>
+            <a href="sandbox-template.html"><span class="menu-text">沙箱模板</span></a>
           </div>
           <div class="menu-item">
             <div class="menu-icon">
@@ -1327,226 +1029,97 @@
   <!-- 第三栏：右侧主内容 -->
   <div class="main-content">
     <div class="breadcrumb">
-      <span class="breadcrumb-left" id="menu-name-display">沙箱模板</span>
-      <a class="breadcrumb-link" id="menu-link-display">Sandbox 帮助文档</a>
+      <span class="breadcrumb-left" id="menu-name-display">
+        <a href="index.html" style="color: #666; text-decoration: none;">沙箱实例</a>
+        <span style="margin: 0 8px; color: #999;">&gt;</span>
+        <span style="color: #333;">创建沙箱实例</span>
+      </span>
     </div>
     <div class="content-body">
-      <div class="product-list-page">
-        <!-- 工具栏 -->
-        <div class="product-toolbar">
-          <div class="toolbar-left">
-            <a class="btn btn-primary" href="sandbox-template-create.html" style="display:inline-flex; align-items:center; gap:8px;">
-              <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
-                <path d="M8 2v12M2 8h12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-              </svg>
-              创建模板
-            </a>
+      <div class="product-list-page" style="padding: 24px; background: #fff; border-radius: 4px; height: 100%; overflow-y: auto;">
+
+        <!-- 沙箱类型选择（预留三类，本版仅代码沙箱可用） -->
+        <div class="form-section-title">选择沙箱类型</div>
+        <div class="sandbox-type-group">
+          <div class="sandbox-type-card active" data-type="code" onclick="selectSandboxType(this)">
+            <div class="type-title">代码沙箱</div>
+            <div class="type-desc">隔离执行 Python / JS 代码，适合 Code Interpreter 场景</div>
           </div>
-          <div class="toolbar-right">
-            <div class="search-box">
-              <input type="text" id="sandbox-search" placeholder="请输入模板ID">
-              <button class="search-btn">
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                  <circle cx="7" cy="7" r="5" stroke="currentColor" stroke-width="1.5" fill="none"/>
-                  <path d="M11 11l3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-                </svg>
-              </button>
+          <div class="sandbox-type-card disabled" data-type="desktop">
+            <span class="type-soon-badge">敬请期待</span>
+            <div class="type-title">桌面沙箱</div>
+            <div class="type-desc">带可视化桌面的 Computer-Use 环境</div>
+          </div>
+          <div class="sandbox-type-card disabled" data-type="browser">
+            <span class="type-soon-badge">敬请期待</span>
+            <div class="type-title">浏览器沙箱</div>
+            <div class="type-desc">内置 Chromium，供 Browser-Use Agent 远程操控</div>
+          </div>
+        </div>
+
+        <!-- 代码沙箱表单 -->
+        <div id="panel-code" class="sandbox-type-panel">
+          <div class="form-section-title">基本信息</div>
+
+          <div class="form-group" style="margin-bottom: 24px; display: flex; align-items: flex-start; width: 100%;">
+            <label class="form-label" style="width: 140px; flex-shrink: 0; margin-bottom: 0; font-weight: 500; line-height: 32px;">名称 <span class="required">*</span></label>
+            <div class="form-control" style="flex: 1; max-width: 100%;">
+              <input type="text" id="sandbox-name-input" class="form-input" placeholder="例如：sandbox-dev-python" style="width: 100%;">
             </div>
-            <button class="refresh-btn" title="刷新">
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                <path d="M14 8A6 6 0 118 2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-                <path d="M14 2v4h-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </button>
+          </div>
+
+          <div class="form-group" style="margin-bottom: 24px; display: flex; align-items: flex-start; width: 100%;">
+            <label class="form-label" style="width: 140px; flex-shrink: 0; margin-bottom: 0; font-weight: 500; line-height: 32px;">模板 <span class="required">*</span></label>
+            <div class="form-control" style="flex: 1; max-width: 100%;">
+              <select id="sandbox-template-select" class="form-input" style="width: 100%; appearance: auto; background: #fff;">
+                <option value="code-interpreter-v1" selected>code-interpreter-v1（代码沙箱）</option>
+                <option value="desktop">desktop（桌面沙箱）</option>
+                <option value="chrome-template">chrome-template（浏览器沙箱）</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group" style="margin-bottom: 24px; display: flex; align-items: flex-start; width: 100%;">
+            <label class="form-label" style="width: 140px; flex-shrink: 0; margin-bottom: 0; font-weight: 500; line-height: 32px;">API密钥 <span class="required">*</span></label>
+            <div style="flex: 1; max-width: 100%;">
+              <div style="display: flex; gap: 8px;">
+                <select id="sandbox-apikey-select" class="form-input" style="flex: 1; appearance: auto; background: #fff;">
+                  <option value="">选择 API Key</option>
+                </select>
+                <button type="button" class="btn btn-default" style="width: 32px; padding: 0; display: flex; align-items: center; justify-content: center; flex-shrink: 0;" title="刷新">
+                  <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M14 8A6 6 0 118 2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M14 2v4h-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </button>
+              </div>
+              <div class="field-hint">对应环境变量 E2B_API_KEY，用于连接 aisandbox.qihoo.net 网关</div>
+            </div>
+          </div>
+
+          <div class="form-group" style="margin-bottom: 24px; display: flex; align-items: flex-start; width: 100%;">
+            <label class="form-label" style="width: 140px; flex-shrink: 0; margin-bottom: 0; font-weight: 500; line-height: 32px;">超时时间 <span class="required">*</span></label>
+            <div class="form-control" style="flex: 1; max-width: 100%;">
+              <input type="number" id="sandbox-timeout-input" class="form-input" value="600" min="1" style="width: 200px;">
+              <span class="input-suffix">秒（沙箱最长运行时间）</span>
+            </div>
           </div>
         </div>
-        
-        <!-- 表格 -->
-        <div class="product-table">
-          <div class="table-wrapper">
-            <table>
-            <thead>
-              <tr>
-                <th>模板ID</th>
-                <th>模板名称</th>
-                <th>CPU</th>
-                <th>内存(Memory)</th>
-                <th>创建时间</th>
-                <th>更新时间</th>
-                <th>可见性</th>
-                <th>操作</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr data-name="code-interpreter-v1">
-                <td class="id-cell">zs47yil2jbkdf73nali2<span class="copy-icon" onclick="copyText('zs47yil2jbkdf73nali2')">📋</span></td>
-                <td class="template-name">code-interpreter-v1</td>
-                <td>2</td>
-                <td>1024MB</td>
-                <td>2025-09-12 17:24:45</td>
-                <td>2025-09-12 17:24:45</td>
-                <td><span class="visibility-badge">Public</span></td>
-                <td><a href="sandbox-template-create.html?mode=edit&name=code-interpreter-v1" class="action-link">编辑</a><a href="#" class="action-link delete-template-btn">删除</a></td>
-              </tr>
-              <tr data-name="desktop">
-                <td class="id-cell">y0ad1vs1k72ijelq7jjy<span class="copy-icon" onclick="copyText('y0ad1vs1k72ijelq7jjy')">📋</span></td>
-                <td class="template-name">desktop</td>
-                <td>2</td>
-                <td>1024MB</td>
-                <td>2025-09-22 15:10:28</td>
-                <td>2025-09-22 15:10:28</td>
-                <td><span class="visibility-badge">Public</span></td>
-                <td><a href="sandbox-template-create.html?mode=edit&name=desktop" class="action-link">编辑</a><a href="#" class="action-link delete-template-btn">删除</a></td>
-              </tr>
-              <tr data-name="chrome-template">
-                <td class="id-cell">kqepe5sjnv9hrcxzxe2g<span class="copy-icon" onclick="copyText('kqepe5sjnv9hrcxzxe2g')">📋</span></td>
-                <td class="template-name">chrome-template</td>
-                <td>2</td>
-                <td>1024MB</td>
-                <td>2025-11-12 15:36:52</td>
-                <td>2025-11-12 15:36:55</td>
-                <td><span class="visibility-badge">Public</span></td>
-                <td><a href="sandbox-template-create.html?mode=edit&name=chrome-template" class="action-link">编辑</a><a href="#" class="action-link delete-template-btn">删除</a></td>
-              </tr>
-            </tbody>
-          </table>
-          </div>
+
+        <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 32px;">
+          <a href="index.html" class="btn btn-default">取消</a>
+          <button type="button" id="sandbox-form-submit-btn" class="btn btn-primary" onclick="createSandbox()">创建</button>
         </div>
-        
-        <!-- 翻页组件 -->
-        <div class="pagination-bar">
-          <div class="pagination-left">共3条记录 第1/1页</div>
-        </div>
+
       </div>
     </div>
   </div>
 </div>
 
-<!-- 删除确认弹窗 -->
-<div class="modal-overlay" id="delete-template-modal">
-  <div class="modal-dialog" style="width: 400px;">
-    <div class="modal-header">
-      <h3 class="modal-title">删除确认</h3>
-      <button class="modal-close" onclick="closeDeleteTemplateModal()">&times;</button>
-    </div>
-    <div class="modal-body" style="padding: 28px 20px;">
-      <p id="delete-template-msg" style="margin: 0; font-size: 15px; color: #333; line-height: 1.6;"></p>
-    </div>
-    <div class="modal-footer">
-      <button class="btn btn-default" onclick="closeDeleteTemplateModal()">取消</button>
-      <button class="btn btn-primary" style="background:#ff4d4f;border-color:#ff4d4f;" onclick="confirmDeleteTemplate()">删除</button>
-    </div>
-  </div>
-</div>
-
-<!-- 创建模板弹窗 -->
-<div class="modal-overlay" id="create-template-modal">
-  <div class="modal-dialog">
-    <div class="modal-header">
-      <h3 class="modal-title">创建模板</h3>
-      <button class="modal-close" onclick="closeCreateTemplateModal()">&times;</button>
-    </div>
-    <div class="modal-body">
-      <div class="form-group">
-        <label class="form-label">基础镜像 <span class="required">*</span></label>
-        <div class="form-control">
-          <input type="text" class="form-input" id="base-image" value="harbor.qihoo.net/e2b-infra/code-interpreter:latest" readonly style="background:#f5f5f5;color:#666;">
-        </div>
-      </div>
-      <div class="form-group">
-        <label class="form-label">安装包</label>
-        <div class="form-control" style="flex-direction:column;align-items:stretch;">
-          <button class="btn btn-primary pkg-add-row-btn" onclick="addPkgRow()">
-            <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 1v10M1 6h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
-            添加安装包
-          </button>
-          <div class="pkg-rows" id="pkg-rows">
-            <!-- 动态行 -->
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="modal-footer">
-      <button class="btn btn-default" onclick="closeCreateTemplateModal()">取消</button>
-      <button class="btn btn-primary" onclick="createTemplate()">创建</button>
-    </div>
-  </div>
 </div>
 
 <style>
-  /* 弹窗样式 */
-  .modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.5);
-    display: none;
-    align-items: center;
-    justify-content: center;
-    z-index: 1000;
-  }
-  .modal-overlay.active {
-    display: flex;
-  }
-  .modal-dialog {
-    background: #fff;
-    border-radius: 8px;
-    width: 600px;
-    max-width: 90%;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-  }
-  .modal-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 16px 20px;
-    border-bottom: 1px solid #eee;
-  }
-  .modal-title {
-    margin: 0;
-    font-size: 16px;
-    font-weight: 600;
-    color: #333;
-  }
-  .modal-close {
-    background: none;
-    border: none;
-    font-size: 24px;
-    color: #999;
-    cursor: pointer;
-    padding: 0;
-    line-height: 1;
-  }
-  .modal-close:hover {
-    color: #333;
-  }
-  .modal-body {
-    padding: 20px;
-    max-height: 60vh;
-    overflow-y: auto;
-  }
-  .modal-footer {
-    display: flex;
-    justify-content: flex-end;
-    gap: 12px;
-    padding: 16px 20px;
-    border-top: 1px solid #eee;
-  }
-  .form-group {
-    display: flex;
-    align-items: flex-start;
-    margin-bottom: 16px;
-  }
-  .form-group:last-child {
-    margin-bottom: 0;
-  }
   .form-label {
     display: flex;
     align-items: center;
     flex-shrink: 0;
-    width: 80px;
     margin-bottom: 0;
     font-size: 14px;
     color: #333;
@@ -1574,71 +1147,6 @@
   .form-input:focus {
     border-color: #0066FF;
   }
-  .pkg-add-row-btn {
-    height: 32px;
-    padding: 0 14px;
-    font-size: 14px;
-    margin-bottom: 12px;
-    width: fit-content;
-  }
-  .pkg-rows {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-  }
-  .pkg-row {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-  .pkg-row .form-select {
-    flex: 1;
-    height: 32px;
-    padding: 0 10px;
-    border: 1px solid #D9D9D9;
-    border-radius: 4px;
-    font-size: 14px;
-    color: #333;
-    outline: none;
-    background: #fff;
-    cursor: pointer;
-    appearance: auto;
-  }
-  .pkg-row .form-select:focus {
-    border-color: #0066FF;
-  }
-  .pkg-row .form-select:disabled {
-    background: #f5f5f5;
-    color: #999;
-    cursor: not-allowed;
-  }
-  .pkg-del-btn {
-    width: 32px;
-    height: 32px;
-    border: 1px solid #D9D9D9;
-    border-radius: 4px;
-    background: #fff;
-    color: #999;
-    font-size: 16px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-    transition: all 0.2s;
-  }
-  .pkg-del-btn:hover {
-    border-color: #e53e3e;
-    color: #e53e3e;
-  }
-  .pkg-del-btn.disabled {
-    cursor: not-allowed;
-    opacity: 0.4;
-  }
-  .pkg-del-btn.disabled:hover {
-    border-color: #D9D9D9;
-    color: #999;
-  }
 </style>
 
 <script>
@@ -1661,7 +1169,6 @@
   document.querySelectorAll('.menu-level-1 > .menu-item').forEach(item => {
     item.addEventListener('click', function(e) {
       e.stopPropagation();
-      // 切换选中状态
       this.classList.toggle('selected');
     });
   });
@@ -1670,246 +1177,73 @@
   document.querySelectorAll('.submenu-expanded .menu-item').forEach(item => {
     item.addEventListener('click', function(e) {
       e.stopPropagation();
-      
-      // 移除同一子菜单内其他项的active状态
       const parentSubmenu = this.closest('.submenu-expanded');
       if (parentSubmenu) {
         parentSubmenu.querySelectorAll('.menu-item').forEach(i => i.classList.remove('active'));
       }
-      
-      // 添加当前项的active状态
       this.classList.add('active');
-      
-      // 更新右侧主内容区的菜单名称
-      const menuText = this.querySelector('.menu-text');
-      if (menuText) {
-        document.getElementById('menu-name-display').textContent = menuText.textContent;
-      }
     });
   });
 
-  // 三级菜单项点击选中交互
-  document.querySelectorAll('.menu-level-3 .menu-item').forEach(item => {
-    item.addEventListener('click', function(e) {
-      e.stopPropagation();
-      
-      // 移除所有三级菜单项的active状态
-      document.querySelectorAll('.menu-level-3 .menu-item').forEach(i => i.classList.remove('active'));
-      
-      // 添加当前项的active状态
-      this.classList.add('active');
-      
-      // 更新右侧主内容区的菜单名称
-      const menuText = this.querySelector('.menu-text');
-      if (menuText) {
-        document.getElementById('menu-name-display').textContent = menuText.textContent;
-      }
-    });
-  });
-
-  // 创建模板弹窗
-  const PKG_TYPES = ['apt', 'cargo', 'gem', 'go', 'npm', 'pip'];
-  const PKG_VERSIONS = {
-    apt: ['最新版本', '1.0', '2.0', '3.0'],
-    cargo: ['最新版本', '0.1', '0.2', '1.0'],
-    gem: ['最新版本', '1.0', '2.0', '3.0'],
-    go: ['最新版本', '1.19', '1.20', '1.21', '1.22'],
-    npm: ['最新版本', '6.x', '8.x', '9.x', '10.x'],
-    pip: ['最新版本', '22.0', '23.0', '24.0']
-  };
-  let pkgRowCounter = 0;
-  let deletingTemplateRow = null;
-
-  const createTemplateBtn = document.getElementById('create-template-btn');
-  if (createTemplateBtn) {
-    createTemplateBtn.addEventListener('click', function() {
-      document.getElementById('create-template-modal').classList.add('active');
-      // 重置
-      document.getElementById('pkg-rows').innerHTML = '';
-      pkgRowCounter = 0;
-      // 默认添加一行
-      addPkgRow();
-    });
+  // 沙箱类型选择（本版仅代码沙箱可用，桌面/浏览器禁用）
+  function selectSandboxType(card) {
+    if (card.classList.contains('disabled')) return;
+    document.querySelectorAll('.sandbox-type-card').forEach(c => c.classList.remove('active'));
+    card.classList.add('active');
+    // 预留：后续可根据 data-type 切换不同表单面板
   }
 
-  function closeCreateTemplateModal() {
-    document.getElementById('create-template-modal').classList.remove('active');
-  }
+  // 创建沙箱实例（展示型，不接真实后端）
+  function createSandbox() {
+    const name = document.getElementById('sandbox-name-input').value.trim();
+    const template = document.getElementById('sandbox-template-select').value;
+    const apiKey = document.getElementById('sandbox-apikey-select').value;
+    const timeout = document.getElementById('sandbox-timeout-input').value;
 
-  function openDeleteTemplateModal(row) {
-    deletingTemplateRow = row;
-    const templateName = row.dataset.name || row.querySelector('.template-name')?.textContent?.trim() || '';
-    document.getElementById('delete-template-msg').textContent = '确认要删除' + templateName + '模版吗，删除后不可恢复。';
-    document.getElementById('delete-template-modal').classList.add('active');
-  }
-
-  function closeDeleteTemplateModal() {
-    document.getElementById('delete-template-modal').classList.remove('active');
-    deletingTemplateRow = null;
-  }
-
-  function confirmDeleteTemplate() {
-    if (deletingTemplateRow) {
-      deletingTemplateRow.remove();
-      document.querySelector('.pagination-left').textContent = '共' + document.querySelectorAll('.product-table tbody tr').length + '条记录 第1/1页';
-    }
-    closeDeleteTemplateModal();
-  }
-
-  document.querySelectorAll('.delete-template-btn').forEach(btn => {
-    btn.addEventListener('click', function(e) {
-      e.preventDefault();
-      const row = this.closest('tr');
-      if (row) openDeleteTemplateModal(row);
-    });
-  });
-
-  function getUsedPkgTypes() {
-    const used = [];
-    document.querySelectorAll('#pkg-rows .pkg-type-select').forEach(sel => {
-      if (sel.value) used.push(sel.value);
-    });
-    return used;
-  }
-
-  function updatePkgTypeOptions() {
-    const used = getUsedPkgTypes();
-    document.querySelectorAll('#pkg-rows .pkg-type-select').forEach(sel => {
-      const currentVal = sel.value;
-      PKG_TYPES.forEach(type => {
-        const opt = sel.querySelector('option[value="' + type + '"]');
-        if (opt) {
-          opt.hidden = (used.includes(type) && type !== currentVal);
-        }
-      });
-    });
-  }
-
-  function updateVersionOptions(typeSelect) {
-    const type = typeSelect.value;
-    const row = typeSelect.closest('.pkg-row');
-    const verSel = row.querySelector('.pkg-ver-select');
-    if (!type) {
-      verSel.innerHTML = '<option value="">请先选择安装包</option>';
-      verSel.disabled = true;
+    if (!name) {
+      alert('请输入沙箱名称');
       return;
     }
-    verSel.disabled = false;
-    const versions = PKG_VERSIONS[type] || ['最新版本'];
-    verSel.innerHTML = versions.map(v => '<option value="' + v + '">' + v + '</option>').join('');
-  }
-
-  function addPkgRow() {
-    pkgRowCounter++;
-    const rowId = 'pkg-row-' + pkgRowCounter;
-    const used = getUsedPkgTypes();
-    const row = document.createElement('div');
-    row.className = 'pkg-row';
-    row.id = rowId;
-
-    let typeOpts = '<option value="">请选择安装包</option>';
-    PKG_TYPES.forEach(type => {
-      if (!used.includes(type)) {
-        typeOpts += '<option value="' + type + '">' + type + '</option>';
-      }
-    });
-
-    row.innerHTML =
-      '<select class="form-select pkg-type-select" onchange="onPkgTypeChange(this)">' + typeOpts + '</select>' +
-      '<select class="form-select pkg-ver-select" disabled><option value="">请先选择安装包</option></select>' +
-      '<button class="pkg-del-btn" onclick="removePkgRow(\'' + rowId + '\')" title="删除">×</button>';
-
-    document.getElementById('pkg-rows').appendChild(row);
-    updateDelBtns();
-  }
-
-  function onPkgTypeChange(sel) {
-    updatePkgTypeOptions();
-    updateVersionOptions(sel);
-  }
-
-  function removePkgRow(rowId) {
-    const rows = document.querySelectorAll('#pkg-rows .pkg-row');
-    if (rows.length <= 1) return; // 最少保留一个
-    const row = document.getElementById(rowId);
-    if (row) {
-      row.remove();
-      updatePkgTypeOptions();
-      updateDelBtns();
-    }
-  }
-
-  function updateDelBtns() {
-    const rows = document.querySelectorAll('#pkg-rows .pkg-row');
-    rows.forEach(row => {
-      const btn = row.querySelector('.pkg-del-btn');
-      if (rows.length <= 1) {
-        btn.classList.add('disabled');
-      } else {
-        btn.classList.remove('disabled');
-      }
-    });
-  }
-
-  function createTemplate() {
-    const rows = document.querySelectorAll('#pkg-rows .pkg-row');
-    let valid = true;
-    rows.forEach(row => {
-      const type = row.querySelector('.pkg-type-select').value;
-      if (!type) valid = false;
-    });
-    if (!valid) {
-      alert('请选择安装包类型');
+    if (!template) {
+      alert('请选择模板');
       return;
     }
-    alert('模板创建成功！');
-    closeCreateTemplateModal();
+    if (!apiKey) {
+      alert('请选择 API 密钥');
+      return;
+    }
+    if (!timeout || Number(timeout) <= 0) {
+      alert('请输入有效的超时时间');
+      return;
+    }
+    alert('沙箱实例创建成功！');
+    window.location.href = 'index.html';
   }
 
-  document.getElementById('create-template-modal').addEventListener('click', function(e) {
-    if (e.target === this) {
-      closeCreateTemplateModal();
-    }
-  });
-  document.getElementById('delete-template-modal').addEventListener('click', function(e) {
-    if (e.target === this) {
-      closeDeleteTemplateModal();
-    }
-  });
-
+  // 菜单折叠交互
   document.querySelectorAll('.menu-item').forEach(item => {
     const arrow = item.querySelector('.menu-arrow');
     if (arrow) {
-      // 一级菜单的箭头图标不触发交互
       const isTopLevel = item.parentElement.classList.contains('menu-level-1');
       if (isTopLevel) {
-        return; // 跳过一级菜单项
+        return;
       }
-      
       item.style.cursor = 'pointer';
       item.addEventListener('click', function(e) {
         e.stopPropagation();
-        
-        // 找到父元素
         const parent = this.parentElement;
-        
-        // 情况1：一级菜单项，控制 menu-level-2
         let submenu = parent.querySelector('.menu-level-2');
         if (submenu) {
           submenu.classList.toggle('collapsed');
           this.classList.toggle('collapsed');
           return;
         }
-        
-        // 情况2：二级菜单项，控制 submenu-expanded
         submenu = parent.querySelector('.submenu-expanded');
         if (submenu) {
           submenu.classList.toggle('collapsed');
           this.classList.toggle('collapsed');
           return;
         }
-        
-        // 情况3：三级菜单项
         submenu = parent.querySelector('.menu-level-3');
         if (submenu) {
           submenu.classList.toggle('collapsed');

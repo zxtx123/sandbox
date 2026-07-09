@@ -1319,7 +1319,7 @@
       <span class="breadcrumb-left" id="menu-name-display">
         <a href="sandbox-template.html" style="color: #666; text-decoration: none;">沙箱模板</a>
         <span style="margin: 0 8px; color: #999;">&gt;</span>
-        <span style="color: #333;">创建模板</span>
+        <span id="template-form-title" style="color: #333;">创建模板</span>
       </span>
     </div>
     <div class="content-body">
@@ -1328,7 +1328,21 @@
         <div class="form-group" style="margin-bottom: 24px; display: flex; align-items: flex-start; width: 100%;">
           <label class="form-label" style="width: 140px; flex-shrink: 0; margin-bottom: 0; font-weight: 500; line-height: 32px;">名称 <span class="required">*</span></label>
           <div class="form-control" style="flex: 1; max-width: 100%;">
-            <input type="text" class="form-input" placeholder="sandbox-custom-ch3r8g" style="width: 100%;">
+            <input type="text" id="template-name-input" class="form-input" placeholder="sandbox-custom-ch3r8g" style="width: 100%;">
+          </div>
+        </div>
+
+        <div class="form-group" style="margin-bottom: 24px; display: flex; align-items: flex-start; width: 100%;">
+          <label class="form-label" style="width: 140px; flex-shrink: 0; margin-bottom: 0; font-weight: 500; line-height: 32px;">可见范围</label>
+          <div class="form-control" style="flex: 1; max-width: 100%; gap: 16px; min-height: 32px;">
+            <label style="display: inline-flex; align-items: center; gap: 6px; cursor: pointer;">
+              <input type="radio" name="templateVisibility" value="public" checked>
+              <span>public</span>
+            </label>
+            <label style="display: inline-flex; align-items: center; gap: 6px; cursor: pointer;">
+              <input type="radio" name="templateVisibility" value="private">
+              <span>private</span>
+            </label>
           </div>
         </div>
 
@@ -1437,7 +1451,7 @@
 
         <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 32px;">
           <a href="sandbox-template.html" class="btn btn-default">取消</a>
-          <a href="sandbox-template.html" class="btn btn-primary">创建</a>
+          <a href="sandbox-template.html" id="template-form-submit-btn" class="btn btn-primary">创建</a>
         </div>
 
       </div>
@@ -1815,6 +1829,17 @@
 
   if (document.getElementById('pkg-rows')) {
     addPkgRow();
+  }
+
+  const templateFormParams = new URLSearchParams(window.location.search);
+  if (templateFormParams.get('mode') === 'edit') {
+    const templateName = templateFormParams.get('name') || '';
+    const formTitle = document.getElementById('template-form-title');
+    const nameInput = document.getElementById('template-name-input');
+    const submitBtn = document.getElementById('template-form-submit-btn');
+    if (formTitle) formTitle.textContent = '编辑模板';
+    if (nameInput && templateName) nameInput.value = templateName;
+    if (submitBtn) submitBtn.textContent = '保存';
   }
 
   document.querySelectorAll('.menu-item').forEach(item => {
