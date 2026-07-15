@@ -1333,41 +1333,6 @@
         </div>
 
         <div class="form-group" style="margin-bottom: 24px; display: flex; align-items: flex-start; width: 100%;">
-          <label class="form-label" style="width: 140px; flex-shrink: 0; margin-bottom: 0; font-weight: 500; line-height: 32px;">可见范围</label>
-          <div class="form-control" style="flex: 1; max-width: 100%; gap: 16px; min-height: 32px;">
-            <label style="display: inline-flex; align-items: center; gap: 6px; cursor: pointer;">
-              <input type="radio" name="templateVisibility" value="public" checked>
-              <span>public</span>
-            </label>
-            <label style="display: inline-flex; align-items: center; gap: 6px; cursor: pointer;">
-              <input type="radio" name="templateVisibility" value="private">
-              <span>private</span>
-            </label>
-          </div>
-        </div>
-
-        <div class="form-group" style="margin-bottom: 24px; display: flex; align-items: flex-start; width: 100%;">
-          <label class="form-label" style="width: 140px; flex-shrink: 0; margin-bottom: 0; font-weight: 500; line-height: 32px;">描述</label>
-          <div class="form-control" style="flex: 1; max-width: 100%;">
-            <textarea class="form-input" placeholder="请描述此自定义沙箱的用途和使用场景" style="width: 100%; height: 80px; padding: 8px 10px; resize: vertical;"></textarea>
-          </div>
-        </div>
-
-        <div class="form-group" style="margin-bottom: 24px; display: flex; align-items: flex-start; width: 100%;">
-          <label class="form-label" style="width: 140px; flex-shrink: 0; margin-bottom: 0; font-weight: 500; line-height: 32px;">API密钥 <span class="required">*</span></label>
-          <div style="flex: 1; max-width: 100%;">
-            <div style="display: flex; gap: 8px;">
-              <select class="form-input" style="flex: 1; appearance: auto; background: #fff;">
-                <option value="">选择 API Key</option>
-              </select>
-              <button class="btn btn-default" style="width: 32px; padding: 0; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
-                <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M14 8A6 6 0 118 2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M14 2v4h-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <div class="form-group" style="margin-bottom: 24px; display: flex; align-items: flex-start; width: 100%;">
           <label class="form-label" style="width: 140px; flex-shrink: 0; margin-bottom: 0; font-weight: 500; line-height: 32px;">资源配置 <span class="required">*</span></label>
           <div style="flex: 1; max-width: 100%; background: #F8F9FA; padding: 16px; border-radius: 4px; border: 1px solid #E6E6E6; display: flex; gap: 16px;">
             <div style="flex: 1;">
@@ -1382,12 +1347,6 @@
                 <option value="8">8 GB</option>
               </select>
             </div>
-            <div style="flex: 1;">
-              <label style="display: block; margin-bottom: 8px; font-size: 12px; color: #666;">临时磁盘空间</label>
-              <select class="form-input" style="width: 100%; appearance: auto; background: #fff;">
-                <option value="10">10 GB</option>
-              </select>
-            </div>
           </div>
         </div>
 
@@ -1395,33 +1354,17 @@
           <label class="form-label" style="width: 140px; flex-shrink: 0; margin-bottom: 0; font-weight: 500; line-height: 32px;">自定义运行时环境 <span class="required">*</span></label>
           <div style="flex: 1; max-width: 100%; background: #F8F9FA; padding: 16px; border-radius: 4px; border: 1px solid #E6E6E6;">
             <div style="margin-bottom: 16px;">
-              <label style="display: block; margin-bottom: 8px; font-size: 12px; color: #666;">镜像仓库</label>
-              <div style="display: flex; gap: 8px;">
-                <select class="form-input" style="flex: 1; appearance: auto; background: #fff;">
-                  <option value="">选择镜像仓库</option>
-                </select>
-                <button class="btn btn-default" style="width: 32px; padding: 0; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
-                  <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M14 8A6 6 0 118 2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M14 2v4h-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                </button>
-              </div>
+              <label style="display: block; margin-bottom: 8px; font-size: 12px; color: #666;">镜像地址</label>
+              <input type="text" class="form-input" placeholder="只支持容器云镜像仓库地址harbor.qihoo.net/XX" style="width: 100%; background: #fff;">
             </div>
-            <div style="margin-bottom: 16px;">
-              <label style="display: block; margin-bottom: 8px; font-size: 12px; color: #666;">选择镜像</label>
-              <div style="display: flex; gap: 8px;">
-                <select class="form-input" style="flex: 1; appearance: auto; background: #fff;">
-                  <option value="">选择镜像</option>
-                </select>
-                <button class="btn btn-default" style="width: 32px; padding: 0; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
-                  <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M14 8A6 6 0 118 2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M14 2v4h-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                </button>
+            <div style="display: flex; gap: 16px;">
+              <div style="flex: 1;">
+                <label style="display: block; margin-bottom: 8px; font-size: 12px; color: #666;">用户名</label>
+                <input type="text" class="form-input" placeholder="请输入镜像仓库用户名" autocomplete="username" style="width: 100%; background: #fff;">
               </div>
-            </div>
-            <div>
-              <label style="display: block; margin-bottom: 8px; font-size: 12px; color: #666;">选择版本</label>
-              <div style="display: flex; gap: 8px;">
-                <select class="form-input" style="flex: 1; appearance: auto; background: #fff;">
-                  <option value="">选择版本</option>
-                </select>
+              <div style="flex: 1;">
+                <label style="display: block; margin-bottom: 8px; font-size: 12px; color: #666;">密码</label>
+                <input type="password" class="form-input" placeholder="请输入镜像仓库密码" autocomplete="current-password" style="width: 100%; background: #fff;">
               </div>
             </div>
           </div>
@@ -1429,23 +1372,9 @@
 
         <div class="form-group" style="margin-bottom: 24px; display: flex; align-items: flex-start; width: 100%;">
           <label class="form-label" style="width: 140px; flex-shrink: 0; margin-bottom: 0; font-weight: 500; line-height: 32px;">启动配置</label>
-          <div style="flex: 1; max-width: 100%; background: #F8F9FA; padding: 16px; border-radius: 4px; border: 1px solid #E6E6E6; display: flex; gap: 16px;">
-            <div style="flex: 2;">
-              <label style="display: block; margin-bottom: 8px; font-size: 12px; color: #666;">启动命令</label>
-              <input type="text" class="form-input" placeholder="例如: ls -la /home/user" style="width: 100%; background: #fff;">
-            </div>
-            <div style="flex: 1;">
-              <label style="display: block; margin-bottom: 8px; font-size: 12px; color: #666;">端口</label>
-              <input type="text" class="form-input" value="5000" style="width: 100%; background: #fff;">
-            </div>
-          </div>
-        </div>
-
-        <div class="form-group" style="margin-bottom: 24px; display: flex; align-items: flex-start; width: 100%;">
-          <label class="form-label" style="width: 140px; flex-shrink: 0; margin-bottom: 0; font-weight: 500; line-height: 32px;">包管理</label>
           <div style="flex: 1; max-width: 100%; background: #F8F9FA; padding: 16px; border-radius: 4px; border: 1px solid #E6E6E6;">
-            <button type="button" class="btn btn-default pkg-add-row-btn" onclick="addPkgRow()">+ 添加包</button>
-            <div id="pkg-rows" class="pkg-rows"></div>
+            <label style="display: block; margin-bottom: 8px; font-size: 12px; color: #666;">启动命令</label>
+            <input type="text" class="form-input" value="sleep infinity" readonly aria-readonly="true" style="width: 100%; background: #F5F5F5; color: #666; cursor: not-allowed;">
           </div>
         </div>
 
@@ -1562,70 +1491,9 @@
   .form-input:focus {
     border-color: #0066FF;
   }
-  .pkg-add-row-btn {
-    height: 32px;
-    padding: 0 14px;
-    font-size: 14px;
-    margin-bottom: 12px;
-    width: fit-content;
-  }
-  .pkg-rows {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-  }
-  .pkg-row {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-  .pkg-row .form-select {
-    flex: 1;
-    height: 32px;
-    padding: 0 10px;
-    border: 1px solid #D9D9D9;
-    border-radius: 4px;
-    font-size: 14px;
-    color: #333;
-    outline: none;
-    background: #fff;
-    cursor: pointer;
-    appearance: auto;
-  }
-  .pkg-row .form-select:focus {
-    border-color: #0066FF;
-  }
-  .pkg-row .form-select:disabled {
-    background: #f5f5f5;
-    color: #999;
-    cursor: not-allowed;
-  }
-  .pkg-del-btn {
-    width: 32px;
-    height: 32px;
-    border: 1px solid #D9D9D9;
-    border-radius: 4px;
-    background: #fff;
-    color: #999;
-    font-size: 16px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-    transition: all 0.2s;
-  }
-  .pkg-del-btn:hover {
-    border-color: #e53e3e;
-    color: #e53e3e;
-  }
-  .pkg-del-btn.disabled {
-    cursor: not-allowed;
-    opacity: 0.4;
-  }
-  .pkg-del-btn.disabled:hover {
+  .form-input[readonly] {
     border-color: #D9D9D9;
-    color: #999;
+    box-shadow: none;
   }
 </style>
 
@@ -1696,140 +1564,6 @@
   });
 
 
-
-  const PKG_TYPES = ['apt', 'cargo', 'gem', 'go', 'npm', 'pip'];
-  const PKG_VERSIONS = {
-    apt: ['latest', 'stable'],
-    cargo: ['latest', '1.88', '1.87'],
-    gem: ['latest', '3.6', '3.5'],
-    go: ['latest', '1.24', '1.23'],
-    npm: ['latest', '11', '10'],
-    pip: ['latest', '25', '24']
-  };
-  let pkgRowCounter = 0;
-
-  function closeCreateTemplateModal() {
-    const modal = document.getElementById('create-template-modal');
-    if (modal) {
-      modal.classList.remove('active');
-    }
-  }
-
-  function getUsedPkgTypes() {
-    const used = [];
-    document.querySelectorAll('#pkg-rows .pkg-type-select').forEach(sel => {
-      if (sel.value) used.push(sel.value);
-    });
-    return used;
-  }
-
-  function updatePkgTypeOptions() {
-    const used = getUsedPkgTypes();
-    document.querySelectorAll('#pkg-rows .pkg-type-select').forEach(sel => {
-      const currentVal = sel.value;
-      PKG_TYPES.forEach(type => {
-        const opt = sel.querySelector('option[value="' + type + '"]');
-        if (opt) {
-          opt.hidden = (used.includes(type) && type !== currentVal);
-        }
-      });
-    });
-  }
-
-  function updateVersionOptions(typeSelect) {
-    const type = typeSelect.value;
-    const row = typeSelect.closest('.pkg-row');
-    const verSel = row.querySelector('.pkg-ver-select');
-    if (!type) {
-      verSel.innerHTML = '<option value="">请先选择安装包</option>';
-      verSel.disabled = true;
-      return;
-    }
-    verSel.disabled = false;
-    const versions = PKG_VERSIONS[type] || ['最新版本'];
-    verSel.innerHTML = versions.map(v => '<option value="' + v + '">' + v + '</option>').join('');
-  }
-
-  function addPkgRow() {
-    pkgRowCounter++;
-    const rowId = 'pkg-row-' + pkgRowCounter;
-    const used = getUsedPkgTypes();
-    const row = document.createElement('div');
-    row.className = 'pkg-row';
-    row.id = rowId;
-
-    let typeOpts = '<option value="">请选择安装包</option>';
-    PKG_TYPES.forEach(type => {
-      if (!used.includes(type)) {
-        typeOpts += '<option value="' + type + '">' + type + '</option>';
-      }
-    });
-
-    row.innerHTML =
-      '<select class="form-select pkg-type-select" onchange="onPkgTypeChange(this)">' + typeOpts + '</select>' +
-      '<select class="form-select pkg-ver-select" disabled><option value="">请先选择安装包</option></select>' +
-      '<button class="pkg-del-btn" onclick="removePkgRow(\'' + rowId + '\')" title="删除">×</button>';
-
-    document.getElementById('pkg-rows').appendChild(row);
-    updateDelBtns();
-  }
-
-  function onPkgTypeChange(sel) {
-    updatePkgTypeOptions();
-    updateVersionOptions(sel);
-  }
-
-  function removePkgRow(rowId) {
-    const rows = document.querySelectorAll('#pkg-rows .pkg-row');
-    if (rows.length <= 1) return; // 最少保留一个
-    const row = document.getElementById(rowId);
-    if (row) {
-      row.remove();
-      updatePkgTypeOptions();
-      updateDelBtns();
-    }
-  }
-
-  function updateDelBtns() {
-    const rows = document.querySelectorAll('#pkg-rows .pkg-row');
-    rows.forEach(row => {
-      const btn = row.querySelector('.pkg-del-btn');
-      if (!btn) return;
-      if (rows.length <= 1) {
-        btn.classList.add('disabled');
-      } else {
-        btn.classList.remove('disabled');
-      }
-    });
-  }
-
-  function createTemplate() {
-    const rows = document.querySelectorAll('#pkg-rows .pkg-row');
-    let valid = true;
-    rows.forEach(row => {
-      const type = row.querySelector('.pkg-type-select').value;
-      if (!type) valid = false;
-    });
-    if (!valid) {
-      alert('请选择安装包类型');
-      return;
-    }
-    alert('模板创建成功！');
-    closeCreateTemplateModal();
-  }
-
-  const createTemplateModal = document.getElementById('create-template-modal');
-  if (createTemplateModal) {
-    createTemplateModal.addEventListener('click', function(e) {
-      if (e.target === this) {
-        closeCreateTemplateModal();
-      }
-    });
-  }
-
-  if (document.getElementById('pkg-rows')) {
-    addPkgRow();
-  }
 
   const templateFormParams = new URLSearchParams(window.location.search);
   if (templateFormParams.get('mode') === 'edit') {
