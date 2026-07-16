@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>沙箱模板 - 360智汇云</title>
+  <title>用量统计 - 360智汇云</title>
   <style>
     * {
       margin: 0;
@@ -1046,6 +1046,17 @@
       border-radius: 4px;
       font-size: 12px;
     }
+
+    .action-link {
+      color: #0066FF;
+      text-decoration: none;
+      margin-right: 12px;
+      cursor: pointer;
+    }
+
+    .action-link:hover {
+      text-decoration: underline;
+    }
   </style>
   <link rel="stylesheet" href="styles/sandbox-shell.css">
   <link rel="stylesheet" href="styles/ai-sandbox.css">
@@ -1055,311 +1066,165 @@
 
 <!-- 主体容器（三栏布局） -->
 <div class="container">
-  <div id="sandbox-shell" data-active="沙箱模板" data-breadcrumb="沙箱模板 / 创建模板"></div>
+  <div id="sandbox-shell" data-active="用量统计" data-breadcrumb="用量统计"></div>
   <div class="main-content">
     <div class="breadcrumb">
-      <span class="breadcrumb-left" id="menu-name-display">
-        <a href="sandbox-template.html" style="color: #666; text-decoration: none;">沙箱模板</a>
-        <span style="margin: 0 8px; color: #999;">&gt;</span>
-        <span id="template-form-title" style="color: #333;">创建模板</span>
-      </span>
+      <span class="breadcrumb-left" id="menu-name-display">用量统计</span>
+      <a class="breadcrumb-link" id="menu-link-display">Sandbox 帮助文档</a>
     </div>
     <div class="content-body">
-      <div class="product-list-page" style="padding: 24px; background: #fff; border-radius: 4px; height: 100%; overflow-y: auto;">
-        
-        <div class="form-group" style="margin-bottom: 24px; display: flex; align-items: flex-start; width: 100%;">
-          <label class="form-label" style="width: 140px; flex-shrink: 0; margin-bottom: 0; font-weight: 500; line-height: 32px;">名称 <span class="required">*</span></label>
-          <div class="form-control" style="flex: 1; max-width: 100%;">
-            <input type="text" id="template-name-input" class="form-input" placeholder="sandbox-custom-ch3r8g" style="width: 100%;">
+      <div class="usage-page">
+        <div class="usage-toolbar">
+          <div class="usage-range">
+            <span class="usage-range-label">统计周期</span>
+            <select id="usage-range" class="usage-select">
+              <option value="7">近 7 天</option>
+              <option value="30">近 30 天</option>
+            </select>
+          </div>
+          <button class="refresh-btn" id="usage-refresh" title="刷新">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+              <path d="M14 8A6 6 0 118 2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+              <path d="M14 2v4h-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+        </div>
+
+        <div class="usage-grid">
+          <div class="usage-card">
+            <div class="usage-card-head">
+              <h3>vCPU 使用时长</h3>
+              <p>所有沙箱消耗的总 vCPU 时间</p>
+            </div>
+            <div class="usage-chart" id="chart-vcpu"></div>
+          </div>
+          <div class="usage-card">
+            <div class="usage-card-head">
+              <h3>内存使用时长</h3>
+              <p>所有沙箱的总内存使用时长</p>
+            </div>
+            <div class="usage-chart" id="chart-mem"></div>
           </div>
         </div>
 
-        <div class="form-group" style="margin-bottom: 24px; display: flex; align-items: flex-start; width: 100%;">
-          <label class="form-label" style="width: 140px; flex-shrink: 0; margin-bottom: 0; font-weight: 500; line-height: 32px;">资源配置 <span class="required">*</span></label>
-          <div style="flex: 1; max-width: 100%; background: #F8F9FA; padding: 16px; border-radius: 4px; border: 1px solid #E6E6E6; display: flex; gap: 16px;">
-            <div style="flex: 1;">
-              <label style="display: block; margin-bottom: 8px; font-size: 12px; color: #666;">CPU核数</label>
-              <select class="form-input" style="width: 100%; appearance: auto; background: #fff;">
-                <option value="4">4 核</option>
-              </select>
-            </div>
-            <div style="flex: 1;">
-              <label style="display: block; margin-bottom: 8px; font-size: 12px; color: #666;">内存大小</label>
-              <select class="form-input" style="width: 100%; appearance: auto; background: #fff;">
-                <option value="8">8 GB</option>
-              </select>
-            </div>
+        <div class="usage-card usage-card-wide">
+          <div class="usage-card-head">
+            <div class="usage-legend"><span class="usage-legend-dot"></span>沙箱数量统计</div>
           </div>
+          <div class="usage-chart usage-chart-tall" id="chart-count"></div>
         </div>
-
-        <div class="form-group" style="margin-bottom: 24px; display: flex; align-items: flex-start; width: 100%;">
-          <label class="form-label" style="width: 140px; flex-shrink: 0; margin-bottom: 0; font-weight: 500; line-height: 32px;">自定义运行时环境 <span class="required">*</span></label>
-          <div style="flex: 1; max-width: 100%; background: #F8F9FA; padding: 16px; border-radius: 4px; border: 1px solid #E6E6E6;">
-            <div style="margin-bottom: 16px;">
-              <label style="display: block; margin-bottom: 8px; font-size: 12px; color: #666;">镜像地址</label>
-              <input type="text" class="form-input" placeholder="只支持容器云镜像仓库地址harbor.qihoo.net/XX" style="width: 100%; background: #fff;">
-            </div>
-            <div style="display: flex; gap: 16px;">
-              <div style="flex: 1;">
-                <label style="display: block; margin-bottom: 8px; font-size: 12px; color: #666;">用户名</label>
-                <input type="text" class="form-input" placeholder="请输入镜像仓库用户名" autocomplete="username" style="width: 100%; background: #fff;">
-              </div>
-              <div style="flex: 1;">
-                <label style="display: block; margin-bottom: 8px; font-size: 12px; color: #666;">密码</label>
-                <input type="password" class="form-input" placeholder="请输入镜像仓库密码" autocomplete="current-password" style="width: 100%; background: #fff;">
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="form-group" style="margin-bottom: 24px; display: flex; align-items: flex-start; width: 100%;">
-          <label class="form-label" style="width: 140px; flex-shrink: 0; margin-bottom: 0; font-weight: 500; line-height: 32px;">启动配置</label>
-          <div style="flex: 1; max-width: 100%; background: #F8F9FA; padding: 16px; border-radius: 4px; border: 1px solid #E6E6E6;">
-            <label style="display: block; margin-bottom: 8px; font-size: 12px; color: #666;">启动命令</label>
-            <input type="text" class="form-input" value="sleep infinity" readonly aria-readonly="true" style="width: 100%; background: #F5F5F5; color: #666; cursor: not-allowed;">
-          </div>
-        </div>
-
-        <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 32px;">
-          <a href="sandbox-template.html" class="btn btn-default">取消</a>
-          <a href="sandbox-template.html" id="template-form-submit-btn" class="btn btn-primary">创建</a>
-        </div>
-
       </div>
     </div>
   </div>
 </div>
 
-</div>
-
 <style>
-  /* 弹窗样式 */
-  .modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.5);
-    display: none;
-    align-items: center;
-    justify-content: center;
-    z-index: 1000;
-  }
-  .modal-overlay.active {
-    display: flex;
-  }
-  .modal-dialog {
-    background: #fff;
-    border-radius: 8px;
-    width: 600px;
-    max-width: 90%;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-  }
-  .modal-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 16px 20px;
-    border-bottom: 1px solid #eee;
-  }
-  .modal-title {
-    margin: 0;
-    font-size: 16px;
-    font-weight: 600;
-    color: #333;
-  }
-  .modal-close {
-    background: none;
-    border: none;
-    font-size: 24px;
-    color: #999;
-    cursor: pointer;
-    padding: 0;
-    line-height: 1;
-  }
-  .modal-close:hover {
-    color: #333;
-  }
-  .modal-body {
-    padding: 20px;
-    max-height: 60vh;
-    overflow-y: auto;
-  }
-  .modal-footer {
-    display: flex;
-    justify-content: flex-end;
-    gap: 12px;
-    padding: 16px 20px;
-    border-top: 1px solid #eee;
-  }
-  .form-group {
-    display: flex;
-    align-items: flex-start;
-    margin-bottom: 16px;
-  }
-  .form-group:last-child {
-    margin-bottom: 0;
-  }
-  .form-label {
-    display: flex;
-    align-items: center;
-    flex-shrink: 0;
-    width: 80px;
-    margin-bottom: 0;
-    font-size: 14px;
-    color: #333;
-  }
-  .form-label .required {
-    color: #e53e3e;
-    margin-left: 2px;
-  }
-  .form-control {
-    flex: 1;
-    display: flex;
-    align-items: center;
-  }
-  .form-input {
-    width: 100%;
-    height: 32px;
-    padding: 0 10px;
-    border: 1px solid #D9D9D9;
-    border-radius: 4px;
-    font-size: 14px;
-    color: #333;
-    outline: none;
-    transition: border-color 0.2s;
-  }
-  .form-input:focus {
-    border-color: #0066FF;
-  }
-  .form-input[readonly] {
-    border-color: #D9D9D9;
-    box-shadow: none;
-  }
+  .usage-page { padding: 4px 0; }
+  .usage-toolbar { display:flex; align-items:center; justify-content:flex-end; gap:12px; margin-bottom:16px; }
+  .usage-range { display:flex; align-items:center; gap:8px; }
+  .usage-range-label { font-size:13px; color:#666; }
+  .usage-select { height:32px; padding:0 10px; border:1px solid #D9D9D9; border-radius:4px; background:#fff; cursor:pointer; font-size:13px; color:#333; }
+  .usage-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:16px; }
+  .usage-card { background:#fff; border:1px solid #EEF0F3; border-radius:8px; padding:20px 20px 12px; box-shadow:0 1px 3px rgba(0,0,0,0.03); }
+  .usage-card-wide { margin-bottom:8px; }
+  .usage-card-head { margin-bottom:8px; }
+  .usage-card-head h3 { margin:0; font-size:16px; font-weight:600; color:#202020; }
+  .usage-card-head p { margin:4px 0 0; font-size:12px; color:#8C9AAE; }
+  .usage-legend { display:flex; align-items:center; justify-content:center; gap:6px; font-size:13px; color:#333; }
+  .usage-legend-dot { width:10px; height:10px; border-radius:50%; background:#2FB6A0; }
+  .usage-chart { width:100%; height:230px; }
+  .usage-chart-tall { height:300px; }
+  .usage-chart svg { width:100%; height:100%; display:block; }
+  .uc-axis { stroke:#EAECEF; stroke-width:1; }
+  .uc-grid { stroke:#F2F4F6; stroke-width:1; }
+  .uc-label { fill:#9AA4B2; font-size:11px; font-family:"Microsoft YaHei",sans-serif; }
+  .uc-line { fill:none; stroke:#2FB6A0; stroke-width:2; }
+  .uc-dot { fill:#2FB6A0; }
+  .uc-dot-ring { fill:#fff; stroke:#2FB6A0; stroke-width:2; }
 </style>
 
 <script>
-  // 复制文本功能
-  function copyText(text) {
-    navigator.clipboard.writeText(text).then(() => {
-      alert('已复制: ' + text);
+  // 用量统计示例数据（会话级，可按周期切换）
+  const USAGE_DATA = {
+    '7': {
+      vcpu:  { unit:'vcpu 时(小时)', dates:['2026-07-15','2026-07-16'], values:[0, 8],   yMax:10, yStep:2 },
+      mem:   { unit:'内存 GB时(小时)', dates:['2026-07-15','2026-07-16'], values:[0, 4.2], yMax:5,  yStep:1 },
+      count: { unit:'数量',          dates:['2026-07-15','2026-07-16'], values:[1, 25],  yMax:30, yStep:5 }
+    },
+    '30': {
+      vcpu:  { unit:'vcpu 时(小时)', dates:['06-17','06-24','07-01','07-08','07-16'], values:[2,5,4,9,8],   yMax:10, yStep:2 },
+      mem:   { unit:'内存 GB时(小时)', dates:['06-17','06-24','07-01','07-08','07-16'], values:[1,2.5,2,4.6,4.2], yMax:5, yStep:1 },
+      count: { unit:'数量',          dates:['06-17','06-24','07-01','07-08','07-16'], values:[3,8,6,20,25], yMax:30, yStep:5 }
+    }
+  };
+
+  function drawChart(elId, series) {
+    const el = document.getElementById(elId);
+    const W = el.clientWidth || 480, H = el.clientHeight || 230;
+    const padL = 44, padR = 24, padT = 20, padB = 34;
+    const plotW = W - padL - padR, plotH = H - padT - padB;
+    const n = series.values.length;
+    const xAt = i => padL + (n === 1 ? plotW/2 : plotW * i/(n-1));
+    const yAt = v => padT + plotH * (1 - v/series.yMax);
+
+    let g = '';
+    // 横向网格 + Y 轴刻度
+    for (let v = 0; v <= series.yMax; v += series.yStep) {
+      const y = yAt(v);
+      g += '<line class="uc-grid" x1="'+padL+'" y1="'+y.toFixed(1)+'" x2="'+(W-padR)+'" y2="'+y.toFixed(1)+'"/>';
+      g += '<text class="uc-label" x="'+(padL-8)+'" y="'+(y+4).toFixed(1)+'" text-anchor="end">'+v+'</text>';
+    }
+    // 单位
+    g += '<text class="uc-label" x="'+padL+'" y="'+(padT-6)+'" text-anchor="start">'+series.unit+'</text>';
+    // 面积
+    let area = 'M'+xAt(0)+','+yAt(series.values[0]);
+    series.values.forEach((v,i)=>{ if(i>0) area += ' L'+xAt(i)+','+yAt(v); });
+    area += ' L'+xAt(n-1)+','+yAt(0)+' L'+xAt(0)+','+yAt(0)+' Z';
+    g += '<path d="'+area+'" fill="url(#ucGrad)"/>';
+    // 折线
+    let line = 'M'+xAt(0)+','+yAt(series.values[0]);
+    series.values.forEach((v,i)=>{ if(i>0) line += ' L'+xAt(i)+','+yAt(v); });
+    g += '<path class="uc-line" d="'+line+'"/>';
+    // 数据点 + X 轴标签
+    series.values.forEach((v,i)=>{
+      const x = xAt(i), y = yAt(v);
+      g += '<circle class="uc-dot-ring" cx="'+x.toFixed(1)+'" cy="'+y.toFixed(1)+'" r="4"/>';
+      g += '<text class="uc-label" x="'+x.toFixed(1)+'" y="'+(H-padB+18)+'" text-anchor="middle">'+series.dates[i]+'</text>';
     });
+    // X 轴基线
+    g += '<line class="uc-axis" x1="'+padL+'" y1="'+yAt(0)+'" x2="'+(W-padR)+'" y2="'+yAt(0)+'"/>';
+
+    el.innerHTML = '<svg viewBox="0 0 '+W+' '+H+'" preserveAspectRatio="none">'
+      + '<defs><linearGradient id="ucGrad" x1="0" y1="0" x2="0" y2="1">'
+      + '<stop offset="0%" stop-color="#2FB6A0" stop-opacity="0.28"/>'
+      + '<stop offset="100%" stop-color="#2FB6A0" stop-opacity="0.02"/>'
+      + '</linearGradient></defs>' + g + '</svg>';
   }
 
-  // 图标栏交互
+  function renderUsage() {
+    const range = document.getElementById('usage-range').value;
+    const d = USAGE_DATA[range];
+    drawChart('chart-vcpu', d.vcpu);
+    drawChart('chart-mem', d.mem);
+    drawChart('chart-count', d.count);
+  }
+
+  document.getElementById('usage-range').addEventListener('change', renderUsage);
+  document.getElementById('usage-refresh').addEventListener('click', renderUsage);
+  window.addEventListener('resize', renderUsage);
+
+  // 图标栏 / 菜单交互（沿用平台范式）
   document.querySelectorAll('.icon-item').forEach(item => {
     item.addEventListener('click', function() {
       document.querySelectorAll('.icon-item').forEach(i => i.classList.remove('active'));
       this.classList.add('active');
     });
   });
-
-  // 一级菜单项点击切换图标状态
   document.querySelectorAll('.menu-level-1 > .menu-item').forEach(item => {
-    item.addEventListener('click', function(e) {
-      e.stopPropagation();
-      // 切换选中状态
-      this.classList.toggle('selected');
-    });
+    item.addEventListener('click', function(e){ e.stopPropagation(); this.classList.toggle('selected'); });
   });
 
-  // 子菜单项点击选中交互
-  document.querySelectorAll('.submenu-expanded .menu-item').forEach(item => {
-    item.addEventListener('click', function(e) {
-      e.stopPropagation();
-      
-      // 移除同一子菜单内其他项的active状态
-      const parentSubmenu = this.closest('.submenu-expanded');
-      if (parentSubmenu) {
-        parentSubmenu.querySelectorAll('.menu-item').forEach(i => i.classList.remove('active'));
-      }
-      
-      // 添加当前项的active状态
-      this.classList.add('active');
-      
-      // 更新右侧主内容区的菜单名称
-      const menuText = this.querySelector('.menu-text');
-      if (menuText) {
-        document.getElementById('menu-name-display').textContent = menuText.textContent;
-      }
-    });
-  });
-
-  // 三级菜单项点击选中交互
-  document.querySelectorAll('.menu-level-3 .menu-item').forEach(item => {
-    item.addEventListener('click', function(e) {
-      e.stopPropagation();
-      
-      // 移除所有三级菜单项的active状态
-      document.querySelectorAll('.menu-level-3 .menu-item').forEach(i => i.classList.remove('active'));
-      
-      // 添加当前项的active状态
-      this.classList.add('active');
-      
-      // 更新右侧主内容区的菜单名称
-      const menuText = this.querySelector('.menu-text');
-      if (menuText) {
-        document.getElementById('menu-name-display').textContent = menuText.textContent;
-      }
-    });
-  });
-
-
-
-  const templateFormParams = new URLSearchParams(window.location.search);
-  if (templateFormParams.get('mode') === 'edit') {
-    const templateName = templateFormParams.get('name') || '';
-    const formTitle = document.getElementById('template-form-title');
-    const nameInput = document.getElementById('template-name-input');
-    const submitBtn = document.getElementById('template-form-submit-btn');
-    if (formTitle) formTitle.textContent = '编辑模板';
-    if (nameInput && templateName) nameInput.value = templateName;
-    if (submitBtn) submitBtn.textContent = '保存';
-  }
-
-  document.querySelectorAll('.menu-item').forEach(item => {
-    const arrow = item.querySelector('.menu-arrow');
-    if (arrow) {
-      // 一级菜单的箭头图标不触发交互
-      const isTopLevel = item.parentElement.classList.contains('menu-level-1');
-      if (isTopLevel) {
-        return; // 跳过一级菜单项
-      }
-      
-      item.style.cursor = 'pointer';
-      item.addEventListener('click', function(e) {
-        e.stopPropagation();
-        
-        // 找到父元素
-        const parent = this.parentElement;
-        
-        // 情况1：一级菜单项，控制 menu-level-2
-        let submenu = parent.querySelector('.menu-level-2');
-        if (submenu) {
-          submenu.classList.toggle('collapsed');
-          this.classList.toggle('collapsed');
-          return;
-        }
-        
-        // 情况2：二级菜单项，控制 submenu-expanded
-        submenu = parent.querySelector('.submenu-expanded');
-        if (submenu) {
-          submenu.classList.toggle('collapsed');
-          this.classList.toggle('collapsed');
-          return;
-        }
-        
-        // 情况3：三级菜单项
-        submenu = parent.querySelector('.menu-level-3');
-        if (submenu) {
-          submenu.classList.toggle('collapsed');
-          this.classList.toggle('collapsed');
-          return;
-        }
-      });
-    }
-  });
+  renderUsage();
 </script>
 <script src="styles/sandbox-shell.js"></script>
 <script src="styles/ai-sandbox.js"></script>
