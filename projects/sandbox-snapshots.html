@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>360智汇云规范</title>
+  <title>沙箱快照 - 360智汇云</title>
   <style>
     * {
       margin: 0;
@@ -222,6 +222,11 @@
     }
 
     .icon-item:hover {
+      background: #0066FF;
+      color: #fff;
+    }
+
+    .icon-item.active {
       background: #0066FF;
       color: #fff;
     }
@@ -1012,12 +1017,43 @@
       color: #999;
     }
 
+    .id-cell {
+      font-family: monospace;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .copy-icon {
+      cursor: pointer;
+      opacity: 0.5;
+      font-size: 12px;
+    }
+
+    .copy-icon:hover {
+      opacity: 1;
+    }
+
+    .template-name {
+      color: #333;
+    }
+
+    .visibility-badge {
+      display: inline-block;
+      padding: 2px 8px;
+      background: #E6F7EE;
+      color: #52C41A;
+      border-radius: 4px;
+      font-size: 12px;
+    }
+
     .action-link {
       color: #0066FF;
       text-decoration: none;
       margin-right: 12px;
       cursor: pointer;
     }
+
     .action-link:hover {
       text-decoration: underline;
     }
@@ -1074,7 +1110,7 @@
 <div class="container">
   <!-- 第一栏：左侧图标栏 -->
   <div class="icon-bar">
-    <div class="icon-item" title="全部">
+    <div class="icon-item active" title="全部">
       <div class="icon-svg">
         <svg width="20" height="20" viewBox="0 0 16 16" fill="none">
           <rect x="2" y="2" width="5" height="5" rx="1" fill="currentColor"/>
@@ -1193,7 +1229,7 @@
         
         <!-- 展开的子菜单：AI沙箱 Sandbox -->
         <div class="submenu-expanded">
-          <div class="menu-item active">
+          <div class="menu-item">
             <div class="menu-icon">
               <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
                 <rect x="2" y="2" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.5" fill="none"/>
@@ -1202,9 +1238,9 @@
                 <rect x="9" y="9" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.5" fill="none"/>
               </svg>
             </div>
-            <span class="menu-text">沙箱实例</span>
+            <a href="index.html"><span class="menu-text">沙箱实例</span></a>
           </div>
-          <div class="menu-item">
+          <div class="menu-item active">
             <div class="menu-icon">
               <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
                 <path d="M3 4.5C3 3.7 4.8 3 8 3s5 0.7 5 1.5S11.2 6 8 6 3 5.3 3 4.5z" stroke="currentColor" stroke-width="1.5" fill="none"/>
@@ -1212,17 +1248,17 @@
                 <path d="M3 8c0 0.8 1.8 1.5 5 1.5s5-0.7 5-1.5" stroke="currentColor" stroke-width="1.5" fill="none"/>
               </svg>
             </div>
-            <a href="sandbox-snapshots.html"><span class="menu-text">沙箱快照</span></a>
+            <span class="menu-text">沙箱快照</span>
           </div>
-          <a href="sandbox-template.html" class="menu-item">
+          <div class="menu-item">
             <div class="menu-icon">
               <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
                 <rect x="2" y="2" width="12" height="12" rx="2" stroke="currentColor" stroke-width="1.5" fill="none"/>
                 <path d="M6 6l2 2 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
               </svg>
             </div>
-            <span class="menu-text">沙箱模板</span>
-          </a>
+            <a href="sandbox-template.html"><span class="menu-text">沙箱模板</span></a>
+          </div>
           <div class="menu-item">
             <div class="menu-icon">
               <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
@@ -1301,7 +1337,7 @@
   <!-- 第三栏：右侧主内容 -->
   <div class="main-content">
     <div class="breadcrumb">
-      <span class="breadcrumb-left" id="menu-name-display">沙箱实例</span>
+      <span class="breadcrumb-left" id="menu-name-display">沙箱快照</span>
       <a class="breadcrumb-link" id="menu-link-display">Sandbox 帮助文档</a>
     </div>
     <div class="content-body">
@@ -1309,25 +1345,25 @@
         <!-- 工具栏 -->
         <div class="product-toolbar">
           <div class="toolbar-left">
-            <button class="btn btn-primary" onclick="window.location.href='sandbox-create.html'">
-              <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
-                <path d="M8 2v12M2 8h12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-              </svg>
-              创建沙箱
-            </button>
+            <a class="btn btn-default" href="index.html" style="display:inline-flex; align-items:center; gap:8px;">返回实例列表</a>
           </div>
           <div class="toolbar-right">
             <div class="search-box">
-              <input type="text" id="sandbox-search" placeholder="请输入沙箱ID">
+              <input type="text" id="snapshot-search" placeholder="搜索快照ID、名称或来源沙箱">
               <button class="search-btn">
                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
                   <circle cx="7" cy="7" r="5" stroke="currentColor" stroke-width="1.5" fill="none"/>
                   <path d="M11 11l3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
                 </svg>
               </button>
-              <button class="clear-btn" onclick="document.getElementById('sandbox-search').value=''" title="清除">C</button>
             </div>
-            <button class="refresh-btn" title="刷新">
+            <select id="status-filter" class="form-select" style="height:32px; padding:0 10px; border:1px solid #D9D9D9; border-radius:4px; background:#fff; appearance:auto; cursor:pointer;">
+              <option value="">全部状态</option>
+              <option value="ready">可用</option>
+              <option value="creating">创建中</option>
+              <option value="failed">创建失败</option>
+            </select>
+            <button class="refresh-btn" title="刷新" id="refresh-btn">
               <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
                 <path d="M14 8A6 6 0 118 2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
                 <path d="M14 2v4h-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
@@ -1335,185 +1371,74 @@
             </button>
           </div>
         </div>
-        
+
         <!-- 表格 -->
         <div class="product-table">
           <div class="table-wrapper">
             <table>
             <thead>
               <tr>
-                <th style="width: 40px;"><input type="checkbox" class="product-checkbox"></th>
-                <th>沙箱ID</th>
+                <th>快照ID</th>
+                <th>快照名称</th>
+                <th>来源沙箱</th>
                 <th>模板</th>
-                <th>CPU</th>
-                <th>内存</th>
-                <th>MetaData</th>
                 <th>状态</th>
-                <th>启动时间</th>
+                <th>创建时间</th>
+                <th>描述</th>
                 <th>操作</th>
               </tr>
             </thead>
-            <tbody id="sandbox-instance-table-body">
-              <tr>
-                <td><input type="checkbox" class="product-checkbox"></td>
-                <td>sandbox-dev-python</td>
-                <td>Python 3.11</td>
-                <td>2核</td>
-                <td>4GB</td>
-                <td>dev-env</td>
-                <td><span class="status-badge status-normal"><span class="status-dot"></span>运行中</span></td>
-                <td>2026-05-20 10:30:00</td>
-                <td><a href="#" class="action-link set-policy-btn" data-sandbox="sandbox-dev-python">访问策略</a><a href="#" class="action-link create-snapshot-btn" data-sandbox="sandbox-dev-python" data-template="Python 3.11" data-cpu="2核" data-memory="4GB">创建快照</a></td>
-              </tr>
-              <tr>
-                <td><input type="checkbox" class="product-checkbox"></td>
-                <td>sandbox-prod-java</td>
-                <td>Java 17</td>
-                <td>4核</td>
-                <td>8GB</td>
-                <td>prod-env</td>
-                <td><span class="status-badge status-normal"><span class="status-dot"></span>运行中</span></td>
-                <td>2026-05-21 14:15:00</td>
-                <td><a href="#" class="action-link set-policy-btn" data-sandbox="sandbox-prod-java">访问策略</a><a href="#" class="action-link create-snapshot-btn" data-sandbox="sandbox-prod-java" data-template="Java 17" data-cpu="4核" data-memory="8GB">创建快照</a></td>
-              </tr>
-              <tr>
-                <td><input type="checkbox" class="product-checkbox"></td>
-                <td>sandbox-test-node</td>
-                <td>Node.js 20</td>
-                <td>2核</td>
-                <td>4GB</td>
-                <td>test-env</td>
-                <td><span class="status-badge status-normal"><span class="status-dot"></span>运行中</span></td>
-                <td>2026-05-22 09:00:00</td>
-                <td><a href="#" class="action-link set-policy-btn" data-sandbox="sandbox-test-node">访问策略</a><a href="#" class="action-link create-snapshot-btn" data-sandbox="sandbox-test-node" data-template="Node.js 20" data-cpu="2核" data-memory="4GB">创建快照</a></td>
-              </tr>
-            </tbody>
+            <tbody id="snapshot-table-body"></tbody>
           </table>
           </div>
+          <div id="snapshot-empty" class="snapshot-empty" hidden>
+            <p>暂无沙箱快照</p>
+            <a class="btn btn-primary" href="index.html">前往实例列表创建快照</a>
+          </div>
         </div>
-        
+
         <!-- 翻页组件 -->
         <div class="pagination-bar">
-          <div class="pagination-left">共3条记录 第1/1页</div>
-          <div class="pagination-right">
-            <div class="page-size-select">
-              10条/页
-              <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-                <path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </div>
-            <button class="page-btn disabled">&lt;</button>
-            <button class="page-btn active">1</button>
-            <button class="page-btn">2</button>
-            <button class="page-btn">3</button>
-            <button class="page-btn">4</button>
-            <span class="page-ellipsis">···</span>
-            <button class="page-btn">50</button>
-            <button class="page-btn">&gt;</button>
-          </div>
+          <div class="pagination-left" id="record-count">共0条记录 第1/1页</div>
         </div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- 创建快照弹窗 -->
-<div class="modal-overlay" id="create-snapshot-modal" role="dialog" aria-modal="true" aria-labelledby="create-snapshot-title">
-  <div class="modal-dialog">
+<!-- 删除确认弹窗 -->
+<div class="modal-overlay" id="delete-snapshot-modal">
+  <div class="modal-dialog" style="width: 420px;">
     <div class="modal-header">
-      <h3 class="modal-title" id="create-snapshot-title">创建沙箱快照</h3>
-      <button class="modal-close" type="button" onclick="closeCreateSnapshotModal()" aria-label="关闭">&times;</button>
+      <h3 class="modal-title">删除确认</h3>
+      <button class="modal-close" onclick="closeDeleteSnapshotModal()">&times;</button>
     </div>
-    <div class="modal-body">
-      <div class="form-group"><label class="form-label">沙箱实例</label><div class="form-control"><span class="sandbox-name-tag" id="snapshot-source-sandbox"></span></div></div>
-      <div class="form-group"><label class="form-label">模板</label><div class="form-control"><span id="snapshot-source-template" style="line-height:36px;color:#666;"></span></div></div>
-      <div class="form-group"><label class="form-label">快照名称 <span class="required">*</span></label><div class="form-control"><input id="snapshot-name-input" class="form-input" type="text" placeholder="例如：snapshot-dev-python-20260716"></div></div>
-      <div class="form-group"><label class="form-label">描述</label><div class="form-control"><textarea id="snapshot-description-input" class="form-input form-textarea" rows="3" placeholder="请描述此快照的用途或基线"></textarea></div></div>
-      <div class="snapshot-impact-tip"><strong>完整快照</strong>会保存文件系统与运行时内存状态。创建期间实例会短暂停顿，WebSocket、终端和命令流连接将断开；完成后源实例继续运行。</div>
-    </div>
-    <div class="modal-footer"><button class="btn btn-default" type="button" onclick="closeCreateSnapshotModal()">取消</button><button class="btn btn-primary" id="create-snapshot-submit-btn" type="button" onclick="createSnapshot()">创建快照</button></div>
-  </div>
-</div>
-
-<style>
-  .status-badge { display:inline-flex; align-items:center; gap:4px; padding:2px 8px; border-radius:4px; font-size:12px; }
-  .status-normal { background:#E6F7EE; color:#52C41A; }
-  .status-dot { width:6px; height:6px; border-radius:50%; background:currentColor; }
-  .snapshot-impact-tip { margin-left:80px; padding:10px 12px; background:#FFFBE6; border:1px solid #FFE58F; border-radius:4px; color:#8C6D1F; font-size:12px; line-height:1.6; }
-  #create-snapshot-modal .form-input {
-    width: 100%;
-    height: 32px;
-    padding: 0 10px;
-    border: 1px solid #D9D9D9;
-    border-radius: 4px;
-    font-size: 14px;
-    color: #333;
-    outline: none;
-    transition: border-color 0.2s;
-  }
-  #create-snapshot-modal .form-input:focus {
-    border-color: #0066FF;
-  }
-  #create-snapshot-modal .form-input::placeholder {
-    color: #bbb;
-  }
-  #create-snapshot-modal textarea.form-input {
-    height: auto;
-    min-height: 72px;
-    padding: 8px 10px;
-    line-height: 1.5;
-    resize: vertical;
-    font-family: inherit;
-  }
-</style>
-
-<!-- 设置策略弹窗 -->
-<div class="modal-overlay" id="set-policy-modal">
-  <div class="modal-dialog">
-    <div class="modal-header">
-      <h3 class="modal-title">设置策略</h3>
-      <button class="modal-close" onclick="closeSetPolicyModal()">&times;</button>
-    </div>
-    <div class="modal-body">
-      <div class="form-group">
-        <label class="form-label">沙箱</label>
-        <div class="form-control">
-          <span class="sandbox-name-tag" id="set-sandbox-name"></span>
-        </div>
-      </div>
-      <div class="form-group">
-        <label class="form-label">网络策略 <span class="required">*</span></label>
-        <div class="form-control">
-          <div class="multi-select-container" id="policy-multi-select">
-            <!-- 顶部已选标签栏 -->
-            <div class="multi-select-header" onclick="togglePolicyDropdown()">
-              <div class="multi-select-tags" id="selected-policy-tags">
-                <span class="multi-select-placeholder">请选择网络策略</span>
-              </div>
-              <span class="multi-select-arrow" id="policy-arrow">▲</span>
-            </div>
-            <!-- 下拉选项面板 -->
-            <div class="multi-select-dropdown" id="policy-dropdown">
-              <div id="policy-options-list"></div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="form-group" id="selected-services-group" style="display:none;">
-        <label class="form-label">访问对象</label>
-        <div class="form-control">
-          <div id="selected-services-list" class="selected-services"></div>
-        </div>
-      </div>
+    <div class="modal-body" style="padding: 24px 20px;">
+      <p id="delete-snapshot-msg" style="margin: 0 0 12px; font-size: 15px; color: #333; line-height: 1.6;"></p>
+      <div style="padding:10px 12px; background:#FFFBE6; border:1px solid #FFE58F; border-radius:4px; color:#8C6D1F; font-size:12px; line-height:1.6;">删除后不可恢复。已由该快照创建的实例不受影响。</div>
     </div>
     <div class="modal-footer">
-      <button class="btn btn-default" onclick="closeSetPolicyModal()">取消</button>
-      <button class="btn btn-primary" onclick="createPolicyFromSandbox()">创建</button>
+      <button class="btn btn-default" onclick="closeDeleteSnapshotModal()">取消</button>
+      <button class="btn btn-primary" style="background:#ff4d4f;border-color:#ff4d4f;" onclick="confirmDeleteSnapshot()">删除</button>
     </div>
   </div>
 </div>
 
 <style>
+  .snapshot-empty { padding:72px 24px; text-align:center; color:#999; }
+  .snapshot-empty p { margin:0 0 16px; font-size:15px; color:#666; }
+  .snap-status { display:inline-flex; align-items:center; gap:5px; padding:2px 8px; border-radius:4px; font-size:12px; }
+  .snap-status::before { content:""; width:6px; height:6px; border-radius:50%; background:currentColor; }
+  .snap-status.ready { background:#E6F7EE; color:#52C41A; }
+  .snap-status.creating { background:#E6F4FF; color:#1677FF; }
+  .snap-status.failed { background:#FFF1F0; color:#FF4D4F; }
+  .action-link.disabled { color:#bbb; cursor:not-allowed; }
+</style>
+
+<!-- 原创建/删除模板弹窗（保留隐藏，避免脚本引用报错） -->
+<!-- 弹窗样式（复用模板页范式） -->
+<style>
+  /* 弹窗样式 */
   .modal-overlay {
     position: fixed;
     top: 0;
@@ -1532,10 +1457,9 @@
   .modal-dialog {
     background: #fff;
     border-radius: 8px;
-    width: 560px;
+    width: 600px;
     max-width: 90%;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-    overflow: visible;
   }
   .modal-header {
     display: flex;
@@ -1590,205 +1514,113 @@
     margin-bottom: 0;
     font-size: 14px;
     color: #333;
-    line-height: 36px;
-    justify-content: flex-end;
-    padding-right: 12px;
+  }
+  .form-label .required {
+    color: #e53e3e;
+    margin-left: 2px;
   }
   .form-control {
     flex: 1;
-    min-width: 0;
-  }
-  .required {
-    color: #ff4d4f;
-  }
-  .form-tip {
-    font-size: 12px;
-    color: #999;
-    margin-top: 4px;
-  }
-  .selected-services {
     display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    padding: 8px;
-    background: #f5f5f5;
-    border-radius: 4px;
-    min-height: 36px;
-  }
-  .selected-services .service-tag {
-    display: inline-flex;
     align-items: center;
-    padding: 4px 12px;
-    background: #e6f7ff;
-    border: 1px solid #91d5ff;
-    border-radius: 4px;
-    font-size: 13px;
-    color: #1890ff;
   }
-
-  .form-textarea {
-    resize: vertical;
-  }
-  /* 沙箱名称标签 */
-  .sandbox-name-tag {
-    display: inline-block;
-    background: #e8f4fd;
-    color: #1890ff;
-    padding: 4px 12px;
-    border-radius: 4px;
-    font-size: 13px;
-    line-height: 20px;
-  }
-  /* 自定义多选下拉框 */
-  .multi-select-container {
-    position: relative;
+  .form-input {
     width: 100%;
-    z-index: 20;
+    height: 32px;
+    padding: 0 10px;
+    border: 1px solid #D9D9D9;
+    border-radius: 4px;
+    font-size: 14px;
+    color: #333;
+    outline: none;
+    transition: border-color 0.2s;
   }
-  .multi-select-header {
+  .form-input:focus {
+    border-color: #0066FF;
+  }
+  .pkg-add-row-btn {
+    height: 32px;
+    padding: 0 14px;
+    font-size: 14px;
+    margin-bottom: 12px;
+    width: fit-content;
+  }
+  .pkg-rows {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .pkg-row {
     display: flex;
     align-items: center;
-    min-height: 38px;
-    padding: 6px 10px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    background: #fff;
-    cursor: pointer;
-    flex-wrap: wrap;
-    gap: 6px;
+    gap: 8px;
   }
-  .multi-select-header:hover {
-    border-color: #3498db;
-  }
-  .multi-select-header.open {
-    border-color: #3498db;
-    box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.12);
-  }
-  .multi-select-tags {
+  .pkg-row .form-select {
     flex: 1;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-    align-items: center;
-  }
-  .multi-select-placeholder {
-    color: #999;
-    font-size: 14px;
-  }
-  .multi-select-tag {
-    display: inline-flex;
-    align-items: center;
-    padding: 2px 8px;
-    background: #e8f4fc;
+    height: 32px;
+    padding: 0 10px;
+    border: 1px solid #D9D9D9;
     border-radius: 4px;
-    font-size: 13px;
-    color: #333;
-  }
-  .multi-select-tag .tag-close {
-    margin-left: 6px;
-    cursor: pointer;
-    color: #666;
     font-size: 14px;
-    line-height: 1;
-  }
-  .multi-select-tag .tag-close:hover {
     color: #333;
-  }
-  .multi-select-arrow {
-    font-size: 10px;
-    color: #666;
-    margin-left: 8px;
-    transition: transform 0.2s;
-  }
-  .multi-select-arrow.up {
-    transform: rotate(180deg);
-  }
-  .multi-select-dropdown {
-    display: none;
-    position: absolute;
-    top: 100%;
-    margin-top: 6px;
-    left: 0;
-    right: 0;
+    outline: none;
     background: #fff;
-    border: 1px solid #ddd;
-    border-radius: 6px;
-    box-shadow: 0 8px 24px rgba(0,0,0,0.12);
-    z-index: 1200;
-    max-height: 220px;
-    overflow-y: auto;
-  }
-  .multi-select-dropdown.open {
-    display: block;
-  }
-  .multi-select-option {
-    display: flex;
-    align-items: center;
-    padding: 10px 12px;
     cursor: pointer;
-    font-size: 14px;
-    color: #333;
+    appearance: auto;
   }
-  .multi-select-option:hover {
-    background: #f5f9fc;
+  .pkg-row .form-select:focus {
+    border-color: #0066FF;
   }
-  .multi-select-option.selected {
-    background: #e8f4fc;
+  .pkg-row .form-select:disabled {
+    background: #f5f5f5;
+    color: #999;
+    cursor: not-allowed;
   }
-  .multi-select-option .checkbox {
-    width: 16px;
-    height: 16px;
-    border: 1px solid #ccc;
-    border-radius: 3px;
-    margin-right: 10px;
+  .pkg-del-btn {
+    width: 32px;
+    height: 32px;
+    border: 1px solid #D9D9D9;
+    border-radius: 4px;
+    background: #fff;
+    color: #999;
+    font-size: 16px;
+    cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: #fff;
     flex-shrink: 0;
+    transition: all 0.2s;
   }
-  .multi-select-option.selected .checkbox {
-    background: #3498db;
-    border-color: #3498db;
+  .pkg-del-btn:hover {
+    border-color: #e53e3e;
+    color: #e53e3e;
   }
-  .multi-select-option.selected .checkbox::after {
-    content: '✓';
-    color: #fff;
-    font-size: 12px;
-  }
-  .multi-select-option.disabled {
-    color: #bbb;
+  .pkg-del-btn.disabled {
     cursor: not-allowed;
-    background: #fafafa;
+    opacity: 0.4;
   }
-  .multi-select-option.disabled:hover {
-    background: #fafafa;
-  }
-  .multi-select-option.disabled .checkbox {
-    background: #f0f0f0;
-    border-color: #ddd;
-  }
-  .service-tag {
-    display: inline-flex;
-    align-items: center;
-    padding: 4px 10px;
-    background: #e8f4fc;
-    border-radius: 4px;
-    font-size: 13px;
-    color: #333;
-    margin: 2px;
-  }
-  .service-tag .tag-close {
-    margin-left: 6px;
-    cursor: pointer;
-    color: #666;
-  }
-  .service-tag .tag-close:hover {
-    color: #333;
+  .pkg-del-btn.disabled:hover {
+    border-color: #D9D9D9;
+    color: #999;
   }
 </style>
 
 <script>
+  // 复制文本功能
+  function copyText(text) {
+    navigator.clipboard.writeText(text).then(() => {
+      alert('已复制: ' + text);
+    });
+  }
+
+  // 图标栏交互
+  document.querySelectorAll('.icon-item').forEach(item => {
+    item.addEventListener('click', function() {
+      document.querySelectorAll('.icon-item').forEach(i => i.classList.remove('active'));
+      this.classList.add('active');
+    });
+  });
+
   // 一级菜单项点击切换图标状态
   document.querySelectorAll('.menu-level-1 > .menu-item').forEach(item => {
     item.addEventListener('click', function(e) {
@@ -1839,7 +1671,96 @@
     });
   });
 
-  // 菜单展开/收起交互
+  // ===== 沙箱快照数据与渲染 =====
+  const SNAPSHOTS_KEY = 'sandboxSnapshots';
+  const SEED_SNAPSHOTS = [
+    { id:'snap_dev_python_base', name:'snapshot-dev-python-base', sourceSandboxId:'sandbox-dev-python', template:'Python 3.11', cpu:'2核', memory:'4GB', status:'ready', createdAt:'2026-07-14 10:30:00', description:'Python 依赖安装完成后的开发基线', captureMode:'full' },
+    { id:'snap_prod_java_release', name:'snapshot-prod-java-release', sourceSandboxId:'sandbox-prod-java', template:'Java 17', cpu:'4核', memory:'8GB', status:'ready', createdAt:'2026-07-15 14:15:00', description:'发布前运行态快照', captureMode:'full' },
+    { id:'snap_node_build', name:'snapshot-node-build', sourceSandboxId:'sandbox-test-node', template:'Node.js 20', cpu:'2核', memory:'4GB', status:'creating', createdAt:'2026-07-16 09:00:00', description:'Node.js 测试环境', captureMode:'full' }
+  ];
+
+  const snapshotStore = {
+    list() {
+      const saved = sessionStorage.getItem(SNAPSHOTS_KEY);
+      if (!saved) { this.save(SEED_SNAPSHOTS); return SEED_SNAPSHOTS.slice(); }
+      return JSON.parse(saved);
+    },
+    save(snapshots) { sessionStorage.setItem(SNAPSHOTS_KEY, JSON.stringify(snapshots)); },
+    get(id) { return this.list().find(s => s.id === id); },
+    remove(id) { this.save(this.list().filter(s => s.id !== id)); }
+  };
+
+  const SNAP_STATUS_LABEL = { ready:'可用', creating:'创建中', failed:'创建失败' };
+  let pendingDeleteId = '';
+
+  function escapeHtml(value) {
+    return String(value == null ? '' : value).replace(/[&<>'"]/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[ch]));
+  }
+
+  function renderSnapshots() {
+    const keyword = (document.getElementById('snapshot-search').value || '').trim().toLowerCase();
+    const filter = document.getElementById('status-filter').value;
+    const snapshots = snapshotStore.list().filter(s => {
+      const matchKeyword = !keyword || [s.id, s.name, s.sourceSandboxId].join(' ').toLowerCase().includes(keyword);
+      return matchKeyword && (!filter || s.status === filter);
+    });
+    const body = document.getElementById('snapshot-table-body');
+    const empty = document.getElementById('snapshot-empty');
+    const table = document.querySelector('.product-table table');
+    body.innerHTML = snapshots.map(s => {
+      const disabled = s.status === 'creating';
+      const createLink = disabled
+        ? '<a class="action-link disabled" title="快照创建中，暂不可用">从快照创建</a>'
+        : '<a class="action-link" href="sandbox-snapshot-create.html?id=' + encodeURIComponent(s.id) + '">从快照创建</a>';
+      const deleteLink = disabled
+        ? '<a class="action-link disabled" title="快照创建中，暂不可删除">删除</a>'
+        : '<a href="#" class="action-link delete-snapshot-btn" data-id="' + escapeHtml(s.id) + '">删除</a>';
+      return '<tr>' +
+        '<td class="id-cell">' + escapeHtml(s.id) + '<span class="copy-icon" onclick="copyText(\'' + escapeHtml(s.id) + '\')">📋</span></td>' +
+        '<td>' + escapeHtml(s.name) + '</td>' +
+        '<td>' + escapeHtml(s.sourceSandboxId) + '</td>' +
+        '<td>' + escapeHtml(s.template) + '</td>' +
+        '<td><span class="snap-status ' + s.status + '">' + SNAP_STATUS_LABEL[s.status] + '</span></td>' +
+        '<td>' + escapeHtml(s.createdAt) + '</td>' +
+        '<td>' + (escapeHtml(s.description) || '-') + '</td>' +
+        '<td>' + createLink + deleteLink + '</td>' +
+      '</tr>';
+    }).join('');
+    empty.hidden = snapshots.length !== 0;
+    if (table) table.style.display = snapshots.length === 0 ? 'none' : '';
+    document.getElementById('record-count').textContent = '共' + snapshots.length + '条记录 第1/1页';
+  }
+
+  function openDeleteSnapshotModal(id) {
+    pendingDeleteId = id;
+    const snapshot = snapshotStore.get(id);
+    document.getElementById('delete-snapshot-msg').textContent = '确定删除快照“' + (snapshot ? snapshot.name : id) + '”吗？';
+    document.getElementById('delete-snapshot-modal').classList.add('active');
+  }
+
+  function closeDeleteSnapshotModal() {
+    document.getElementById('delete-snapshot-modal').classList.remove('active');
+    pendingDeleteId = '';
+  }
+
+  function confirmDeleteSnapshot() {
+    if (pendingDeleteId) snapshotStore.remove(pendingDeleteId);
+    closeDeleteSnapshotModal();
+    renderSnapshots();
+  }
+
+  document.getElementById('snapshot-search').addEventListener('input', renderSnapshots);
+  document.getElementById('status-filter').addEventListener('change', renderSnapshots);
+  document.getElementById('refresh-btn').addEventListener('click', renderSnapshots);
+  document.getElementById('snapshot-table-body').addEventListener('click', function(e) {
+    const btn = e.target.closest('.delete-snapshot-btn');
+    if (btn) { e.preventDefault(); openDeleteSnapshotModal(btn.dataset.id); }
+  });
+  document.getElementById('delete-snapshot-modal').addEventListener('click', function(e) {
+    if (e.target === this) closeDeleteSnapshotModal();
+  });
+  renderSnapshots();
+
   document.querySelectorAll('.menu-item').forEach(item => {
     const arrow = item.querySelector('.menu-arrow');
     if (arrow) {
@@ -1880,309 +1801,6 @@
           return;
         }
       });
-    }
-  });
-
-  function renderSnapshotInstances() {
-    const instances = JSON.parse(sessionStorage.getItem('sandboxSnapshotInstances') || '[]');
-    const body = document.getElementById('sandbox-instance-table-body');
-    if (!body || instances.length === 0) return;
-    const rows = instances.map(instance => `<tr>
-      <td><input type="checkbox" class="product-checkbox"></td>
-      <td>${instance.id}</td>
-      <td>${instance.template}</td>
-      <td>${instance.cpu}</td>
-      <td>${instance.memory}</td>
-      <td>${instance.metadata}</td>
-      <td><span class="status-badge status-normal"><span class="status-dot"></span>运行中</span></td>
-      <td>${instance.createdAt}</td>
-      <td><a href="#" class="action-link set-policy-btn" data-sandbox="${instance.id}">访问策略</a><a href="#" class="action-link create-snapshot-btn" data-sandbox="${instance.id}" data-template="${instance.template}" data-cpu="${instance.cpu}" data-memory="${instance.memory}">创建快照</a></td>
-    </tr>`).join('');
-    body.insertAdjacentHTML('afterbegin', rows);
-  }
-
-  renderSnapshotInstances();
-
-  const SNAPSHOTS_KEY = 'sandboxSnapshots';
-  let currentSnapshotSource = null;
-
-  function getSnapshots() {
-    return JSON.parse(sessionStorage.getItem(SNAPSHOTS_KEY) || '[]');
-  }
-
-  function saveSnapshots(snapshots) {
-    sessionStorage.setItem(SNAPSHOTS_KEY, JSON.stringify(snapshots));
-  }
-
-  document.addEventListener('click', function(event) {
-    const btn = event.target.closest('.create-snapshot-btn');
-    if (!btn) return;
-    event.preventDefault();
-    currentSnapshotSource = {
-      id: btn.dataset.sandbox,
-      template: btn.dataset.template,
-      cpu: btn.dataset.cpu,
-      memory: btn.dataset.memory
-    };
-    document.getElementById('snapshot-source-sandbox').textContent = currentSnapshotSource.id;
-    document.getElementById('snapshot-source-template').textContent = currentSnapshotSource.template;
-    document.getElementById('snapshot-name-input').value = '';
-    document.getElementById('snapshot-description-input').value = '';
-    document.getElementById('create-snapshot-modal').classList.add('active');
-  });
-
-  function closeCreateSnapshotModal() {
-    document.getElementById('create-snapshot-modal').classList.remove('active');
-    currentSnapshotSource = null;
-  }
-
-  function createSnapshot() {
-    const name = document.getElementById('snapshot-name-input').value.trim();
-    if (!name) {
-      alert('请输入快照名称');
-      return;
-    }
-    if (getSnapshots().some(snapshot => snapshot.name === name)) {
-      alert('快照名称已存在，请使用其他名称');
-      return;
-    }
-    const submitBtn = document.getElementById('create-snapshot-submit-btn');
-    submitBtn.disabled = true;
-    submitBtn.textContent = '创建中...';
-    const source = currentSnapshotSource;
-    setTimeout(() => {
-      const now = new Date();
-      const pad = value => String(value).padStart(2, '0');
-      const createdAt = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())} ${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
-      const snapshot = {
-        id: `snap_${Date.now().toString(36)}`,
-        name,
-        sourceSandboxId: source.id,
-        template: source.template,
-        cpu: source.cpu,
-        memory: source.memory,
-        status: 'ready',
-        createdAt,
-        description: document.getElementById('snapshot-description-input').value.trim(),
-        captureMode: 'full'
-      };
-      saveSnapshots([snapshot, ...getSnapshots()]);
-      submitBtn.disabled = false;
-      submitBtn.textContent = '创建快照';
-      closeCreateSnapshotModal();
-      alert('快照创建成功，源实例已恢复运行。');
-      window.location.href = 'sandbox-snapshots.html';
-    }, 700);
-  }
-
-  document.getElementById('create-snapshot-modal').addEventListener('click', function(event) {
-    if (event.target === this) closeCreateSnapshotModal();
-  });
-
-  // 设置策略弹窗
-  let currentSandboxName = '';
-  document.querySelectorAll('.set-policy-btn').forEach(btn => {
-    btn.addEventListener('click', function(e) {
-      e.preventDefault();
-      currentSandboxName = this.dataset.sandbox;
-      document.getElementById('set-sandbox-name').value = currentSandboxName;
-      
-      openSetPolicyModal();
-    });
-  });
-
-  function closeSetPolicyModal() {
-    document.getElementById('set-policy-modal').classList.remove('active');
-    selectedPolicyIds = [];
-    setPolicyDropdownState(false);
-    renderPolicyTags();
-    renderPolicyOptions();
-    document.getElementById('selected-services-list').innerHTML = '';
-    document.getElementById('selected-services-group').style.display = 'none';
-    currentSandboxName = '';
-  }
-
-  // 多选下拉框相关函数
-  let selectedPolicyIds = [];
-
-  function openSetPolicyModal() {
-    const modal = document.getElementById('set-policy-modal');
-    modal.classList.add('active');
-    selectedPolicyIds = [];
-    setPolicyDropdownState(false);
-    renderPolicyTags();
-    renderPolicyOptions();
-    document.getElementById('selected-services-list').innerHTML = '';
-    document.getElementById('selected-services-group').style.display = 'none';
-    // 设置沙箱名称标签
-    document.getElementById('set-sandbox-name').textContent = currentSandboxName || '';
-  }
-
-  function setPolicyDropdownState(isOpen) {
-    const dropdown = document.getElementById('policy-dropdown');
-    const arrow = document.getElementById('policy-arrow');
-    const header = document.querySelector('#policy-multi-select .multi-select-header');
-    if (dropdown) dropdown.classList.toggle('open', isOpen);
-    if (arrow) arrow.classList.toggle('up', isOpen);
-    if (header) header.classList.toggle('open', isOpen);
-  }
-
-  function togglePolicyDropdown() {
-    const dropdown = document.getElementById('policy-dropdown');
-    if (!dropdown) return;
-    setPolicyDropdownState(!dropdown.classList.contains('open'));
-  }
-
-  function selectPolicy(id, name) {
-    const policies = JSON.parse(localStorage.getItem('sandboxPolicies') || '[]');
-    const targetPolicy = policies.find(p => p.id === id);
-    if (!targetPolicy) return;
-
-    const idx = selectedPolicyIds.indexOf(id);
-    if (idx > -1) {
-      // 取消选中，直接移除
-      selectedPolicyIds.splice(idx, 1);
-    } else {
-      // 选中前校验
-      const targetType = targetPolicy.accessType;
-      const isIsolated = (targetType === 'sandbox-intranet' || targetType === 'public-network');
-      // 已选策略中是否有内网或公网类型
-      const selectedPolicies = policies.filter(p => selectedPolicyIds.includes(p.id));
-      const hasIsolated = selectedPolicies.some(sp => sp.accessType === 'sandbox-intranet' || sp.accessType === 'public-network');
-      if (isIsolated) {
-        // 内网或公网策略只能单独选择，不能再选别的
-        if (selectedPolicyIds.length > 0) {
-          alert('沙箱内网或公网类型策略不支持与其他策略同时选择');
-          return;
-        }
-      } else {
-        // 已选内网或公网策略时，不能再选其他策略
-        if (hasIsolated) {
-          alert('沙箱内网或公网类型策略不支持与其他策略同时选择');
-          return;
-        }
-      }
-      selectedPolicyIds.push(id);
-    }
-    renderPolicyTags();
-    renderPolicyOptions();
-    updateSelectedServices();
-  }
-
-  function removePolicy(id, e) {
-    if (e) e.stopPropagation();
-    const idx = selectedPolicyIds.indexOf(id);
-    if (idx > -1) {
-      selectedPolicyIds.splice(idx, 1);
-    }
-    renderPolicyTags();
-    renderPolicyOptions();
-    updateSelectedServices();
-  }
-
-  function renderPolicyTags() {
-    const container = document.getElementById('selected-policy-tags');
-    if (!container) return;
-    if (selectedPolicyIds.length === 0) {
-      container.innerHTML = '<span class="multi-select-placeholder">请选择网络策略</span>';
-      return;
-    }
-    const policies = JSON.parse(localStorage.getItem('sandboxPolicies') || '[]');
-    container.innerHTML = selectedPolicyIds.map(id => {
-      const policy = policies.find(p => p.id === id);
-      const name = policy ? policy.name : id;
-      return `<span class="multi-select-tag">${name}<span class="tag-close" onclick="removePolicy('${id}', event)">×</span></span>`;
-    }).join('');
-  }
-
-  function renderPolicyOptions() {
-    const container = document.getElementById('policy-options-list');
-    if (!container) return;
-    const policies = JSON.parse(localStorage.getItem('sandboxPolicies') || '[]');
-    if (policies.length === 0) {
-      container.innerHTML = '<div class="multi-select-option" style="color:#999;">暂无网络策略</div>';
-      return;
-    }
-    // 判断当前是否已选了内网或公网策略
-    const selectedPolicies = policies.filter(p => selectedPolicyIds.includes(p.id));
-    const hasIsolated = selectedPolicies.some(sp => sp.accessType === 'sandbox-intranet' || sp.accessType === 'public-network');
-    container.innerHTML = policies.map(p => {
-      const isSelected = selectedPolicyIds.includes(p.id);
-      const isIsolated = (p.accessType === 'sandbox-intranet' || p.accessType === 'public-network');
-      let isDisabled = false;
-      if (hasIsolated && !isSelected) {
-        // 已选内网/公网时，其他所有选项禁用
-        isDisabled = true;
-      } else if (!hasIsolated && isIsolated && selectedPolicyIds.length > 0) {
-        // 已选了VPC/私网策略时，内网/公网选项禁用
-        isDisabled = true;
-      }
-      const cls = ['multi-select-option'];
-      if (isSelected) cls.push('selected');
-      if (isDisabled) cls.push('disabled');
-      const clickHandler = isDisabled ? '' : `onclick="selectPolicy('${p.id}', '${p.name}')"`;
-      return `<div class="${cls.join(' ')}" ${clickHandler}><span class="checkbox"></span>${p.name}</div>`;
-    }).join('');
-  }
-
-  function updateSelectedServices() {
-    const container = document.getElementById('selected-services-list');
-    const group = document.getElementById('selected-services-group');
-    if (!container || !group) return;
-    if (selectedPolicyIds.length === 0) {
-      container.innerHTML = '';
-      group.style.display = 'none';
-      return;
-    }
-    const policies = JSON.parse(localStorage.getItem('sandboxPolicies') || '[]');
-    const selectedPolicies = policies.filter(p => selectedPolicyIds.includes(p.id));
-    let html = '';
-    selectedPolicies.forEach(p => {
-      const accessType = p.accessType || 'sandbox-intranet';
-      let objContent = '';
-      if (accessType === 'sandbox-intranet' || accessType === 'public-network') {
-        objContent = '-';
-      } else if (accessType === 'vpc-network') {
-        objContent = (p.vpcnetwork || '') + '<br>' + (p.subnet || '');
-      } else if (accessType === 'private-connection') {
-        objContent = (p.service || '') + '<br>' + (p.domain || '');
-      }
-      html += '<div style="margin-bottom:8px;"><div style="font-weight:500;color:#333;margin-bottom:2px;">' + (p.name || '') + '</div><div style="color:#666;font-size:13px;padding-left:8px;">' + objContent + '</div></div>';
-    });
-    container.innerHTML = html || '<span style="color:#999;">暂无访问对象</span>';
-    group.style.display = 'block';
-  }
-
-  // 点击外部关闭下拉框
-  document.addEventListener('click', function(e) {
-    const container = document.getElementById('policy-multi-select');
-    if (container && !container.contains(e.target)) {
-      setPolicyDropdownState(false);
-    }
-  });
-
-  function createPolicyFromSandbox() {
-    if (selectedPolicyIds.length === 0) { alert('请选择网络策略'); return; }
-
-    const policies = JSON.parse(localStorage.getItem('sandboxPolicies') || '[]');
-    const selectedPolicies = policies.filter(p => selectedPolicyIds.includes(p.id));
-    const policyNames = selectedPolicies.map(p => p.name).join(', ');
-
-    const sandboxPolicies = JSON.parse(localStorage.getItem('sandboxSandboxPolicies') || '[]');
-    sandboxPolicies.push({
-      sandbox: currentSandboxName,
-      policyIds: selectedPolicyIds.slice(),
-      policyNames: policyNames
-    });
-    localStorage.setItem('sandboxSandboxPolicies', JSON.stringify(sandboxPolicies));
-
-    alert('策略关联成功！');
-    closeSetPolicyModal();
-  }
-
-  document.getElementById('set-policy-modal').addEventListener('click', function(e) {
-    if (e.target === this) {
-      closeSetPolicyModal();
     }
   });
 </script>
