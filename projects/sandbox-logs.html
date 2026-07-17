@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>运行日志 - 360智汇云</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    a { text-decoration: none; }
+    body {
+      font-family: "Microsoft YaHei", "PingFang SC", -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #F0F5F7; font-size: 14px; color: #202020; line-height: 1.5; overflow: hidden;
+    }
+
+    /* ========== 顶部导航栏 ========== */
+    .header { height: 50px; background: #fff; box-shadow: 0 2px 6px rgba(49,49,71,0.26);
+      display: flex; align-items: center; justify-content: space-between; padding: 0 20px; position: relative; z-index: 100; }
+    .header-left { display: flex; align-items: center; gap: 16px; }
+    .logo { display: flex; align-items: center; gap: 8px; cursor: pointer; }
+    .logo-icon { width: 177px; height: 28px; }
+    .header-btn { padding: 6px 12px; border-radius: 4px; background: #F8F9FA; font-size: 14px; cursor: pointer;
+      display: flex; align-items: center; gap: 8px; transition: all 0.2s; color: #202020; border: 1px #F8F9FA solid; }
+    .header-btn.group { background: #fff; border-color: #D8E0E8; color: #202020; padding: 6px 10px; }
+    .header-btn.group:hover { background: #F8F9FA; }
+    .tag { background: #EEF6FF; color: #0066FF; padding: 2px 6px; border-radius: 2px; font-size: 14px; font-weight: 500; }
+    .dropdown-arrow { margin-left: 4px; display: flex; align-items: center; justify-content: center; }
+    .header-divider { width: 1px; height: 50px; background: #F5F5F5; }
+    .header-right { display: flex; align-items: center; gap: 16px; }
+    .header-link { color: #666; text-decoration: none; font-size: 14px; position: relative; cursor: pointer; transition: color 0.2s; }
+    .header-link:hover { color: #0066FF; }
+    .header-link .dot { position: absolute; top: -2px; right: -6px; width: 6px; height: 6px; background: #FF4D4F; border-radius: 50%; }
+    .user-info { display: flex; align-items: center; gap: 8px; cursor: pointer; padding: 4px 0px; border-radius: 4px; transition: background 0.2s; }
+    .user-info:hover { background: #F5F7FA; }
+    .user-avatar { width: 28px; height: 28px; border-radius: 50%; background: #0066FF; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 14px; }
+    .user-detail { display: flex; flex-direction: column; }
+    .user-name { font-size: 14px; color: #333; line-height: 1.3; }
+    .user-sub { font-size: 12px; color: #8C9AAE; line-height: 1.3; }
+
+    /* ========== 主体容器 ========== */
+    .container { display: flex; height: calc(100vh - 56px); }
+
+    /* 左侧图标栏 */
+    .icon-bar { width: 50px; background: #2e8cff; display: flex; flex-direction: column; align-items: center; gap: 2px; flex-shrink: 0; }
+    .icon-item { width: 50px; height: 40px; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center;
+      font-size: 11px; color: #E5EAF3; transition: all 0.2s; background: transparent; position: relative; }
+    .icon-item:nth-child(1), .icon-item:nth-child(2), .icon-item:nth-child(3) { height: 50px; }
+    .icon-item:hover, .icon-item.active { background: #0066FF; color: #fff; }
+    .icon-item .icon-svg { width: 18px; height: 18px; display: flex; align-items: center; justify-content: center; }
+    .icon-item:nth-child(1) .icon-svg, .icon-item:nth-child(2) .icon-svg, .icon-item:nth-child(3) .icon-svg { width: 20px; height: 20px; }
+    .icon-item .icon-label { display: block; font-size: 10px; font-weight: 400; margin-top: 2px; }
+
+    /* 中间菜单栏 */
+    .sidebar { width: 200px; background: #ffffff; flex-direction: column; overflow: hidden; flex-shrink: 0; border-right: 1px solid #E6E6e6; color: #202020; }
+    .sidebar-menu { flex: 1; overflow-y: auto; overflow-x: hidden; }
+    .sidebar-menu::-webkit-scrollbar { width: 4px; }
+    .sidebar-menu::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.2); border-radius: 2px; }
+    .menu-level-1 { color: #202020; font-size: 14px; }
+    .menu-level-1 > .menu-item { border-bottom: 1px solid #E6E6e6; }
+    .menu-level-1 > .menu-item .menu-icon { display: none; }
+    .menu-level-1 > .menu-item .menu-arrow { pointer-events: none; }
+    .menu-level-1 > .menu-item .menu-arrow .star-icon { width: 18px; height: 18px; color: #999999; fill: transparent; transition: all 0.2s ease; }
+    .menu-level-1 > .menu-item.selected .menu-arrow .star-icon { color: #0066FF; fill: #0066FF; }
+    .menu-item { display: flex; align-items: center; padding: 0 16px; height: 50px; line-height: 50px; color: #202020; font-size: 16px; font-weight: 500;
+      cursor: pointer; gap: 8px; transition: all 0.2s; position: relative; }
+    .menu-item.active { background: #0066FF; color: #fff; }
+    .menu-item.active::after { content: ''; position: absolute; right: 0; top: 4px; bottom: 4px; width: 2px; background: #fff; border-radius: 1px 0 0 1px; }
+    .menu-icon { width: 16px; height: 16px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; opacity: 0.8; }
+    .menu-item.active .menu-icon { opacity: 1; }
+    .menu-text { flex: 1; font-size: inherit; }
+    .menu-arrow { width: 16px; height: 16px; display: flex; align-items: center; justify-content: center; color: #202020; transition: transform 0.2s ease; }
+    .submenu-expanded { background: #ffffff; max-height: 1000px; overflow: hidden; transition: max-height 0.3s ease-out; }
+    .submenu-expanded.collapsed { max-height: 0; }
+    .submenu-expanded .menu-item { color: #202020; height: 40px; line-height: 40px; padding: 0 16px; font-size: 14px; }
+    .submenu-expanded .menu-item:hover { background: #f5f5f5; }
+    .submenu-expanded .menu-item.active { background: #006bff; color: #ffffff; }
+    .submenu-expanded .menu-item.active::after { display: none; }
+    .submenu-expanded .menu-icon { opacity: 1; color: #202020; width: 16px; height: 16px; }
+    .submenu-expanded .menu-icon svg { width: 16px; height: 16px; }
+    .submenu-expanded .menu-item.active .menu-icon { color: #ffffff; }
+    .submenu-expanded .menu-item a { display: flex; align-items: center; flex: 1; color: inherit; }
+
+    /* 右侧主内容 */
+    .main-content { flex: 1; display: flex; flex-direction: column; overflow: hidden; min-width: 0; }
+    .breadcrumb { padding: 0px 20px; border-bottom: 1px solid #E6E6e6; font-size: 14px; display: flex; height: 50px; line-height: 50px;
+      justify-content: space-between; align-items: center; background: #ffffff; }
+    .breadcrumb-left { color: #202020; }
+    .breadcrumb-link { color: #0066FF; text-decoration: none; cursor: pointer; font-size: 12px; }
+    .content-body { flex: 1; display: flex; flex-direction: column; background: #ffffff; margin: 20px; box-shadow: 0 2px 3px rgba(0,0,0,0.09); overflow: hidden; }
+
+    /* ========== 日志页 ========== */
+    .log-page { flex: 1; display: flex; flex-direction: column; overflow: hidden; min-height: 0; }
+    .log-toolbar { display: flex; align-items: center; justify-content: flex-end; padding: 12px 16px; border-bottom: 1px solid #EEF0F3; gap: 8px; flex-shrink: 0; }
+    .tb-select { height: 32px; padding: 0 28px 0 12px; border: 1px solid #D9D9D9; border-radius: 4px; background: #fff
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M3 4.5L6 7.5L9 4.5' stroke='%23888' stroke-width='1.2' fill='none' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat right 10px center;
+      font-size: 13px; color: #333; cursor: pointer; appearance: none; -webkit-appearance: none; }
+    .tb-select:hover { border-color: #0066FF; }
+    .tb-icon-btn { width: 32px; height: 32px; border: 1px solid #D9D9D9; border-radius: 4px; background: #fff; display: flex; align-items: center; justify-content: center; cursor: pointer; color: #666; transition: all 0.2s; }
+    .tb-icon-btn:hover { border-color: #0066FF; color: #0066FF; }
+    .tb-icon-btn.spin svg { animation: tb-spin 0.6s linear; }
+    @keyframes tb-spin { from { transform: rotate(0); } to { transform: rotate(360deg); } }
+
+    .log-table-wrap { flex: 1; overflow: auto; min-height: 0; }
+    .log-table { width: 100%; border-collapse: collapse; table-layout: fixed; }
+    .log-table col.c-sandbox { width: 18%; }
+    .log-table col.c-action { width: 12%; }
+    .log-table col.c-request { width: 22%; }
+    .log-table col.c-content { width: 30%; }
+    .log-table col.c-extime { width: 18%; }
+    .log-table thead th { position: sticky; top: 0; z-index: 2; background: #F5F7FA; padding: 10px 12px; text-align: left;
+      font-size: 13px; font-weight: 600; color: #333; border-bottom: 1px solid #E9ECEF; white-space: nowrap; }
+    .th-sort { display: inline-flex; align-items: center; gap: 4px; cursor: pointer; user-select: none; }
+    .th-sort .sort-ico { display: inline-flex; flex-direction: column; line-height: 0; color: #C0C4CC; }
+    .filter-row th { position: sticky; top: 37px; z-index: 2; background: #FCFCFD; padding: 6px 10px; border-bottom: 1px solid #E9ECEF; }
+    .filter-cell { display: flex; align-items: center; gap: 6px; border: 1px solid #E0E3E8; border-radius: 4px; background: #fff; padding: 0 6px; height: 28px; }
+    .filter-cell .op { color: #B7BCC4; font-size: 12px; flex-shrink: 0; }
+    .filter-cell input { flex: 1; min-width: 0; border: none; outline: none; font-size: 12px; padding: 4px 0; background: transparent; color: #333; }
+    .filter-cell input::placeholder { color: #BBB; }
+    .filter-cell .fx { cursor: pointer; color: #C0C4CC; font-size: 13px; flex-shrink: 0; }
+    .filter-cell .fx:hover { color: #888; }
+
+    .log-table tbody td { padding: 11px 12px; font-size: 13px; color: #333; border-bottom: 1px solid #F0F0F0; vertical-align: middle; }
+    .log-table tbody tr:hover { background: #F8FAFC; }
+    .cell-mono { font-family: "SFMono-Regular", Consolas, monospace; font-size: 12px; color: #303B50; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .cell-content { color: #556; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .badge-action { display: inline-block; padding: 1px 8px; border-radius: 3px; font-size: 12px; font-weight: 500; }
+    .badge-start { background: #EAF3FF; color: #2277FF; }
+    .badge-end { background: #E9F8F0; color: #1FA463; }
+    .log-empty { text-align: center; color: #999; padding: 60px 0; font-size: 14px; }
+
+    /* 分页 */
+    .pagination-bar { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; border-top: 1px solid #E9ECEF; background: #fff; flex-shrink: 0; }
+    .pagination-left { font-size: 13px; color: #666; }
+    .pagination-left b { color: #0066FF; font-weight: 600; }
+    .pagination-right { display: flex; align-items: center; gap: 8px; }
+    .page-size-select { height: 32px; padding: 0 24px 0 10px; border: 1px solid #D9D9D9; border-radius: 4px; background: #fff
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M3 4.5L6 7.5L9 4.5' stroke='%23888' stroke-width='1.2' fill='none' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat right 8px center;
+      font-size: 13px; color: #333; cursor: pointer; appearance: none; -webkit-appearance: none; }
+    .page-btn { min-width: 32px; height: 32px; padding: 0 8px; border: 1px solid #D9D9D9; border-radius: 4px; background: #fff; font-size: 13px; color: #333;
+      cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
+    .page-btn:hover:not(.disabled):not(.active) { border-color: #0066FF; color: #0066FF; }
+    .page-btn.active { background: #0066FF; border-color: #0066FF; color: #fff; }
+    .page-btn.disabled { color: #D9D9D9; cursor: not-allowed; }
+    .page-ellipsis { min-width: 28px; height: 32px; display: flex; align-items: center; justify-content: center; font-size: 13px; color: #999; }
+  </style>
+  <link rel="stylesheet" href="styles/sandbox-shell.css">
+  <link rel="stylesheet" href="styles/ai-sandbox.css">
+</head>
+<body>
+<div id="sandbox-shell" data-active="运行日志" data-breadcrumb="运行日志"></div>
+  <div class="main-content">
+    <div class="breadcrumb">
+      <span class="breadcrumb-left">运行日志</span>
+      <a class="breadcrumb-link">Sandbox 帮助文档</a>
+    </div>
+    <div class="content-body">
+      <div class="log-page">
+        <!-- 工具栏 -->
+        <div class="log-toolbar">
+          <select class="tb-select" id="log-range" title="时间范围">
+            <option value="30m">近30分钟</option>
+            <option value="1h">近1小时</option>
+            <option value="6h">近6小时</option>
+            <option value="1d">近1天</option>
+            <option value="7d">近7天</option>
+          </select>
+          <button class="tb-icon-btn" id="log-refresh" title="刷新">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+              <path d="M14 8A6 6 0 118 2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+              <path d="M14 2v4h-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+          <select class="tb-select" id="log-auto" title="自动刷新">
+            <option value="off">Off</option>
+            <option value="5">5s</option>
+            <option value="10">10s</option>
+            <option value="30">30s</option>
+          </select>
+          <select class="tb-select" id="log-download" title="下载">
+            <option value="">下载</option>
+            <option value="csv">导出 CSV</option>
+            <option value="json">导出 JSON</option>
+          </select>
+        </div>
+
+        <!-- 表格 -->
+        <div class="log-table-wrap">
+          <table class="log-table">
+            <colgroup>
+              <col class="c-sandbox"><col class="c-action"><col class="c-request"><col class="c-content"><col class="c-extime">
+            </colgroup>
+            <thead>
+              <tr>
+                <th>sandboxId</th>
+                <th>action</th>
+                <th>requestId</th>
+                <th>content</th>
+                <th>
+                  <span class="th-sort" id="sort-extime">extime
+                    <span class="sort-ico">
+                      <svg width="10" height="6" viewBox="0 0 10 6"><path d="M5 0l4 5H1z" fill="currentColor"/></svg>
+                      <svg width="10" height="6" viewBox="0 0 10 6"><path d="M5 6L1 1h8z" fill="currentColor"/></svg>
+                    </span>
+                  </span>
+                </th>
+              </tr>
+              <tr class="filter-row">
+                <th><div class="filter-cell"><span class="op">m~</span><input data-col="sandboxId" placeholder="输入关键字"><span class="fx" data-clear="sandboxId">×</span></div></th>
+                <th><div class="filter-cell"><span class="op">m~</span><input data-col="action" placeholder="输入关键字"><span class="fx" data-clear="action">×</span></div></th>
+                <th><div class="filter-cell"><span class="op">m~</span><input data-col="requestId" placeholder="输入关键字"><span class="fx" data-clear="requestId">×</span></div></th>
+                <th><div class="filter-cell"><span class="op">m~</span><input data-col="content" placeholder="输入关键字"><span class="fx" data-clear="content">×</span></div></th>
+                <th><div class="filter-cell"><span class="op">m~</span><input data-col="extime" placeholder="输入关键字"><span class="fx" data-clear="extime">×</span></div></th>
+              </tr>
+            </thead>
+            <tbody id="log-tbody"></tbody>
+          </table>
+        </div>
+
+        <!-- 分页 -->
+        <div class="pagination-bar">
+          <div class="pagination-left">共 <b id="total-count">0</b> 条记录　第 <span id="cur-page">1</span> / <span id="total-page">1</span> 页</div>
+          <div class="pagination-right">
+            <select class="page-size-select" id="page-size">
+              <option value="20">20条/页</option>
+              <option value="50">50条/页</option>
+              <option value="100">100条/页</option>
+            </select>
+            <div class="page-btn" id="prev-page">‹</div>
+            <div id="page-numbers" style="display:flex; gap:8px;"></div>
+            <div class="page-btn" id="next-page">›</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<script>
+  // ===== 生成示例日志数据（会话级，确定性）=====
+  const SANDBOX_IDS = ['iogm1bxoy7utezytyxly8','iogm1bxoy7utezytyxly8','iogm1bxoy7utezytyxly8','k7p2qz3n8vd4rml9wxab6','k7p2qz3n8vd4rml9wxab6'];
+  const CODE_SAMPLES = [
+    "1 + 1",
+    "x += 1; print(x)",
+    "x = 41",
+    "print('runcode-ok')",
+    "import math; math.sqrt(16)",
+    "sum([i for i in range(10)])"
+  ];
+  // 线性同余伪随机，保证每次渲染一致
+  let seed = 20260716;
+  function rnd() { seed = (seed * 1103515245 + 12345) & 0x7fffffff; return seed / 0x7fffffff; }
+  function hex(n) { let s = ''; for (let i=0;i<n;i++) s += Math.floor(rnd()*16).toString(16); return s; }
+  function pad(n) { return n < 10 ? '0'+n : ''+n; }
+
+  function buildData() {
+    const rows = [];
+    // 起始时间 2026-07-16 17:05:41.845 往前推
+    let t = new Date(2026, 6, 16, 17, 5, 41, 845).getTime();
+    const PAIRS = 120; // 120 对 => 240 条
+    for (let p = 0; p < PAIRS; p++) {
+      const sid = SANDBOX_IDS[Math.floor(rnd()*SANDBOX_IDS.length)];
+      const reqId = hex(32);
+      const code = CODE_SAMPLES[Math.floor(rnd()*CODE_SAMPLES.length)];
+      const contentEnd = '{"request":"{\\"code\\":\\"'+code+'\\"}","response":"{\\"result\\":\\"ok\\"}"}';
+      const contentStart = '{"request":"{\\"code\\":\\"'+code+'\\"}","response":""}';
+      // ExecuteEnd 在上、ExecuteStart 在下（时间倒序），二者相差约 90ms
+      const endT = t;
+      const startT = t - (60 + Math.floor(rnd()*60));
+      rows.push({ sandboxId: sid, action: 'ExecuteEnd',   requestId: reqId, content: contentEnd,   extime: fmt(endT) });
+      rows.push({ sandboxId: sid, action: 'ExecuteStart', requestId: reqId, content: contentStart, extime: fmt(startT) });
+      t = startT - (40 + Math.floor(rnd()*120));
+    }
+    return rows;
+  }
+  function fmt(ts) {
+    const d = new Date(ts);
+    return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())+' '+
+           pad(d.getHours())+':'+pad(d.getMinutes())+':'+pad(d.getSeconds())+'.'+
+           String(d.getMilliseconds()).padStart(3,'0');
+  }
+
+  const ALL_ROWS = buildData();
+
+  // ===== 状态 =====
+  const state = { page: 1, size: 20, sortAsc: false, filters: {} };
+
+  function getFiltered() {
+    let rows = ALL_ROWS.filter(r => {
+      for (const k in state.filters) {
+        const kw = state.filters[k];
+        if (kw && !String(r[k]).toLowerCase().includes(kw.toLowerCase())) return false;
+      }
+      return true;
+    });
+    rows = rows.slice().sort((a,b) => state.sortAsc ? a.extime.localeCompare(b.extime) : b.extime.localeCompare(a.extime));
+    return rows;
+  }
+
+  function render() {
+    const rows = getFiltered();
+    const total = rows.length;
+    const totalPage = Math.max(1, Math.ceil(total / state.size));
+    if (state.page > totalPage) state.page = totalPage;
+    const start = (state.page - 1) * state.size;
+    const pageRows = rows.slice(start, start + state.size);
+
+    const tbody = document.getElementById('log-tbody');
+    if (pageRows.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="5" class="log-empty">暂无日志数据</td></tr>';
+    } else {
+      tbody.innerHTML = pageRows.map(r => {
+        const badge = r.action === 'ExecuteEnd' ? 'badge-end' : 'badge-start';
+        return '<tr>'
+          + '<td class="cell-mono" title="'+r.sandboxId+'">'+r.sandboxId+'</td>'
+          + '<td><span class="badge-action '+badge+'">'+r.action+'</span></td>'
+          + '<td class="cell-mono" title="'+r.requestId+'">'+r.requestId+'</td>'
+          + '<td class="cell-content" title="'+escAttr(r.content)+'">'+escHtml(r.content)+'</td>'
+          + '<td class="cell-mono">'+r.extime+'</td>'
+          + '</tr>';
+      }).join('');
+    }
+
+    document.getElementById('total-count').textContent = total;
+    document.getElementById('cur-page').textContent = state.page;
+    document.getElementById('total-page').textContent = totalPage;
+    renderPageNumbers(totalPage);
+
+    document.getElementById('prev-page').classList.toggle('disabled', state.page <= 1);
+    document.getElementById('next-page').classList.toggle('disabled', state.page >= totalPage);
+  }
+
+  function escHtml(s){ return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+  function escAttr(s){ return escHtml(s).replace(/"/g,'&quot;'); }
+
+  function renderPageNumbers(totalPage) {
+    const box = document.getElementById('page-numbers');
+    const cur = state.page;
+    let pages = [];
+    if (totalPage <= 7) {
+      for (let i=1;i<=totalPage;i++) pages.push(i);
+    } else {
+      pages.push(1);
+      let lo = Math.max(2, cur-1), hi = Math.min(totalPage-1, cur+1);
+      if (cur <= 3) { lo = 2; hi = 4; }
+      if (cur >= totalPage-2) { lo = totalPage-3; hi = totalPage-1; }
+      if (lo > 2) pages.push('...');
+      for (let i=lo;i<=hi;i++) pages.push(i);
+      if (hi < totalPage-1) pages.push('...');
+      pages.push(totalPage);
+    }
+    box.innerHTML = pages.map(p => p === '...'
+      ? '<span class="page-ellipsis">···</span>'
+      : '<div class="page-btn'+(p===cur?' active':'')+'" data-page="'+p+'">'+p+'</div>'
+    ).join('');
+    box.querySelectorAll('.page-btn[data-page]').forEach(btn => {
+      btn.addEventListener('click', () => { state.page = parseInt(btn.dataset.page,10); render(); });
+    });
+  }
+
+  // ===== 事件 =====
+  document.getElementById('prev-page').addEventListener('click', () => { if (state.page > 1) { state.page--; render(); } });
+  document.getElementById('next-page').addEventListener('click', () => { state.page++; render(); });
+  document.getElementById('page-size').addEventListener('change', e => { state.size = parseInt(e.target.value,10); state.page = 1; render(); });
+  document.getElementById('sort-extime').addEventListener('click', () => { state.sortAsc = !state.sortAsc; render(); });
+
+  document.querySelectorAll('.filter-cell input').forEach(inp => {
+    inp.addEventListener('input', () => { state.filters[inp.dataset.col] = inp.value.trim(); state.page = 1; render(); });
+  });
+  document.querySelectorAll('.fx[data-clear]').forEach(x => {
+    x.addEventListener('click', () => {
+      const col = x.dataset.clear;
+      const inp = document.querySelector('.filter-cell input[data-col="'+col+'"]');
+      inp.value = ''; state.filters[col] = ''; state.page = 1; render();
+    });
+  });
+
+  const refreshBtn = document.getElementById('log-refresh');
+  refreshBtn.addEventListener('click', () => {
+    refreshBtn.classList.remove('spin'); void refreshBtn.offsetWidth; refreshBtn.classList.add('spin');
+    render();
+  });
+
+  let autoTimer = null;
+  document.getElementById('log-auto').addEventListener('change', e => {
+    if (autoTimer) { clearInterval(autoTimer); autoTimer = null; }
+    const v = e.target.value;
+    if (v !== 'off') autoTimer = setInterval(render, parseInt(v,10) * 1000);
+  });
+  document.getElementById('log-download').addEventListener('change', e => {
+    const type = e.target.value;
+    if (!type) return;
+    const rows = getFiltered();
+    let blob, name;
+    if (type === 'json') {
+      blob = new Blob([JSON.stringify(rows, null, 2)], { type: 'application/json' });
+      name = 'sandbox-logs.json';
+    } else {
+      const head = 'sandboxId,action,requestId,content,extime';
+      const body = rows.map(r => [r.sandboxId, r.action, r.requestId, '"'+r.content.replace(/"/g,'""')+'"', r.extime].join(',')).join('\n');
+      blob = new Blob([head+'\n'+body], { type: 'text/csv' });
+      name = 'sandbox-logs.csv';
+    }
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob); a.download = name; a.click();
+    setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+    e.target.value = '';
+  });
+
+  // 图标栏 / 一级菜单交互（沿用平台范式）
+  document.querySelectorAll('.icon-item').forEach(item => {
+    item.addEventListener('click', function() {
+      document.querySelectorAll('.icon-item').forEach(i => i.classList.remove('active'));
+      this.classList.add('active');
+    });
+  });
+  document.querySelectorAll('.menu-level-1 > .menu-item').forEach(item => {
+    item.addEventListener('click', function(e){ e.stopPropagation(); this.classList.toggle('selected'); });
+  });
+
+  render();
+</script>
+<script src="styles/sandbox-shell.js"></script>
+<script src="styles/ai-sandbox.js"></script>
+</body>
+</html>

@@ -13,6 +13,9 @@
   }
 
   function setActiveSandboxMenu() {
+    // 公共区已由 sandbox-shell.js 注入并负责菜单高亮与面包屑，避免重复处理。
+    if (window.SandboxShell) return;
+
     const label = pageLabels[currentFile()];
     if (!label) return;
 
