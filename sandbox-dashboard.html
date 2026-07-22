@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>概览 - 360智汇云</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    a { text-decoration: none; }
+    body {
+      font-family: "Microsoft YaHei", "PingFang SC", -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #F0F5F7; font-size: 14px; color: #202020; line-height: 1.5; overflow: hidden;
+    }
+
+    /* ========== 顶部导航栏 ========== */
+    .header { height: 50px; background: #fff; box-shadow: 0 2px 6px rgba(49,49,71,0.26);
+      display: flex; align-items: center; justify-content: space-between; padding: 0 20px; position: relative; z-index: 100; }
+    .header-left { display: flex; align-items: center; gap: 16px; }
+    .logo { display: flex; align-items: center; gap: 8px; cursor: pointer; }
+    .logo-icon { width: 177px; height: 28px; }
+    .header-btn { padding: 6px 12px; border-radius: 4px; background: #F8F9FA; font-size: 14px; cursor: pointer;
+      display: flex; align-items: center; gap: 8px; transition: all 0.2s; color: #202020; border: 1px #F8F9FA solid; }
+    .header-btn.group { background: #fff; border-color: #D8E0E8; color: #202020; padding: 6px 10px; }
+    .header-btn.group:hover { background: #F8F9FA; }
+    .tag { background: #EEF6FF; color: #0066FF; padding: 2px 6px; border-radius: 2px; font-size: 14px; font-weight: 500; }
+    .dropdown-arrow { margin-left: 4px; display: flex; align-items: center; justify-content: center; }
+    .header-divider { width: 1px; height: 50px; background: #F5F5F5; }
+    .header-right { display: flex; align-items: center; gap: 16px; }
+    .header-link { color: #666; text-decoration: none; font-size: 14px; position: relative; cursor: pointer; transition: color 0.2s; }
+    .header-link:hover { color: #0066FF; }
+    .header-link .dot { position: absolute; top: -2px; right: -6px; width: 6px; height: 6px; background: #FF4D4F; border-radius: 50%; }
+    .user-info { display: flex; align-items: center; gap: 8px; cursor: pointer; padding: 4px 0px; border-radius: 4px; transition: background 0.2s; }
+    .user-info:hover { background: #F5F7FA; }
+    .user-avatar { width: 28px; height: 28px; border-radius: 50%; background: #0066FF; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 14px; }
+    .user-detail { display: flex; flex-direction: column; }
+    .user-name { font-size: 14px; color: #333; line-height: 1.3; }
+    .user-sub { font-size: 12px; color: #8C9AAE; line-height: 1.3; }
+
+    /* ========== 主体容器 ========== */
+    .container { display: flex; height: calc(100vh - 56px); }
+    .icon-bar { width: 50px; background: #2e8cff; display: flex; flex-direction: column; align-items: center; gap: 2px; flex-shrink: 0; }
+    .icon-item { width: 50px; height: 40px; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center;
+      font-size: 11px; color: #E5EAF3; transition: all 0.2s; background: transparent; position: relative; }
+    .icon-item:nth-child(1), .icon-item:nth-child(2), .icon-item:nth-child(3) { height: 50px; }
+    .icon-item:hover, .icon-item.active { background: #0066FF; color: #fff; }
+    .icon-item .icon-svg { width: 18px; height: 18px; display: flex; align-items: center; justify-content: center; }
+    .icon-item:nth-child(1) .icon-svg, .icon-item:nth-child(2) .icon-svg, .icon-item:nth-child(3) .icon-svg { width: 20px; height: 20px; }
+    .icon-item .icon-label { display: block; font-size: 10px; font-weight: 400; margin-top: 2px; }
+
+    .sidebar { width: 200px; background: #ffffff; flex-direction: column; overflow: hidden; flex-shrink: 0; border-right: 1px solid #E6E6e6; color: #202020; }
+    .sidebar-menu { flex: 1; overflow-y: auto; overflow-x: hidden; }
+    .sidebar-menu::-webkit-scrollbar { width: 4px; }
+    .sidebar-menu::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.2); border-radius: 2px; }
+    .menu-level-1 { color: #202020; font-size: 14px; }
+    .menu-level-1 > .menu-item { border-bottom: 1px solid #E6E6e6; }
+    .menu-level-1 > .menu-item .menu-icon { display: none; }
+    .menu-level-1 > .menu-item .menu-arrow { pointer-events: none; }
+    .menu-level-1 > .menu-item .menu-arrow .star-icon { width: 18px; height: 18px; color: #999999; fill: transparent; transition: all 0.2s ease; }
+    .menu-level-1 > .menu-item.selected .menu-arrow .star-icon { color: #0066FF; fill: #0066FF; }
+    .menu-item { display: flex; align-items: center; padding: 0 16px; height: 50px; line-height: 50px; color: #202020; font-size: 16px; font-weight: 500;
+      cursor: pointer; gap: 8px; transition: all 0.2s; position: relative; }
+    .menu-item.active { background: #0066FF; color: #fff; }
+    .menu-item.active::after { content: ''; position: absolute; right: 0; top: 4px; bottom: 4px; width: 2px; background: #fff; border-radius: 1px 0 0 1px; }
+    .menu-icon { width: 16px; height: 16px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; opacity: 0.8; }
+    .menu-item.active .menu-icon { opacity: 1; }
+    .menu-text { flex: 1; font-size: inherit; }
+    .menu-arrow { width: 16px; height: 16px; display: flex; align-items: center; justify-content: center; color: #202020; transition: transform 0.2s ease; }
+    .submenu-expanded { background: #ffffff; max-height: 1000px; overflow: hidden; transition: max-height 0.3s ease-out; }
+    .submenu-expanded.collapsed { max-height: 0; }
+    .submenu-expanded .menu-item { color: #202020; height: 40px; line-height: 40px; padding: 0 16px; font-size: 14px; }
+    .submenu-expanded .menu-item:hover { background: #f5f5f5; }
+    .submenu-expanded .menu-item.active { background: #006bff; color: #ffffff; }
+    .submenu-expanded .menu-item.active::after { display: none; }
+    .submenu-expanded .menu-icon { opacity: 1; color: #202020; width: 16px; height: 16px; }
+    .submenu-expanded .menu-icon svg { width: 16px; height: 16px; }
+    .submenu-expanded .menu-item.active .menu-icon { color: #ffffff; }
+
+    .main-content { flex: 1; display: flex; flex-direction: column; overflow: hidden; min-width: 0; }
+    .breadcrumb { padding: 0px 20px; border-bottom: 1px solid #E6E6e6; font-size: 14px; display: flex; height: 50px; line-height: 50px;
+      justify-content: space-between; align-items: center; background: #ffffff; }
+    .breadcrumb-left { color: #202020; }
+    .breadcrumb-link { color: #0066FF; text-decoration: none; cursor: pointer; font-size: 12px; }
+    .content-body { flex: 1; display: flex; flex-direction: column; background: #ffffff; margin: 20px; box-shadow: 0 2px 3px rgba(0,0,0,0.09); overflow: hidden; }
+
+    /* ========== 概览页 ========== */
+    .dash-page { flex: 1; display: flex; flex-direction: column; overflow: auto; min-height: 0; padding: 4px 0; }
+    .dash-welcome { display: flex; align-items: center; justify-content: space-between; padding: 18px 24px; background: linear-gradient(90deg, #F2F8FF 0%, #FFFFFF 100%);
+      border-bottom: 1px solid #EEF0F3; flex-shrink: 0; }
+    .dash-welcome-left h2 { font-size: 18px; font-weight: 600; color: #202020; }
+    .dash-welcome-left p { margin-top: 4px; font-size: 13px; color: #8C9AAE; }
+    .dash-welcome-right { display: flex; align-items: center; gap: 12px; }
+    .dash-range { display: flex; align-items: center; gap: 8px; }
+    .dash-range-label { font-size: 13px; color: #666; }
+    .dash-select { height: 32px; padding: 0 28px 0 12px; border: 1px solid #D9D9D9; border-radius: 4px; background: #fff
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M3 4.5L6 7.5L9 4.5' stroke='%23888' stroke-width='1.2' fill='none' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat right 10px center;
+      font-size: 13px; color: #333; cursor: pointer; appearance: none; -webkit-appearance: none; }
+    .dash-select:hover { border-color: #0066FF; }
+    .dash-refresh { width: 32px; height: 32px; border: 1px solid #D9D9D9; border-radius: 4px; background: #fff; display: flex;
+      align-items: center; justify-content: center; cursor: pointer; color: #666; transition: all 0.2s; }
+    .dash-refresh:hover { border-color: #0066FF; color: #0066FF; }
+
+    /* 维度区块 */
+    .dim-section { padding: 16px 24px; flex-shrink: 0; }
+    .dim-section:not(:last-child) { border-bottom: 1px solid #EEF0F3; }
+    .dim-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+    .dim-title { font-size: 15px; font-weight: 600; color: #202020; display: flex; align-items: center; gap: 8px; }
+    .dim-bar { width: 3px; height: 14px; border-radius: 2px; display: inline-block; }
+    .dim-bar-blue { background: #0066FF; }
+    .dim-bar-red { background: #F5222D; }
+    .dim-bar-purple { background: #722ED1; }
+    .dim-bar-cyan { background: #13C2C2; }
+    .dim-link { color: #0066FF; font-size: 12px; cursor: pointer; }
+    .dim-link:hover { text-decoration: underline; }
+
+    /* 指标卡网格（自适应折行） */
+    .dim-body { display: flex; gap: 16px; align-items: stretch; }
+    .dim-metrics { flex: 1; min-width: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 12px; }
+    .metric-card { background: #fff; border: 1px solid #EEF0F3; border-radius: 8px; padding: 16px 18px; box-shadow: 0 1px 3px rgba(0,0,0,0.03); display: flex; flex-direction: column; gap: 8px; }
+    .metric-top { display: flex; align-items: center; justify-content: space-between; }
+    .metric-label { font-size: 13px; color: #8C9AAE; }
+    .metric-ico { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #fff; }
+    .metric-ico.ico-blue { background: #0066FF; }
+    .metric-ico.ico-green { background: #1FA463; }
+    .metric-ico.ico-orange { background: #FA8C16; }
+    .metric-ico.ico-purple { background: #722ED1; }
+    .metric-ico.ico-cyan { background: #13C2C2; }
+    .metric-ico.ico-red { background: #F5222D; }
+    .metric-value { font-size: 26px; font-weight: 600; color: #202020; line-height: 1.2; }
+    .metric-value .unit { font-size: 13px; font-weight: 400; color: #8C9AAE; margin-left: 4px; }
+    .metric-foot { display: flex; align-items: center; gap: 6px; font-size: 12px; color: #8C9AAE; }
+    .metric-trend { display: inline-flex; align-items: center; gap: 2px; font-weight: 500; }
+    .metric-trend.up { color: #1FA463; }
+    .metric-trend.down { color: #F5222D; }
+
+    /* 快捷入口 */
+    .quick-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 12px; }
+    .quick-item { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; padding: 16px 8px;
+      border: 1px solid #EEF0F3; border-radius: 8px; cursor: pointer; transition: all 0.2s; text-align: center; }
+    .quick-item:hover { border-color: #0066FF; box-shadow: 0 2px 8px rgba(0,102,255,0.08); }
+    .quick-ico { width: 36px; height: 36px; border-radius: 8px; background: #F2F8FF; color: #0066FF; display: flex; align-items: center; justify-content: center; }
+    .quick-text { font-size: 13px; color: #333; }
+    .quick-item:hover .quick-text { color: #0066FF; }
+
+  </style>
+  <link rel="stylesheet" href="styles/sandbox-shell.css">
+  <link rel="stylesheet" href="styles/ai-sandbox.css">
+</head>
+<body>
+<div id="sandbox-shell" data-active="概览" data-breadcrumb="概览"></div>
+  <div class="main-content">
+    <div class="breadcrumb">
+      <span class="breadcrumb-left">概览</span>
+      <a class="breadcrumb-link">Sandbox 帮助文档</a>
+    </div>
+    <div class="content-body">
+      <div class="dash-page">
+
+        <!-- 欢迎条 -->
+        <div class="dash-welcome">
+          <div class="dash-welcome-left">
+            <h2>欢迎使用 AI 沙箱</h2>
+            <p>一站式查看沙箱实例运行状况、模板与快照资产及关键事件</p>
+          </div>
+          <div class="dash-welcome-right">
+            <div class="dash-range">
+              <span class="dash-range-label">统计周期</span>
+              <select id="dash-range" class="dash-select">
+                <option value="7">近 7 天</option>
+                <option value="30">近 30 天</option>
+              </select>
+            </div>
+            <button class="dash-refresh" id="dash-refresh" title="刷新">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <path d="M14 8A6 6 0 118 2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                <path d="M14 2v4h-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- 实例维度 -->
+        <div class="dim-section">
+          <div class="dim-head">
+            <span class="dim-title"><i class="dim-bar dim-bar-blue"></i>实例</span>
+            <a class="dim-link" href="index.html">查看实例</a>
+          </div>
+          <div class="dim-body">
+            <div class="dim-metrics" id="instance-grid"></div>
+          </div>
+        </div>
+
+        <!-- 模板维度 -->
+        <div class="dim-section">
+          <div class="dim-head">
+            <span class="dim-title"><i class="dim-bar dim-bar-red"></i>模板</span>
+            <a class="dim-link" href="sandbox-template.html">管理模板</a>
+          </div>
+          <div class="dim-metrics" id="template-grid"></div>
+        </div>
+
+        <!-- 快照维度 -->
+        <div class="dim-section">
+          <div class="dim-head">
+            <span class="dim-title"><i class="dim-bar dim-bar-purple"></i>快照</span>
+            <a class="dim-link" href="sandbox-snapshots.html">管理快照</a>
+          </div>
+          <div class="dim-metrics" id="snapshot-grid"></div>
+        </div>
+
+        <!-- 快捷入口 -->
+        <div class="dim-section">
+          <div class="dim-head">
+            <span class="dim-title"><i class="dim-bar dim-bar-cyan"></i>快捷入口</span>
+          </div>
+          <div class="quick-grid" id="quick-grid"></div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+<script>
+  // ===== 概览示例数据（会话级，按周期切换）=====
+  // 按维度分组：实例 / 模板 / 快照；配色复用现有 6 色色板，零新增。
+  const DASH_DATA = {
+    '7': {
+      instance: [
+        { label: '运行中实例', value: '18', unit: '个', ico: 'ico-blue',   trend: 12.5, up: true },
+        { label: '累计实例',   value: '246', unit: '个', ico: 'ico-cyan',   trend: 8.3,  up: true },
+        { label: '今日执行次数', value: '1,284', unit: '次', ico: 'ico-green',  trend: 5.6,  up: true },
+        { label: '累计执行次数', value: '32,560', unit: '次', ico: 'ico-purple', trend: 3.2,  up: true },
+        { label: 'vCPU 使用时长', value: '486', unit: 'vcpu·时', ico: 'ico-orange', trend: 4.1,  up: true }
+      ],
+
+      template: [
+        { label: '模板总数', value: '32', unit: '个', ico: 'ico-red',    trend: 6.2,  up: true },
+        { label: '新增模板', value: '4',  unit: '个', ico: 'ico-blue',   trend: 33.3, up: true },
+        { label: '公共模板', value: '12', unit: '个', ico: 'ico-green',  trend: 2.0,  up: true },
+        { label: '自定义模板', value: '20', unit: '个', ico: 'ico-orange', trend: 5.0,  up: true },
+        { label: '引用模板', value: '21', unit: '次', ico: 'ico-purple', trend: 9.8,  up: true }
+      ],
+      snapshot: [
+        { label: '快照总数', value: '56',  unit: '个',  ico: 'ico-purple', trend: 9.8,  up: true },
+        { label: '新增快照', value: '7',   unit: '个',  ico: 'ico-cyan',   trend: 16.7, up: true },
+        { label: '存储用量', value: '128', unit: 'GB', ico: 'ico-orange', trend: 5.4,  up: true },
+        { label: '共享快照', value: '9',   unit: '个',  ico: 'ico-red',    trend: 12.5, up: true }
+      ]
+    },
+    '30': {
+      instance: [
+        { label: '运行中实例', value: '18', unit: '个', ico: 'ico-blue',   trend: 12.5, up: true },
+        { label: '累计实例',   value: '246', unit: '个', ico: 'ico-cyan',   trend: 18.4, up: true },
+        { label: '今日执行次数', value: '1,284', unit: '次', ico: 'ico-green',  trend: 5.6,  up: true },
+        { label: '累计执行次数', value: '32,560', unit: '次', ico: 'ico-purple', trend: 14.9, up: true },
+        { label: 'vCPU 使用时长', value: '2,184', unit: 'vcpu·时', ico: 'ico-orange', trend: 9.7,  up: true }
+      ],
+
+      template: [
+        { label: '模板总数', value: '32', unit: '个', ico: 'ico-red',    trend: 15.4, up: true },
+        { label: '新增模板', value: '11', unit: '个', ico: 'ico-blue',   trend: 37.5, up: true },
+        { label: '公共模板', value: '12', unit: '个', ico: 'ico-green',  trend: 4.5,  up: true },
+        { label: '自定义模板', value: '20', unit: '个', ico: 'ico-orange', trend: 8.6,  up: true },
+        { label: '引用模板', value: '21', unit: '次', ico: 'ico-purple', trend: 18.2, up: true }
+      ],
+      snapshot: [
+        { label: '快照总数', value: '56',  unit: '个',  ico: 'ico-purple', trend: 24.6, up: true },
+        { label: '新增快照', value: '19',  unit: '个',  ico: 'ico-cyan',   trend: 29.4, up: true },
+        { label: '存储用量', value: '412', unit: 'GB', ico: 'ico-orange', trend: 11.8, up: true },
+        { label: '共享快照', value: '9',   unit: '个',  ico: 'ico-red',    trend: 12.5, up: true }
+      ]
+    }
+  };
+
+  const METRIC_ICONS = {
+    'ico-blue':   '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="2" y="2" width="5" height="5" rx="1" fill="currentColor"/><rect x="9" y="2" width="5" height="3" rx="1" fill="currentColor"/><rect x="9" y="7" width="5" height="7" rx="1" fill="currentColor"/><rect x="2" y="9" width="5" height="5" rx="1" fill="currentColor"/></svg>',
+    'ico-green':  '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 12l3-3 3 3 4-5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+    'ico-orange': '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="5.5" stroke="currentColor" stroke-width="1.6" fill="none"/><path d="M8 5v3l2 2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>',
+    'ico-purple': '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 2l5 8H3z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" fill="none"/></svg>',
+    'ico-cyan':   '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="2" y="2" width="12" height="12" rx="2" stroke="currentColor" stroke-width="1.6" fill="none"/><path d="M6 6l2 2 4-4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+    'ico-red':    '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 2l6 11H2z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" fill="none"/><path d="M8 7v3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><circle cx="8" cy="12" r="0.8" fill="currentColor"/></svg>'
+  };
+
+  const QUICK_ITEMS = [
+    { text: '新建沙箱', href: 'sandbox-create.html',  ico: '<svg width="18" height="18" viewBox="0 0 16 16" fill="none"><path d="M8 3v10M3 8h10" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>' },
+    { text: '沙箱实例', href: 'index.html',           ico: '<svg width="18" height="18" viewBox="0 0 16 16" fill="none"><rect x="2" y="2" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.6"/><rect x="9" y="2" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.6"/><rect x="2" y="9" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.6"/><rect x="9" y="9" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.6"/></svg>' },
+    { text: '运行日志', href: 'sandbox-logs.html',     ico: '<svg width="18" height="18" viewBox="0 0 16 16" fill="none"><rect x="2" y="3" width="12" height="10" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M5 7h6M5 10h4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>' },
+    { text: '网络策略', href: 'sandbox-policy.html',   ico: '<svg width="18" height="18" viewBox="0 0 16 16" fill="none"><path d="M3 12l3-3 3 3 4-5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>' },
+    { text: 'API 密钥', href: 'sandbox-apikeys.html',  ico: '<svg width="18" height="18" viewBox="0 0 16 16" fill="none"><path d="M7 3L3 6v5c0 2 2 3 4 3s4-1 4-3V6l-4-3z" stroke="currentColor" stroke-width="1.6"/><circle cx="8" cy="8" r="2" stroke="currentColor" stroke-width="1.6"/></svg>' },
+    { text: '用量统计', href: 'sandbox-usage.html',    ico: '<svg width="18" height="18" viewBox="0 0 16 16" fill="none"><path d="M3 12l3-3 3 3 4-5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>' }
+  ];
+
+  function metricCardHtml(m) {
+    const trendArrow = m.up
+      ? '<svg width="10" height="10" viewBox="0 0 10 10"><path d="M5 2l4 5H1z" fill="currentColor"/></svg>'
+      : '<svg width="10" height="10" viewBox="0 0 10 10"><path d="M5 8L1 3h8z" fill="currentColor"/></svg>';
+    const trendCls = m.up ? 'up' : 'down';
+    return '<div class="metric-card">'
+      + '<div class="metric-top"><span class="metric-label">' + m.label + '</span>'
+      + '<span class="metric-ico ' + m.ico + '">' + (METRIC_ICONS[m.ico] || '') + '</span></div>'
+      + '<div class="metric-value">' + m.value + '<span class="unit">' + m.unit + '</span></div>'
+      + '<div class="metric-foot"><span class="metric-trend ' + trendCls + '">' + trendArrow + (m.up ? '+' : '-') + Math.abs(m.trend) + '%</span>'
+      + '<span>较上周期</span></div>'
+      + '</div>';
+  }
+
+  function renderDim(gridId, metrics) {
+    const box = document.getElementById(gridId);
+    if (box) box.innerHTML = metrics.map(metricCardHtml).join('');
+  }
+
+  function renderQuick() {
+    const box = document.getElementById('quick-grid');
+    box.innerHTML = QUICK_ITEMS.map(q => {
+      const tag = q.href ? 'a' : 'div';
+      const href = q.href ? ' href="' + q.href + '"' : '';
+      return '<' + tag + ' class="quick-item"' + href + '>'
+        + '<span class="quick-ico">' + q.ico + '</span>'
+        + '<span class="quick-text">' + q.text + '</span>'
+        + '</' + tag + '>';
+    }).join('');
+  }
+
+  function renderDashboard() {
+    const range = document.getElementById('dash-range').value;
+    const d = DASH_DATA[range];
+    renderDim('instance-grid', d.instance);
+    renderDim('template-grid', d.template);
+    renderDim('snapshot-grid', d.snapshot);
+  }
+
+  document.getElementById('dash-range').addEventListener('change', renderDashboard);
+  document.getElementById('dash-refresh').addEventListener('click', renderDashboard);
+  window.addEventListener('resize', renderDashboard);
+
+  renderQuick();
+  renderDashboard();
+</script>
+<script src="styles/sandbox-shell.js"></script>
+<script src="styles/ai-sandbox.js"></script>
+</body>
+</html>
