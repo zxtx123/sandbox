@@ -11,6 +11,8 @@
   /* ---------- 侧边栏菜单：唯一数据源 ----------
      href 为 null 表示暂无对应页面，渲染为不可跳转的占位项。 */
   var SANDBOX_MENU = [
+    { text: "概览", href: "sandbox-dashboard.html",
+      icon: '<svg width="12" height="12" viewBox="0 0 16 16" fill="none"><rect x="2" y="2" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.5" fill="none"/><rect x="9" y="2" width="5" height="3" rx="1" stroke="currentColor" stroke-width="1.5" fill="none"/><rect x="9" y="7" width="5" height="7" rx="1" stroke="currentColor" stroke-width="1.5" fill="none"/><rect x="2" y="9" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>' },
     { text: "沙箱实例", href: "index.html",
       icon: '<svg width="12" height="12" viewBox="0 0 16 16" fill="none"><rect x="2" y="2" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.5" fill="none"/><rect x="9" y="2" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.5" fill="none"/><rect x="2" y="9" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.5" fill="none"/><rect x="9" y="9" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>' },
     { text: "沙箱快照", href: "sandbox-snapshots.html",
