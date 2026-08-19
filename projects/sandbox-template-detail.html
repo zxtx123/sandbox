@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>模板详情 - 360智汇云</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    a {
+      text-decoration: none;
+    }
+    body {
+      font-family: "Microsoft YaHei", "PingFang SC", -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #F0F5F7;
+      font-size: 14px;
+      color: #202020;
+      line-height: 1.5;
+      overflow: hidden;
+    }
+    /* ========== 主体容器（三栏布局） ========== */
+    .container {
+      display: flex;
+      height: calc(100vh - 56px);
+    }
+    /* ========== 第三栏：右侧主内容区 ========== */
+    .main-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      min-width: 0;
+    }
+    .breadcrumb {
+      padding: 0px 20px;
+      border-bottom: 1px solid #E6E6e6;
+      font-size: 14px;
+      display: flex;
+      height: 50px;
+      line-height: 50px;
+      justify-content: space-between;
+      align-items: center;
+      background: #ffffff;
+    }
+    .breadcrumb-left {
+      color: #202020;
+    }
+    .content-body {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      background: #ffffff;
+      margin: 20px;
+      box-shadow: 0 2px 3px rgba(0, 0, 0, 0.09);
+      overflow: hidden;
+    }
+    .detail-page {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      padding: 24px;
+      background: #fff;
+      overflow-y: auto;
+      min-height: 0;
+    }
+    /* 详情头部 */
+    .detail-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-bottom: 20px;
+      border-bottom: 1px solid #F0F0F0;
+      margin-bottom: 24px;
+    }
+    .detail-title {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .detail-title h2 {
+      font-size: 20px;
+      font-weight: 600;
+      color: #202020;
+      margin: 0;
+    }
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 12px;
+    }
+    .status-normal {
+      background: #E6F7EE;
+      color: #52C41A;
+    }
+    .status-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+    }
+    .status-normal .status-dot {
+      background: #52C41A;
+    }
+    /* 区块 */
+    .detail-section {
+      margin-bottom: 24px;
+    }
+    .detail-section-title {
+      font-size: 15px;
+      font-weight: 600;
+      color: #202020;
+      margin-bottom: 16px;
+      padding-left: 10px;
+      border-left: 3px solid #0066FF;
+      line-height: 1.2;
+    }
+    .detail-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px 32px;
+      background: #F8F9FA;
+      border: 1px solid #E6E6E6;
+      border-radius: 4px;
+      padding: 20px 24px;
+    }
+    .detail-item {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .detail-item-label {
+      font-size: 12px;
+      color: #666;
+    }
+    .detail-item-value {
+      font-size: 14px;
+      color: #202020;
+      word-break: break-all;
+    }
+    .detail-item-value .id-cell {
+      font-family: monospace;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .copy-icon {
+      cursor: pointer;
+      opacity: 0.5;
+      font-size: 12px;
+    }
+    .copy-icon:hover {
+      opacity: 1;
+    }
+    .visibility-badge {
+      display: inline-block;
+      padding: 2px 8px;
+      background: #E6F7EE;
+      color: #52C41A;
+      border-radius: 4px;
+      font-size: 12px;
+    }
+    .btn {
+      height: 32px;
+      padding: 0 12px;
+      border-radius: 4px;
+      font-size: 14px;
+      cursor: pointer;
+      border: 1px solid transparent;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+    .btn-default {
+      background: #fff;
+      color: #333;
+      border-color: #D9D9D9;
+    }
+    .btn-default:hover {
+      border-color: #0066FF;
+      color: #0066FF;
+    }
+  </style>
+  <link rel="stylesheet" href="styles/sandbox-shell.css">
+  <link rel="stylesheet" href="styles/ai-sandbox.css">
+</head>
+<body>
+
+<!-- 主体容器（三栏布局） -->
+<div class="container">
+  <div id="sandbox-shell" data-active="沙箱模板" data-breadcrumb="沙箱模板 / 模板详情"></div>
+  <div class="main-content">
+    <div class="breadcrumb">
+      <span class="breadcrumb-left" id="menu-name-display">
+        <a href="sandbox-template.html" style="color: #666; text-decoration: none;">沙箱模板</a>
+        <span style="margin: 0 8px; color: #999;">&gt;</span>
+        <span id="detail-crumb-title" style="color: #333;">模板详情</span>
+      </span>
+    </div>
+    <div class="content-body">
+      <div class="detail-page">
+        <div class="detail-header">
+          <div class="detail-title">
+            <h2 id="detail-name">-</h2>
+            <span class="status-badge status-normal"><span class="status-dot"></span><span id="detail-status">可用</span></span>
+          </div>
+          <a href="sandbox-template.html" class="btn btn-default">返回列表</a>
+        </div>
+
+        <!-- 基本信息 -->
+        <div class="detail-section">
+          <div class="detail-section-title">基本信息</div>
+          <div class="detail-grid">
+            <div class="detail-item">
+              <span class="detail-item-label">模板ID</span>
+              <span class="detail-item-value"><span class="id-cell" id="detail-id">-</span><span class="copy-icon" onclick="copyText(document.getElementById('detail-id').textContent)">📋</span></span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-item-label">模板名称</span>
+              <span class="detail-item-value" id="detail-name2">-</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-item-label">可见性</span>
+              <span class="detail-item-value"><span class="visibility-badge" id="detail-visibility">Public</span></span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-item-label">状态</span>
+              <span class="detail-item-value" id="detail-status2">可用</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-item-label">创建时间</span>
+              <span class="detail-item-value" id="detail-created">-</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-item-label">更新时间</span>
+              <span class="detail-item-value" id="detail-updated">-</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 资源配置 -->
+        <div class="detail-section">
+          <div class="detail-section-title">资源配置</div>
+          <div class="detail-grid">
+            <div class="detail-item">
+              <span class="detail-item-label">CPU核数</span>
+              <span class="detail-item-value" id="detail-cpu">-</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-item-label">内存大小</span>
+              <span class="detail-item-value" id="detail-mem">-</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 运行时环境 -->
+        <div class="detail-section">
+          <div class="detail-section-title">自定义运行时环境</div>
+          <div class="detail-grid">
+            <div class="detail-item" style="grid-column: 1 / -1;">
+              <span class="detail-item-label">镜像地址</span>
+              <span class="detail-item-value" id="detail-image">-</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 启动配置 -->
+        <div class="detail-section">
+          <div class="detail-section-title">启动配置</div>
+          <div class="detail-grid">
+            <div class="detail-item" style="grid-column: 1 / -1;">
+              <span class="detail-item-label">启动命令</span>
+              <span class="detail-item-value" id="detail-command">-</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // 模板详情数据源（与列表页保持一致）
+  var TEMPLATE_DETAILS = {
+    'code-interpreter-v1': {
+      id: 'zs47yil2jbkdf73nali2',
+      name: 'code-interpreter-v1',
+      status: '可用',
+      cpu: '2 核',
+      mem: '1024MB',
+      created: '2025-09-12 17:24:45',
+      updated: '2025-09-12 17:24:45',
+      visibility: 'Public',
+      image: 'harbor.qihoo.net/e2b-infra/code-interpreter:latest',
+      command: 'sleep infinity'
+    },
+    'desktop': {
+      id: 'y0ad1vs1k72ijelq7jjy',
+      name: 'desktop',
+      status: '可用',
+      cpu: '2 核',
+      mem: '1024MB',
+      created: '2025-09-22 15:10:28',
+      updated: '2025-09-22 15:10:28',
+      visibility: 'Public',
+      image: 'harbor.qihoo.net/e2b-infra/desktop:latest',
+      command: 'sleep infinity'
+    },
+    'chrome-template': {
+      id: 'kqepe5sjnv9hrcxzxe2g',
+      name: 'chrome-template',
+      status: '可用',
+      cpu: '2 核',
+      mem: '1024MB',
+      created: '2025-11-12 15:36:52',
+      updated: '2025-11-12 15:36:55',
+      visibility: 'Public',
+      image: 'harbor.qihoo.net/e2b-infra/chrome:latest',
+      command: 'sleep infinity'
+    }
+  };
+
+  function copyText(text) {
+    navigator.clipboard.writeText(text).then(function() {
+      alert('已复制: ' + text);
+    });
+  }
+
+  function renderDetail() {
+    var params = new URLSearchParams(window.location.search);
+    var name = params.get('name') || '';
+    var tpl = TEMPLATE_DETAILS[name] || TEMPLATE_DETAILS['code-interpreter-v1'];
+    document.getElementById('detail-name').textContent = tpl.name;
+    document.getElementById('detail-name2').textContent = tpl.name;
+    document.getElementById('detail-id').textContent = tpl.id;
+    document.getElementById('detail-status').textContent = tpl.status;
+    document.getElementById('detail-status2').textContent = tpl.status;
+    document.getElementById('detail-visibility').textContent = tpl.visibility;
+    document.getElementById('detail-created').textContent = tpl.created;
+    document.getElementById('detail-updated').textContent = tpl.updated;
+    document.getElementById('detail-cpu').textContent = tpl.cpu;
+    document.getElementById('detail-mem').textContent = tpl.mem;
+    document.getElementById('detail-image').textContent = tpl.image;
+    document.getElementById('detail-command').textContent = tpl.command;
+    document.getElementById('detail-crumb-title').textContent = tpl.name + ' 详情';
+  }
+
+  renderDetail();
+</script>
+<script src="styles/sandbox-shell.js"></script>
+<script src="styles/ai-sandbox.js"></script>
+</body>
+</html>
