@@ -1095,7 +1095,7 @@
                 <td>dev-env</td>
                 <td><span class="status-badge status-normal"><span class="status-dot"></span>运行中</span></td>
                 <td>2026-05-20 10:30:00</td>
-                <td><a href="#" class="action-link set-policy-btn" data-sandbox="sandbox-dev-python">访问策略</a><a href="#" class="action-link create-snapshot-btn" data-sandbox="sandbox-dev-python" data-template="Python 3.11" data-cpu="2核" data-memory="4GB">创建快照</a></td>
+                <td><a href="#" class="action-link set-policy-btn" data-sandbox="sandbox-dev-python">访问策略</a><a href="#" class="action-link create-snapshot-btn" data-sandbox="sandbox-dev-python" data-template="Python 3.11" data-cpu="2核" data-memory="4GB">创建快照</a><a href="#" class="action-link delete-instance-btn" data-sandbox="sandbox-dev-python">删除</a></td>
               </tr>
               <tr>
                 <td><input type="checkbox" class="product-checkbox"></td>
@@ -1106,7 +1106,7 @@
                 <td>prod-env</td>
                 <td><span class="status-badge status-normal"><span class="status-dot"></span>运行中</span></td>
                 <td>2026-05-21 14:15:00</td>
-                <td><a href="#" class="action-link set-policy-btn" data-sandbox="sandbox-prod-java">访问策略</a><a href="#" class="action-link create-snapshot-btn" data-sandbox="sandbox-prod-java" data-template="Java 17" data-cpu="4核" data-memory="8GB">创建快照</a></td>
+                <td><a href="#" class="action-link set-policy-btn" data-sandbox="sandbox-prod-java">访问策略</a><a href="#" class="action-link create-snapshot-btn" data-sandbox="sandbox-prod-java" data-template="Java 17" data-cpu="4核" data-memory="8GB">创建快照</a><a href="#" class="action-link delete-instance-btn" data-sandbox="sandbox-prod-java">删除</a></td>
               </tr>
               <tr>
                 <td><input type="checkbox" class="product-checkbox"></td>
@@ -1117,7 +1117,7 @@
                 <td>test-env</td>
                 <td><span class="status-badge status-normal"><span class="status-dot"></span>运行中</span></td>
                 <td>2026-05-22 09:00:00</td>
-                <td><a href="#" class="action-link set-policy-btn" data-sandbox="sandbox-test-node">访问策略</a><a href="#" class="action-link create-snapshot-btn" data-sandbox="sandbox-test-node" data-template="Node.js 20" data-cpu="2核" data-memory="4GB">创建快照</a></td>
+                <td><a href="#" class="action-link set-policy-btn" data-sandbox="sandbox-test-node">访问策略</a><a href="#" class="action-link create-snapshot-btn" data-sandbox="sandbox-test-node" data-template="Node.js 20" data-cpu="2核" data-memory="4GB">创建快照</a><a href="#" class="action-link delete-instance-btn" data-sandbox="sandbox-test-node">删除</a></td>
               </tr>
             </tbody>
           </table>
@@ -1164,6 +1164,23 @@
       <div class="snapshot-impact-tip"><strong>完整快照</strong>会保存文件系统与运行时内存状态。创建期间实例会短暂停顿，WebSocket、终端和命令流连接将断开；完成后源实例继续运行。</div>
     </div>
     <div class="modal-footer"><button class="btn btn-default" type="button" onclick="closeCreateSnapshotModal()">取消</button><button class="btn btn-primary" id="create-snapshot-submit-btn" type="button" onclick="createSnapshot()">创建快照</button></div>
+  </div>
+</div>
+
+<!-- 删除沙箱确认弹窗 -->
+<div class="modal-overlay" id="delete-instance-modal" role="dialog" aria-modal="true">
+  <div class="modal-dialog" style="width: 420px;">
+    <div class="modal-header">
+      <h3 class="modal-title">删除确认</h3>
+      <button class="modal-close" type="button" onclick="closeDeleteInstanceModal()" aria-label="关闭">&times;</button>
+    </div>
+    <div class="modal-body" style="padding: 28px 20px;">
+      <p id="delete-instance-msg" style="margin: 0; font-size: 15px; color: #333; line-height: 1.6;"></p>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-default" type="button" onclick="closeDeleteInstanceModal()">取消</button>
+      <button class="btn btn-primary" type="button" style="background:#ff4d4f;border-color:#ff4d4f;" onclick="confirmDeleteInstance()">删除</button>
+    </div>
   </div>
 </div>
 
@@ -1628,12 +1645,47 @@
       <td>${instance.metadata}</td>
       <td><span class="status-badge status-normal"><span class="status-dot"></span>运行中</span></td>
       <td>${instance.createdAt}</td>
-      <td><a href="#" class="action-link set-policy-btn" data-sandbox="${instance.id}">访问策略</a><a href="#" class="action-link create-snapshot-btn" data-sandbox="${instance.id}" data-template="${instance.template}" data-cpu="${instance.cpu}" data-memory="${instance.memory}">创建快照</a></td>
+      <td><a href="#" class="action-link set-policy-btn" data-sandbox="${instance.id}">访问策略</a><a href="#" class="action-link create-snapshot-btn" data-sandbox="${instance.id}" data-template="${instance.template}" data-cpu="${instance.cpu}" data-memory="${instance.memory}">创建快照</a><a href="#" class="action-link delete-instance-btn" data-sandbox="${instance.id}">删除</a></td>
     </tr>`).join('');
     body.insertAdjacentHTML('afterbegin', rows);
   }
 
   renderSnapshotInstances();
+
+  // 删除沙箱实例
+  let deletingInstanceRow = null;
+  let deletingInstanceName = '';
+
+  document.addEventListener('click', function(event) {
+    const btn = event.target.closest('.delete-instance-btn');
+    if (!btn) return;
+    event.preventDefault();
+    deletingInstanceRow = btn.closest('tr');
+    deletingInstanceName = btn.dataset.sandbox || (deletingInstanceRow ? deletingInstanceRow.children[1].textContent.trim() : '');
+    document.getElementById('delete-instance-msg').textContent = '确认要删除沙箱实例「' + deletingInstanceName + '」吗？删除后不可恢复。';
+    document.getElementById('delete-instance-modal').classList.add('active');
+  });
+
+  function closeDeleteInstanceModal() {
+    document.getElementById('delete-instance-modal').classList.remove('active');
+    deletingInstanceRow = null;
+    deletingInstanceName = '';
+  }
+
+  function confirmDeleteInstance() {
+    if (deletingInstanceRow) {
+      deletingInstanceRow.remove();
+      const pagination = document.querySelector('.pagination-left');
+      if (pagination) {
+        pagination.textContent = '共' + document.querySelectorAll('#sandbox-instance-table-body tr').length + '条记录 第1/1页';
+      }
+    }
+    closeDeleteInstanceModal();
+  }
+
+  document.getElementById('delete-instance-modal').addEventListener('click', function(event) {
+    if (event.target === this) closeDeleteInstanceModal();
+  });
 
   const SNAPSHOTS_KEY = 'sandboxSnapshots';
   let currentSnapshotSource = null;
