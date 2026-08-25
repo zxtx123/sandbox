@@ -677,6 +677,14 @@
       color: #0066FF;
     }
 
+    .btn:disabled {
+      background: #f5f5f5;
+      border-color: #d9d9d9 !important;
+      color: #bfbfbf !important;
+      cursor: not-allowed;
+      opacity: 1;
+    }
+
     .search-box {
       display: flex;
       align-items: center;
@@ -1056,6 +1064,7 @@
               </svg>
               创建沙箱
             </button>
+            <button class="btn btn-default" id="batch-delete-instance-btn" disabled style="color:#ff4d4f;border-color:#ff4d4f;">批量删除</button>
           </div>
           <div class="toolbar-right">
             <div class="search-box">
@@ -1083,7 +1092,7 @@
             <table>
             <thead>
               <tr>
-                <th style="width: 40px;"><input type="checkbox" class="product-checkbox"></th>
+                <th style="width: 40px;"><input type="checkbox" class="product-checkbox" id="select-all-instances"></th>
                 <th>沙箱ID</th>
                 <th>模板</th>
                 <th>CPU</th>
@@ -1200,6 +1209,23 @@
     <div class="modal-footer">
       <button class="btn btn-default" type="button" onclick="closeDeleteInstanceModal()">取消</button>
       <button class="btn btn-primary" type="button" style="background:#ff4d4f;border-color:#ff4d4f;" onclick="confirmDeleteInstance()">删除</button>
+    </div>
+  </div>
+</div>
+
+<!-- 批量删除沙箱确认弹窗 -->
+<div class="modal-overlay" id="batch-delete-instance-modal" role="dialog" aria-modal="true">
+  <div class="modal-dialog" style="width: 420px;">
+    <div class="modal-header">
+      <h3 class="modal-title">批量删除确认</h3>
+      <button class="modal-close" type="button" onclick="closeBatchDeleteInstanceModal()" aria-label="关闭">&times;</button>
+    </div>
+    <div class="modal-body" style="padding: 28px 20px;">
+      <p id="batch-delete-instance-msg" style="margin: 0; font-size: 15px; color: #333; line-height: 1.6;"></p>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-default" type="button" onclick="closeBatchDeleteInstanceModal()">取消</button>
+      <button class="btn btn-primary" type="button" style="background:#ff4d4f;border-color:#ff4d4f;" onclick="confirmBatchDeleteInstance()">删除</button>
     </div>
   </div>
 </div>
@@ -1718,10 +1744,71 @@
       }
     }
     closeDeleteInstanceModal();
+    updateBatchDeleteState();
   }
 
   document.getElementById('delete-instance-modal').addEventListener('click', function(event) {
     if (event.target === this) closeDeleteInstanceModal();
+  });
+
+  // 批量删除沙箱实例
+  const selectAllInstances = document.getElementById('select-all-instances');
+  const batchDeleteInstanceBtn = document.getElementById('batch-delete-instance-btn');
+
+  function getCheckedInstanceRows() {
+    return Array.from(document.querySelectorAll('#sandbox-instance-table-body input.product-checkbox:checked'));
+  }
+
+  function updateBatchDeleteState() {
+    const checked = getCheckedInstanceRows();
+    batchDeleteInstanceBtn.disabled = checked.length === 0;
+    const total = document.querySelectorAll('#sandbox-instance-table-body input.product-checkbox').length;
+    selectAllInstances.checked = total > 0 && checked.length === total;
+    selectAllInstances.indeterminate = checked.length > 0 && checked.length < total;
+  }
+
+  if (selectAllInstances) {
+    selectAllInstances.addEventListener('change', function() {
+      document.querySelectorAll('#sandbox-instance-table-body input.product-checkbox').forEach(cb => {
+        cb.checked = selectAllInstances.checked;
+      });
+      updateBatchDeleteState();
+    });
+  }
+
+  document.addEventListener('change', function(event) {
+    if (event.target.matches('#sandbox-instance-table-body input.product-checkbox')) {
+      updateBatchDeleteState();
+    }
+  });
+
+  if (batchDeleteInstanceBtn) {
+    batchDeleteInstanceBtn.addEventListener('click', function() {
+      const checked = getCheckedInstanceRows();
+      if (checked.length === 0) return;
+      const names = checked.map(cb => cb.closest('tr').children[1].textContent.trim());
+      document.getElementById('batch-delete-instance-msg').textContent = '确认要删除选中的 ' + checked.length + ' 个沙箱实例吗？删除后不可恢复。';
+      document.getElementById('batch-delete-instance-modal').classList.add('active');
+    });
+  }
+
+  function closeBatchDeleteInstanceModal() {
+    document.getElementById('batch-delete-instance-modal').classList.remove('active');
+  }
+
+  function confirmBatchDeleteInstance() {
+    const checked = getCheckedInstanceRows();
+    checked.forEach(cb => cb.closest('tr').remove());
+    const pagination = document.querySelector('.pagination-left');
+    if (pagination) {
+      pagination.textContent = '共' + document.querySelectorAll('#sandbox-instance-table-body tr').length + '条记录 第1/1页';
+    }
+    closeBatchDeleteInstanceModal();
+    updateBatchDeleteState();
+  }
+
+  document.getElementById('batch-delete-instance-modal').addEventListener('click', function(event) {
+    if (event.target === this) closeBatchDeleteInstanceModal();
   });
 
   // 暂停 / 恢复沙箱实例（带确认弹窗）

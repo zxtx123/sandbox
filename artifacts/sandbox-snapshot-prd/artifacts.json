@@ -1,0 +1,18 @@
+{
+  "version": 1,
+  "status": "complete",
+  "artifacts": [
+    {
+      "kind": "docx",
+      "filePath": "AI沙箱快照功能_PRD_v1.0.docx",
+      "validation": "passed",
+      "preview": {
+        "paths": [
+          "preview/01-instance-create-snapshot.png",
+          "preview/02-snapshot-list.png",
+          "preview/03-create-from-snapshot.png"
+        ]
+      }
+    }
+  ]
+}

@@ -682,6 +682,14 @@
       color: #0066FF;
     }
 
+    .btn:disabled {
+      background: #f5f5f5;
+      border-color: #d9d9d9 !important;
+      color: #bfbfbf !important;
+      cursor: not-allowed;
+      opacity: 1;
+    }
+
     .search-box {
       display: flex;
       align-items: center;
@@ -1093,6 +1101,7 @@
               </svg>
               创建模板
             </a>
+            <button class="btn btn-default" id="batch-delete-template-btn" disabled style="color:#ff4d4f;border-color:#ff4d4f;">批量删除</button>
           </div>
           <div class="toolbar-right">
             <div class="search-box">
@@ -1119,6 +1128,7 @@
             <table>
             <thead>
               <tr>
+                <th style="width: 40px;"><input type="checkbox" class="product-checkbox" id="select-all-templates"></th>
                 <th>模板ID</th>
                 <th>模板名称</th>
                 <th>状态</th>
@@ -1132,6 +1142,7 @@
             </thead>
             <tbody>
               <tr data-name="code-interpreter-v1">
+                <td><input type="checkbox" class="product-checkbox"></td>
                 <td class="id-cell">zs47yil2jbkdf73nali2<span class="copy-icon" onclick="copyText('zs47yil2jbkdf73nali2')">📋</span></td>
                 <td class="template-name"><a class="template-name-link" href="sandbox-template-detail.html?name=code-interpreter-v1">code-interpreter-v1</a></td>
                 <td><span class="status-badge status-normal"><span class="status-dot"></span>可用</span></td>
@@ -1143,6 +1154,7 @@
                 <td><a href="#" class="action-link delete-template-btn">删除</a></td>
               </tr>
               <tr data-name="desktop">
+                <td><input type="checkbox" class="product-checkbox"></td>
                 <td class="id-cell">y0ad1vs1k72ijelq7jjy<span class="copy-icon" onclick="copyText('y0ad1vs1k72ijelq7jjy')">📋</span></td>
                 <td class="template-name"><a class="template-name-link" href="sandbox-template-detail.html?name=desktop">desktop</a></td>
                 <td><span class="status-badge status-normal"><span class="status-dot"></span>可用</span></td>
@@ -1154,6 +1166,7 @@
                 <td><a href="#" class="action-link delete-template-btn">删除</a></td>
               </tr>
               <tr data-name="chrome-template">
+                <td><input type="checkbox" class="product-checkbox"></td>
                 <td class="id-cell">kqepe5sjnv9hrcxzxe2g<span class="copy-icon" onclick="copyText('kqepe5sjnv9hrcxzxe2g')">📋</span></td>
                 <td class="template-name"><a class="template-name-link" href="sandbox-template-detail.html?name=chrome-template">chrome-template</a></td>
                 <td><span class="status-badge status-normal"><span class="status-dot"></span>可用</span></td>
@@ -1191,6 +1204,23 @@
     <div class="modal-footer">
       <button class="btn btn-default" onclick="closeDeleteTemplateModal()">取消</button>
       <button class="btn btn-primary" style="background:#ff4d4f;border-color:#ff4d4f;" onclick="confirmDeleteTemplate()">删除</button>
+    </div>
+  </div>
+</div>
+
+<!-- 批量删除模板确认弹窗 -->
+<div class="modal-overlay" id="batch-delete-template-modal">
+  <div class="modal-dialog" style="width: 400px;">
+    <div class="modal-header">
+      <h3 class="modal-title">批量删除确认</h3>
+      <button class="modal-close" onclick="closeBatchDeleteTemplateModal()">&times;</button>
+    </div>
+    <div class="modal-body" style="padding: 28px 20px;">
+      <p id="batch-delete-template-msg" style="margin: 0; font-size: 15px; color: #333; line-height: 1.6;"></p>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-default" onclick="closeBatchDeleteTemplateModal()">取消</button>
+      <button class="btn btn-primary" style="background:#ff4d4f;border-color:#ff4d4f;" onclick="confirmBatchDeleteTemplate()">删除</button>
     </div>
   </div>
 </div>
@@ -1510,6 +1540,7 @@
       document.querySelector('.pagination-left').textContent = '共' + document.querySelectorAll('.product-table tbody tr').length + '条记录 第1/1页';
     }
     closeDeleteTemplateModal();
+    updateBatchDeleteTemplateState();
   }
 
   document.querySelectorAll('.delete-template-btn').forEach(btn => {
@@ -1518,6 +1549,61 @@
       const row = this.closest('tr');
       if (row) openDeleteTemplateModal(row);
     });
+  });
+
+  // 批量删除模板
+  const selectAllTemplates = document.getElementById('select-all-templates');
+  const batchDeleteTemplateBtn = document.getElementById('batch-delete-template-btn');
+
+  function getCheckedTemplateRows() {
+    return Array.from(document.querySelectorAll('.product-table tbody input.product-checkbox:checked'));
+  }
+
+  function updateBatchDeleteTemplateState() {
+    const checked = getCheckedTemplateRows();
+    batchDeleteTemplateBtn.disabled = checked.length === 0;
+    const total = document.querySelectorAll('.product-table tbody input.product-checkbox').length;
+    selectAllTemplates.checked = total > 0 && checked.length === total;
+    selectAllTemplates.indeterminate = checked.length > 0 && checked.length < total;
+  }
+
+  if (selectAllTemplates) {
+    selectAllTemplates.addEventListener('change', function() {
+      document.querySelectorAll('.product-table tbody input.product-checkbox').forEach(cb => {
+        cb.checked = selectAllTemplates.checked;
+      });
+      updateBatchDeleteTemplateState();
+    });
+  }
+
+  document.addEventListener('change', function(event) {
+    if (event.target.matches('.product-table tbody input.product-checkbox')) {
+      updateBatchDeleteTemplateState();
+    }
+  });
+
+  if (batchDeleteTemplateBtn) {
+    batchDeleteTemplateBtn.addEventListener('click', function() {
+      const checked = getCheckedTemplateRows();
+      if (checked.length === 0) return;
+      document.getElementById('batch-delete-template-msg').textContent = '确认要删除选中的 ' + checked.length + ' 个模板吗？删除后不可恢复。';
+      document.getElementById('batch-delete-template-modal').classList.add('active');
+    });
+  }
+
+  function closeBatchDeleteTemplateModal() {
+    document.getElementById('batch-delete-template-modal').classList.remove('active');
+  }
+
+  function confirmBatchDeleteTemplate() {
+    getCheckedTemplateRows().forEach(cb => cb.closest('tr').remove());
+    document.querySelector('.pagination-left').textContent = '共' + document.querySelectorAll('.product-table tbody tr').length + '条记录 第1/1页';
+    closeBatchDeleteTemplateModal();
+    updateBatchDeleteTemplateState();
+  }
+
+  document.getElementById('batch-delete-template-modal').addEventListener('click', function(e) {
+    if (e.target === this) closeBatchDeleteTemplateModal();
   });
 
   function getUsedPkgTypes() {

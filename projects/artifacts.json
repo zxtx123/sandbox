@@ -1,0 +1,28 @@
+{
+  "version": 1,
+  "status": "complete",
+  "artifacts": [
+    {
+      "kind": "docx",
+      "filePath": "沙箱模板功能PRD.docx",
+      "validation": "passed",
+      "preview": {
+        "paths": [
+          "preview/prd-page-1-list.png",
+          "preview/prd-page-2-create.png",
+          "preview/prd-page-3-delete.png"
+        ]
+      }
+    },
+    {
+      "kind": "docx",
+      "filePath": "outputs/沙箱快照功能帮助手册.docx",
+      "validation": "partial"
+    },
+    {
+      "kind": "docx",
+      "filePath": "outputs/沙箱实例暂停恢复功能PRD_v2.docx",
+      "validation": "partial"
+    }
+  ]
+}
