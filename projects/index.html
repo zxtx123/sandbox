@@ -819,7 +819,7 @@
 
     .product-table th {
       background: #F8F9FA;
-      padding: 12px 16px;
+      padding: 12px 10px;
       text-align: left;
       font-size: 14px;
       font-weight: 500;
@@ -839,10 +839,38 @@
     }
 
     .product-table td {
-      padding: 14px 16px;
+      padding: 14px 10px;
       font-size: 14px;
       color: #333;
       border-bottom: 1px solid #F0F0F0;
+    }
+
+    .product-table th:first-child,
+    .product-table td:first-child {
+      width: 40px;
+      padding-left: 6px;
+      padding-right: 4px;
+      text-align: center;
+    }
+
+    .product-table th:nth-child(2),
+    .product-table td:nth-child(2) {
+      padding-left: 6px;
+    }
+
+    .product-table th:nth-child(7),
+    .product-table td:nth-child(7) {
+      min-width: 90px;
+    }
+
+    .product-table th:nth-child(8),
+    .product-table td:nth-child(8) {
+      min-width: 148px;
+    }
+
+    .product-table th:nth-child(9),
+    .product-table td:nth-child(9) {
+      min-width: 240px;
     }
 
     .product-table tbody tr:hover {
@@ -1095,10 +1123,10 @@
                 <th style="width: 40px;"><input type="checkbox" class="product-checkbox" id="select-all-instances"></th>
                 <th>沙箱ID</th>
                 <th>模板</th>
+                <th>状态</th>
                 <th>CPU</th>
                 <th>内存</th>
                 <th>MetaData</th>
-                <th>状态</th>
                 <th>启动时间</th>
                 <th>操作</th>
               </tr>
@@ -1108,10 +1136,10 @@
                 <td><input type="checkbox" class="product-checkbox"></td>
                 <td>sandbox-dev-python</td>
                 <td>Python 3.11</td>
+                <td><span class="status-badge status-normal"><span class="status-dot"></span>运行中</span></td>
                 <td>2核</td>
                 <td>4GB</td>
                 <td>dev-env</td>
-                <td><span class="status-badge status-normal"><span class="status-dot"></span>运行中</span></td>
                 <td>2026-05-20 10:30:00</td>
                 <td><a href="#" class="action-link set-policy-btn" data-sandbox="sandbox-dev-python">访问策略</a><a href="#" class="action-link create-snapshot-btn" data-sandbox="sandbox-dev-python" data-template="Python 3.11" data-cpu="2核" data-memory="4GB">创建快照</a><a href="#" class="action-link pause-instance-btn" data-sandbox="sandbox-dev-python">暂停</a><a href="#" class="action-link delete-instance-btn" data-sandbox="sandbox-dev-python">删除</a></td>
               </tr>
@@ -1119,10 +1147,10 @@
                 <td><input type="checkbox" class="product-checkbox"></td>
                 <td>sandbox-prod-java</td>
                 <td>Java 17</td>
+                <td><span class="status-badge status-normal"><span class="status-dot"></span>运行中</span></td>
                 <td>4核</td>
                 <td>8GB</td>
                 <td>prod-env</td>
-                <td><span class="status-badge status-normal"><span class="status-dot"></span>运行中</span></td>
                 <td>2026-05-21 14:15:00</td>
                 <td><a href="#" class="action-link set-policy-btn" data-sandbox="sandbox-prod-java">访问策略</a><a href="#" class="action-link create-snapshot-btn" data-sandbox="sandbox-prod-java" data-template="Java 17" data-cpu="4核" data-memory="8GB">创建快照</a><a href="#" class="action-link pause-instance-btn" data-sandbox="sandbox-prod-java">暂停</a><a href="#" class="action-link delete-instance-btn" data-sandbox="sandbox-prod-java">删除</a></td>
               </tr>
@@ -1130,10 +1158,10 @@
                 <td><input type="checkbox" class="product-checkbox"></td>
                 <td>sandbox-test-node</td>
                 <td>Node.js 20</td>
+                <td><span class="status-badge status-normal"><span class="status-dot"></span>运行中</span></td>
                 <td>2核</td>
                 <td>4GB</td>
                 <td>test-env</td>
-                <td><span class="status-badge status-normal"><span class="status-dot"></span>运行中</span></td>
                 <td>2026-05-22 09:00:00</td>
                 <td><a href="#" class="action-link set-policy-btn" data-sandbox="sandbox-test-node">访问策略</a><a href="#" class="action-link create-snapshot-btn" data-sandbox="sandbox-test-node" data-template="Node.js 20" data-cpu="2核" data-memory="4GB">创建快照</a><a href="#" class="action-link pause-instance-btn" data-sandbox="sandbox-test-node">暂停</a><a href="#" class="action-link delete-instance-btn" data-sandbox="sandbox-test-node">删除</a></td>
               </tr>
@@ -1141,10 +1169,10 @@
                 <td><input type="checkbox" class="product-checkbox"></td>
                 <td>sandbox-paused-go</td>
                 <td>Go 1.22</td>
+                <td><span class="status-badge status-paused"><span class="status-dot"></span>已暂停</span></td>
                 <td>2核</td>
                 <td>4GB</td>
                 <td>pause-env</td>
-                <td><span class="status-badge status-paused"><span class="status-dot"></span>已暂停</span></td>
                 <td>2026-05-23 11:00:00</td>
                 <td><a href="#" class="action-link set-policy-btn" data-sandbox="sandbox-paused-go">访问策略</a><a href="#" class="action-link create-snapshot-btn" data-sandbox="sandbox-paused-go" data-template="Go 1.22" data-cpu="2核" data-memory="4GB">创建快照</a><a href="#" class="action-link resume-instance-btn" data-sandbox="sandbox-paused-go">恢复</a><a href="#" class="action-link delete-instance-btn" data-sandbox="sandbox-paused-go">删除</a></td>
               </tr>
@@ -1703,10 +1731,10 @@
       <td><input type="checkbox" class="product-checkbox"></td>
       <td>${instance.id}</td>
       <td>${instance.template}</td>
+      <td><span class="status-badge status-normal"><span class="status-dot"></span>运行中</span></td>
       <td>${instance.cpu}</td>
       <td>${instance.memory}</td>
       <td>${instance.metadata}</td>
-      <td><span class="status-badge status-normal"><span class="status-dot"></span>运行中</span></td>
       <td>${instance.createdAt}</td>
       <td><a href="#" class="action-link set-policy-btn" data-sandbox="${instance.id}">访问策略</a><a href="#" class="action-link create-snapshot-btn" data-sandbox="${instance.id}" data-template="${instance.template}" data-cpu="${instance.cpu}" data-memory="${instance.memory}">创建快照</a><a href="#" class="action-link pause-instance-btn" data-sandbox="${instance.id}">暂停</a><a href="#" class="action-link delete-instance-btn" data-sandbox="${instance.id}">删除</a></td>
     </tr>`).join('');
