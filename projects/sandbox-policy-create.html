@@ -1197,55 +1197,15 @@
               </div>
               <div class="policy-rule-tip">勾选后，沙箱可访问公网服务。</div>
               <div class="public-net-subpanel" id="policy-form-public-subpanel">
-                <div class="public-rule-block">
-                  <div class="public-rule-block-head"><span class="public-rule-block-title">IP 黑名单</span><span class="public-rule-count" id="public-rule-count-ip-black">0 / 500 条</span></div>
-                  <div class="public-rule-tip-line">命中的 IP 一律禁止访问；黑名单优先于白名单。支持 IPv4 / IPv6。</div>
-                  <div class="tag-input-row">
-                    <input type="text" class="form-input" id="public-rule-input-ip-black" placeholder="请输入 IP 地址，如 10.0.0.1" onkeydown="if(event.key==='Enter'){addPublicRuleTag('ip-black');event.preventDefault();}">
-                    <button type="button" class="add-rule-btn" onclick="addPublicRuleTag('ip-black')">添加</button>
-                    <button type="button" class="add-rule-btn" onclick="openPublicRuleImport('ip-black')">批量导入</button>
-                  </div>
-                  <div class="tag-list" id="public-rule-tags-ip-black"></div>
+                <div class="public-rule-buttons">
+                  <button type="button" class="add-rule-btn public-rule-add-btn" onclick="addPublicRuleEntry('ip-black')">+ IP 黑名单</button>
+                  <button type="button" class="add-rule-btn public-rule-add-btn" onclick="addPublicRuleEntry('ip-white')">+ IP 白名单</button>
+                  <button type="button" class="add-rule-btn public-rule-add-btn" onclick="addPublicRuleEntry('cidr-black')">+ 网段黑名单</button>
+                  <button type="button" class="add-rule-btn public-rule-add-btn" onclick="addPublicRuleEntry('cidr-white')">+ 网段白名单</button>
+                  <button type="button" class="add-rule-btn public-rule-add-btn" onclick="addPublicRuleEntry('domain-white')">+ 域名白名单</button>
                 </div>
-                <div class="public-rule-block">
-                  <div class="public-rule-block-head"><span class="public-rule-block-title">IP 白名单</span><span class="public-rule-count" id="public-rule-count-ip-white">0 / 500 条</span></div>
-                  <div class="public-rule-tip-line">白名单非空时，仅允许名单内 IP 访问；留空表示允许所有未命中黑名单的 IP。</div>
-                  <div class="tag-input-row">
-                    <input type="text" class="form-input" id="public-rule-input-ip-white" placeholder="请输入 IP 地址，如 203.0.113.5" onkeydown="if(event.key==='Enter'){addPublicRuleTag('ip-white');event.preventDefault();}">
-                    <button type="button" class="add-rule-btn" onclick="addPublicRuleTag('ip-white')">添加</button>
-                    <button type="button" class="add-rule-btn" onclick="openPublicRuleImport('ip-white')">批量导入</button>
-                  </div>
-                  <div class="tag-list" id="public-rule-tags-ip-white"></div>
-                </div>
-                <div class="public-rule-block">
-                  <div class="public-rule-block-head"><span class="public-rule-block-title">网段黑名单</span><span class="public-rule-count" id="public-rule-count-cidr-black">0 / 200 条</span></div>
-                  <div class="public-rule-tip-line">以 CIDR 网段批量管控连续 IP，如 10.0.0.0/8。IPv4 支持 /8、/16、/24；也支持 IPv6 前缀。</div>
-                  <div class="tag-input-row">
-                    <input type="text" class="form-input" id="public-rule-input-cidr-black" placeholder="请输入 CIDR 网段，如 192.168.1.0/24" onkeydown="if(event.key==='Enter'){addPublicRuleTag('cidr-black');event.preventDefault();}">
-                    <button type="button" class="add-rule-btn" onclick="addPublicRuleTag('cidr-black')">添加</button>
-                    <button type="button" class="add-rule-btn" onclick="openPublicRuleImport('cidr-black')">批量导入</button>
-                  </div>
-                  <div class="tag-list" id="public-rule-tags-cidr-black"></div>
-                </div>
-                <div class="public-rule-block">
-                  <div class="public-rule-block-head"><span class="public-rule-block-title">网段白名单</span><span class="public-rule-count" id="public-rule-count-cidr-white">0 / 200 条</span></div>
-                  <div class="public-rule-tip-line">白名单非空时，仅允许名单内网段访问；与 IP 精确名单共同构成双层过滤。</div>
-                  <div class="tag-input-row">
-                    <input type="text" class="form-input" id="public-rule-input-cidr-white" placeholder="请输入 CIDR 网段，如 10.0.0.0/8" onkeydown="if(event.key==='Enter'){addPublicRuleTag('cidr-white');event.preventDefault();}">
-                    <button type="button" class="add-rule-btn" onclick="addPublicRuleTag('cidr-white')">添加</button>
-                    <button type="button" class="add-rule-btn" onclick="openPublicRuleImport('cidr-white')">批量导入</button>
-                  </div>
-                  <div class="tag-list" id="public-rule-tags-cidr-white"></div>
-                </div>
-                <div class="public-rule-block">
-                  <div class="public-rule-block-head"><span class="public-rule-block-title">域名白名单</span><span class="public-rule-count" id="public-rule-count-domain-white">0 / 300 条（泛域名 ≤ 50）</span></div>
-                  <div class="public-rule-tip-line">支持精确域名与泛域名（如 *.example.com，通配符仅允许在首段一级）。域名解析出的 IP 仍需通过 IP / 网段名单校验。</div>
-                  <div class="tag-input-row">
-                    <input type="text" class="form-input" id="public-rule-input-domain-white" placeholder="请输入域名，如 api.example.com 或 *.example.com" onkeydown="if(event.key==='Enter'){addPublicRuleTag('domain-white');event.preventDefault();}">
-                    <button type="button" class="add-rule-btn" onclick="addPublicRuleTag('domain-white')">添加</button>
-                    <button type="button" class="add-rule-btn" onclick="openPublicRuleImport('domain-white')">批量导入</button>
-                  </div>
-                  <div class="tag-list" id="public-rule-tags-domain-white"></div>
+                <div class="public-rule-entries" id="public-rule-entries">
+                  <div class="public-rule-empty" id="public-rule-empty-tip">请通过上方按钮添加对应的名单记录。</div>
                 </div>
               </div>
             </div>
@@ -1942,6 +1902,60 @@
     gap: 20px;
     margin-top: 10px;
   }
+  .public-rule-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .public-rule-add-btn {
+    height: 28px;
+    padding: 0 12px;
+  }
+  .public-rule-entries {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .public-rule-empty {
+    font-size: 12px;
+    color: #8492a6;
+    padding: 4px 0;
+  }
+  .public-rule-entry {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 10px;
+    border: 1px solid #e3ecf7;
+    border-radius: 4px;
+    background: #fff;
+  }
+  .public-rule-entry-label {
+    flex: 0 0 88px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #1f2d3d;
+  }
+  .public-rule-entry .form-input {
+    flex: 1;
+    min-width: 0;
+    height: 30px;
+    font-size: 13px;
+  }
+  .public-rule-entry-remove {
+    flex: 0 0 auto;
+    height: 28px;
+    padding: 0 10px;
+    border: 1px solid #f0c7c7;
+    border-radius: 2px;
+    background: #fff;
+    color: #e02020;
+    font-size: 13px;
+    cursor: pointer;
+  }
+  .public-rule-entry-remove:hover {
+    background: #fff1f0;
+  }
   .policy-switch input {
     position: absolute;
     opacity: 0;
@@ -2489,6 +2503,10 @@
   const PUBLIC_RULE_KINDS = ['ip-black', 'ip-white', 'cidr-black', 'cidr-white', 'domain-white'];
   let publicRuleImportTarget = null;
 
+  function publicRuleKindOfKey(key) {
+    return { ipBlack: 'ip-black', ipWhite: 'ip-white', cidrBlack: 'cidr-black', cidrWhite: 'cidr-white', domainWhite: 'domain-white' }[key] || null;
+  }
+
   function emptyPublicRules() {
     return { ipBlack: [], ipWhite: [], cidrBlack: [], cidrWhite: [], domainWhite: [] };
   }
@@ -2626,6 +2644,82 @@
     return true;
   }
 
+  let publicRuleEntrySeq = 0;
+
+  function addPublicRuleEntry(kind, value) {
+    if (!PUBLIC_RULE_LIMITS[kind]) return;
+    const container = document.getElementById('public-rule-entries');
+    if (!container) return;
+    const emptyTip = document.getElementById('public-rule-empty-tip');
+    if (emptyTip) emptyTip.style.display = 'none';
+    const row = document.createElement('div');
+    row.className = 'public-rule-entry';
+    row.dataset.kind = kind;
+    const placeholder = {
+      'ip-black': '请输入 IP 地址，如 10.0.0.1',
+      'ip-white': '请输入 IP 地址，如 203.0.113.5',
+      'cidr-black': '请输入 CIDR 网段，如 192.168.1.0/24',
+      'cidr-white': '请输入 CIDR 网段，如 10.0.0.0/8',
+      'domain-white': '请输入域名，如 api.example.com 或 *.example.com'
+    }[kind] || '请输入';
+    row.innerHTML = '<span class="public-rule-entry-label">' + PUBLIC_RULE_TITLES[kind] + '</span>' +
+      '<input type="text" class="form-input public-rule-entry-input" placeholder="' + placeholder + '">' +
+      '<button type="button" class="public-rule-entry-remove" onclick="removePublicRuleEntry(this)">删除</button>';
+    const input = row.querySelector('.public-rule-entry-input');
+    if (typeof value === 'string' && value) input.value = value;
+    container.appendChild(row);
+  }
+
+  function removePublicRuleEntry(btn) {
+    const row = btn && btn.closest ? btn.closest('.public-rule-entry') : null;
+    if (!row) return;
+    const container = document.getElementById('public-rule-entries');
+    row.remove();
+    if (container && !container.querySelector('.public-rule-entry')) {
+      const tip = document.getElementById('public-rule-empty-tip');
+      if (tip) tip.style.display = '';
+    }
+  }
+
+  function collectPublicRuleEntries() {
+    const entries = document.querySelectorAll('#public-rule-entries .public-rule-entry');
+    publicRuleState = emptyPublicRules();
+    let valid = true;
+    entries.forEach(function(entry) {
+      const kind = entry.dataset.kind;
+      const input = entry.querySelector('.public-rule-entry-input');
+      const raw = input ? input.value.trim() : '';
+      if (!raw) { valid = false; input && (input.style.borderColor = '#e02020'); return; }
+      input && (input.style.borderColor = '');
+      let ok = true;
+      if (kind === 'ip-black' || kind === 'ip-white') ok = isValidIp(raw);
+      else if (kind === 'cidr-black' || kind === 'cidr-white') ok = isValidCidr(raw);
+      else if (kind === 'domain-white') ok = isValidDomain(raw);
+      if (!ok) { valid = false; input.style.borderColor = '#e02020'; return; }
+      const key = { 'ip-black': 'ipBlack', 'ip-white': 'ipWhite', 'cidr-black': 'cidrBlack', 'cidr-white': 'cidrWhite', 'domain-white': 'domainWhite' }[kind];
+      if (publicRuleState[key].indexOf(raw) === -1) publicRuleState[key].push(raw);
+    });
+    return valid;
+  }
+
+  function renderPublicRuleEntriesFromState() {
+    const container = document.getElementById('public-rule-entries');
+    if (!container) return;
+    container.innerHTML = '';
+    let total = 0;
+    PUBLIC_RULE_KINDS.forEach(function(kind) {
+      const key = { 'ip-black': 'ipBlack', 'ip-white': 'ipWhite', 'cidr-black': 'cidrBlack', 'cidr-white': 'cidrWhite', 'domain-white': 'domainWhite' }[kind];
+      publicRuleState[key].forEach(function(value) {
+        addPublicRuleEntry(kind, value);
+        total++;
+      });
+    });
+    if (!total) {
+      const tip = document.getElementById('public-rule-empty-tip');
+      if (tip) tip.style.display = '';
+    }
+  }
+
   function removePublicRuleTag(kind, index) {
     const key = { 'ip-black': 'ipBlack', 'ip-white': 'ipWhite', 'cidr-black': 'cidrBlack', 'cidr-white': 'cidrWhite', 'domain-white': 'domainWhite' }[kind];
     if (!key) return;
@@ -2647,6 +2741,8 @@
       if (input) input.value = '';
     });
     renderAllPublicRuleTags();
+    const entries = document.getElementById('public-rule-entries');
+    if (entries) entries.innerHTML = '<div class="public-rule-empty" id="public-rule-empty-tip">请通过上方按钮添加对应的名单记录。</div>';
   }
 
   const PUBLIC_RULE_TITLES = {
@@ -3347,6 +3443,7 @@
     publicRuleState.domainWhite = (savedPublicRules.domainWhitelist || []).slice();
     togglePublicSubRules();
     renderAllPublicRuleTags();
+    renderPublicRuleEntriesFromState();
 
     document.getElementById('policy-form-vpc-out-list').innerHTML = '';
     document.getElementById('policy-form-vpc-in-list').innerHTML = '';
@@ -3398,6 +3495,13 @@
     if (classicAccess === 'ip' && !classicIp) {
       alert('请输入经典网络指定访问 IP');
       return null;
+    }
+    if (allowPublicOutbound) {
+      const publicRuleEntriesValid = collectPublicRuleEntries();
+      if (!publicRuleEntriesValid) {
+        alert('公网管控名单存在空值或格式不合法的记录，请修正后再保存');
+        return null;
+      }
     }
 
     const payload = {
