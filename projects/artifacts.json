@@ -23,6 +23,55 @@
       "kind": "docx",
       "filePath": "outputs/沙箱实例暂停恢复功能PRD_v2.docx",
       "validation": "partial"
+    },
+    {
+      "kind": "docx",
+      "filePath": "outputs/沙箱网络策略功能帮助手册.docx",
+      "validation": "partial",
+      "preview": {
+        "paths": [
+          "outputs/network-policy-shots/policy-list.png",
+          "outputs/network-policy-shots/policy-create.png"
+        ]
+      }
+    },
+    {
+      "kind": "docx",
+      "filePath": "outputs/沙箱模板相关功能PRD.docx",
+      "validation": "partial",
+      "preview": {
+        "paths": [
+          "outputs/sandbox-template-prd-shots/template-list.png",
+          "outputs/sandbox-template-prd-shots/template-create.png",
+          "outputs/sandbox-template-prd-shots/template-detail.png",
+          "outputs/sandbox-template-prd-shots/instance-list.png"
+        ]
+      }
+    },
+    {
+      "kind": "docx",
+      "filePath": "outputs/沙箱计费帮助手册.docx",
+      "validation": "partial",
+      "preview": {
+        "paths": [
+          "outputs/sandbox-billing-shots/usage-cpu-mem.png",
+          "outputs/sandbox-billing-shots/create-datavolume.png",
+          "outputs/sandbox-billing-shots/template-create-disk.png",
+          "outputs/sandbox-billing-shots/snapshot-list.png",
+          "outputs/sandbox-billing-shots/template-list.png"
+        ]
+      }
+    },
+    {
+      "kind": "docx",
+      "filePath": "outputs/E2B网络策略功能PRD.docx",
+      "validation": "passed",
+      "preview": {
+        "paths": [
+          "outputs/e2b-policy-prd-shots/policy-list.png",
+          "outputs/e2b-policy-prd-shots/policy-create.png"
+        ]
+      }
     }
   ]
 }
