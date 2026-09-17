@@ -29,7 +29,7 @@
       icon: '<svg width="12" height="12" viewBox="0 0 16 16" fill="none"><rect x="2" y="3" width="12" height="10" rx="2" stroke="currentColor" stroke-width="1.5" fill="none"/><path d="M5 7h6M5 10h4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>' },
     { text: "API密钥", href: "sandbox-apikeys.html",
       icon: '<svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M7 3L3 6v5c0 2 2 3 4 3s4-1 4-3V6l-4-3z" stroke="currentColor" stroke-width="1.5" fill="none"/><circle cx="8" cy="8" r="2" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>' },
-    { text: "访问凭证", href: "sandbox-credentials.html",
+    { text: "身份凭证", href: "sandbox-credentials.html",
       icon: '<svg width="12" height="12" viewBox="0 0 16 16" fill="none"><rect x="3" y="2.5" width="10" height="11" rx="1.5" stroke="currentColor" stroke-width="1.5" fill="none"/><path d="M5.5 6h5M5.5 9h3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>' },
     { text: "定价和资源包", href: null,
       icon: '<svg width="12" height="12" viewBox="0 0 16 16" fill="none"><rect x="2" y="4" width="12" height="9" rx="1" stroke="currentColor" stroke-width="1.5" fill="none"/><path d="M5 4V3a3 3 0 016 0v1" stroke="currentColor" stroke-width="1.5"/></svg>' },
