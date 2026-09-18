@@ -72,6 +72,17 @@
           "outputs/e2b-policy-prd-shots/policy-create.png"
         ]
       }
+    },
+    {
+      "kind": "docx",
+      "filePath": "outputs/腾讯云AgentRuntime凭证管理PRD.docx",
+      "validation": "passed",
+      "preview": {
+        "paths": [
+          "outputs/tencent-credential-prd-shots/credential-list.jpg",
+          "outputs/tencent-credential-prd-shots/credential-create.jpg"
+        ]
+      }
     }
   ]
 }
