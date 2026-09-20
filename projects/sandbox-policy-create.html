@@ -1195,12 +1195,19 @@
                   <label class="public-access-option"><input type="checkbox" id="policy-form-public-outbound" checked onchange="togglePublicSubRules()"><span>允许访问公网</span></label>
                 </div>
               </div>
-              <div class="policy-rule-tip">勾选后，沙箱可访问公网服务。</div>
+              <div class="policy-rule-tip">勾选时为黑名单模式，仅拦截名单内的公网目标；取消勾选时为白名单模式，仅放行名单内的公网目标。</div>
               <div class="public-net-subpanel" id="policy-form-public-subpanel">
                 <div class="public-rule-buttons">
-                  <button type="button" class="add-rule-btn public-rule-add-btn" onclick="addPublicRuleEntry('ip-black')">+ IP 黑名单</button>
-                  <button type="button" class="add-rule-btn public-rule-add-btn" onclick="addPublicRuleEntry('cidr-black')">+ 网段黑名单</button>
-                  <button type="button" class="add-rule-btn public-rule-add-btn" onclick="addPublicRuleEntry('domain-black')">+ 域名黑名单</button>
+                  <div class="public-rule-button-group" data-mode="black">
+                    <button type="button" class="add-rule-btn public-rule-add-btn" onclick="addPublicRuleEntry('ip-black')">+ IP 黑名单</button>
+                    <button type="button" class="add-rule-btn public-rule-add-btn" onclick="addPublicRuleEntry('cidr-black')">+ 网段黑名单</button>
+                    <button type="button" class="add-rule-btn public-rule-add-btn" onclick="addPublicRuleEntry('domain-black')">+ 域名黑名单</button>
+                  </div>
+                  <div class="public-rule-button-group" data-mode="white" style="display:none;">
+                    <button type="button" class="add-rule-btn public-rule-add-btn" onclick="addPublicRuleEntry('ip-white')">+ IP 白名单</button>
+                    <button type="button" class="add-rule-btn public-rule-add-btn" onclick="addPublicRuleEntry('cidr-white')">+ 网段白名单</button>
+                    <button type="button" class="add-rule-btn public-rule-add-btn" onclick="addPublicRuleEntry('domain-white')">+ 域名白名单</button>
+                  </div>
                 </div>
                 <div class="public-rule-entries" id="public-rule-entries">
                   <div class="public-rule-empty" id="public-rule-empty-tip">请通过上方按钮添加对应的名单记录。</div>
@@ -1212,8 +1219,8 @@
                 <div class="policy-rule-title">访问 VPC <span class="help-icon">?</span></div>
                 <label class="policy-switch"><input type="checkbox" id="policy-form-vpc-out-enabled" onchange="togglePolicyFormSection('vpc-out')"><span class="policy-switch-slider"></span><span class="policy-switch-text" id="policy-form-vpc-out-text">关</span></label>
               </div>
-              <div class="policy-rule-tip">开启后，沙箱可访问指定 VPC 网络、子网和安全组。</div>
-              <div class="policy-rule-table-wrap" id="policy-form-vpc-out-wrap" style="display:none;"><table class="policy-rule-table"><thead><tr><th>VPC 网络</th><th>子网</th><th>安全组</th><th>操作</th></tr></thead><tbody id="policy-form-vpc-out-list"></tbody></table><button type="button" class="add-rule-btn" onclick="addPolicyFormVpcOutRule()">+ 添加策略</button></div>
+              <div class="policy-rule-tip">开启后，沙箱可访问指定 VPC 网络、子网和 IP 白名单目标。</div>
+              <div class="policy-rule-table-wrap" id="policy-form-vpc-out-wrap" style="display:none;"><table class="policy-rule-table"><thead><tr><th>VPC 网络</th><th>子网</th><th>IP白名单</th><th>操作</th></tr></thead><tbody id="policy-form-vpc-out-list"></tbody></table><button type="button" class="add-rule-btn" onclick="addPolicyFormVpcOutRule()">+ 添加策略</button></div>
             </div>
             <div class="policy-rule-section">
               <div class="policy-rule-head">
@@ -1896,6 +1903,11 @@
     flex-wrap: wrap;
     gap: 8px;
   }
+  .public-rule-button-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
   .public-rule-add-btn {
     height: 28px;
     padding: 0 12px;
@@ -2481,32 +2493,52 @@
     });
   }
 
-  // ==================== 公网管控名单（IP/网段/域名黑名单、泛域名） ====================
+  // ==================== 公网管控名单（IP/网段/域名黑白名单、泛域名） ====================
   const PUBLIC_RULE_LIMITS = {
     'ip-black':    { limit: 500, label: 'IP 黑名单' },
+    'ip-white':    { limit: 500, label: 'IP 白名单' },
     'cidr-black':  { limit: 200, label: '网段黑名单' },
-    'domain-black':{ limit: 300, label: '域名黑名单' }
+    'cidr-white':  { limit: 200, label: '网段白名单' },
+    'domain-black':{ limit: 300, label: '域名黑名单' },
+    'domain-white':{ limit: 300, label: '域名白名单' }
   };
-  const PUBLIC_RULE_KINDS = ['ip-black', 'cidr-black', 'domain-black'];
+  const PUBLIC_RULE_KINDS = ['ip-black', 'ip-white', 'cidr-black', 'cidr-white', 'domain-black', 'domain-white'];
+  const PUBLIC_RULE_STATE_KEYS = {
+    'ip-black': 'ipBlack', 'ip-white': 'ipWhite',
+    'cidr-black': 'cidrBlack', 'cidr-white': 'cidrWhite',
+    'domain-black': 'domainBlack', 'domain-white': 'domainWhite'
+  };
   let publicRuleImportTarget = null;
 
   function publicRuleKindOfKey(key) {
-    return { ipBlack: 'ip-black', cidrBlack: 'cidr-black', domainBlack: 'domain-black' }[key] || null;
+    return { ipBlack: 'ip-black', ipWhite: 'ip-white', cidrBlack: 'cidr-black', cidrWhite: 'cidr-white', domainBlack: 'domain-black', domainWhite: 'domain-white' }[key] || null;
   }
 
   function emptyPublicRules() {
-    return { ipBlack: [], cidrBlack: [], domainBlack: [] };
+    return { ipBlack: [], ipWhite: [], cidrBlack: [], cidrWhite: [], domainBlack: [], domainWhite: [] };
   }
 
   function publicRulesFromForm() {
     return {
       ipBlack: publicRuleState.ipBlack.slice(),
+      ipWhite: publicRuleState.ipWhite.slice(),
       cidrBlack: publicRuleState.cidrBlack.slice(),
-      domainBlack: publicRuleState.domainBlack.slice()
+      cidrWhite: publicRuleState.cidrWhite.slice(),
+      domainBlack: publicRuleState.domainBlack.slice(),
+      domainWhite: publicRuleState.domainWhite.slice()
     };
   }
 
   let publicRuleState = emptyPublicRules();
+
+  function publicRuleMode() {
+    const checkbox = document.getElementById('policy-form-public-outbound');
+    return checkbox && checkbox.checked ? 'black' : 'white';
+  }
+
+  function publicRuleModeForKind(kind) {
+    return kind === 'ip-white' || kind === 'cidr-white' || kind === 'domain-white' ? 'white' : 'black';
+  }
 
   function isValidIp(value) {
     if (!value) return false;
@@ -2534,6 +2566,35 @@
     return value && value.indexOf('*.') === 0 && value.length > 2;
   }
 
+  function parsePortList(str) {
+    if (str === undefined || str === null || String(str).trim() === '') return [];
+    const ports = [];
+    const parts = String(str).split(',');
+    for (let i = 0; i < parts.length; i++) {
+      const p = parts[i].trim();
+      if (!/^\d{1,5}$/.test(p)) return null;
+      const n = parseInt(p, 10);
+      if (n < 1 || n > 65535) return null;
+      if (ports.indexOf(n) === -1) ports.push(n);
+    }
+    return ports;
+  }
+
+  function isValidIpEntry(value) {
+    if (!value) return false;
+    let m = value.match(/^\[(.+)\](?::(.*))?$/);
+    if (m) {
+      if (!isValidIp(m[1])) return false;
+      return parsePortList(m[2]) !== null;
+    }
+    m = value.match(/^(\d{1,3}(?:\.\d{1,3}){3}):(.+)$/);
+    if (m) {
+      if (!isValidIp(m[1])) return false;
+      return parsePortList(m[2]) !== null;
+    }
+    return isValidIp(value);
+  }
+
   function isValidDomain(value) {
     if (!value) return false;
     if (isWildcardDomain(value)) {
@@ -2546,19 +2607,18 @@
   }
 
   function publicRuleCountFor(kind) {
-    if (kind === 'ip-black') return publicRuleState.ipBlack.length;
-    if (kind === 'cidr-black') return publicRuleState.cidrBlack.length;
-    if (kind === 'domain-black') return publicRuleState.domainBlack.length;
-    return 0;
+    const key = PUBLIC_RULE_STATE_KEYS[kind];
+    return key ? publicRuleState[key].length : 0;
   }
 
   function updatePublicRuleCounts() {
     PUBLIC_RULE_KINDS.forEach(function(kind) {
       const el = document.getElementById('public-rule-count-' + kind);
       if (!el) return;
-      if (kind === 'domain-black') {
-        const wildcards = publicRuleState.domainBlack.filter(isWildcardDomain).length;
-        el.textContent = publicRuleState.domainBlack.length + ' / 300 条（泛域名 ' + wildcards + ' / 50）';
+      if (kind === 'domain-black' || kind === 'domain-white') {
+        const list = publicRuleState[PUBLIC_RULE_STATE_KEYS[kind]];
+        const wildcards = list.filter(isWildcardDomain).length;
+        el.textContent = list.length + ' / 300 条（泛域名 ' + wildcards + ' / 50）';
       } else {
         el.textContent = publicRuleCountFor(kind) + ' / ' + PUBLIC_RULE_LIMITS[kind].limit + ' 条';
       }
@@ -2568,13 +2628,9 @@
   function renderPublicRuleTags(kind) {
     const container = document.getElementById('public-rule-tags-' + kind);
     if (!container) return;
-    const list = publicRuleState[{
-      'ip-black': 'ipBlack',
-      'cidr-black': 'cidrBlack',
-      'domain-black': 'domainBlack'
-    }[kind]] || [];
+    const list = publicRuleState[PUBLIC_RULE_STATE_KEYS[kind]] || [];
     container.innerHTML = list.map(function(item, index) {
-      const wc = kind === 'domain-black' && isWildcardDomain(item);
+      const wc = (kind === 'domain-black' || kind === 'domain-white') && isWildcardDomain(item);
       return '<span class="tag-item' + (wc ? ' wildcard' : '') + '" title="' + escapeHtml(item) + '">' + escapeHtml(item) +
         '<span class="tag-remove" onclick="removePublicRuleTag(\'' + kind + '\',' + index + ')">&times;</span></span>';
     }).join('');
@@ -2590,24 +2646,24 @@
     const raw = valueOverride !== undefined ? String(valueOverride) : (input ? input.value.trim() : '');
     if (!raw) return false;
     let valid = true;
-    if (kind === 'ip-black') valid = isValidIp(raw);
-    else if (kind === 'cidr-black') valid = isValidCidr(raw);
-    else if (kind === 'domain-black') valid = isValidDomain(raw);
+    if (kind === 'ip-black' || kind === 'ip-white') valid = isValidIpEntry(raw);
+    else if (kind === 'cidr-black' || kind === 'cidr-white') valid = isValidCidr(raw);
+    else valid = isValidDomain(raw);
     if (!valid) {
       if (!silent) {
-        if (kind === 'ip-black') alert('IP 格式不合法：' + raw);
-        else if (kind === 'cidr-black') alert('网段格式不合法（IPv4 仅支持 /8、/16、/24）：' + raw);
+        if (kind === 'ip-black' || kind === 'ip-white') alert('IP 或端口格式不合法（示例：10.0.0.1 或 10.0.0.1:80,443）：' + raw);
+        else if (kind === 'cidr-black' || kind === 'cidr-white') alert('网段格式不合法（IPv4 仅支持 /8、/16、/24）：' + raw);
         else alert('域名格式不合法（泛域名通配符仅允许在首段一级）：' + raw);
       }
       return false;
     }
-    const key = { 'ip-black': 'ipBlack', 'cidr-black': 'cidrBlack', 'domain-black': 'domainBlack' }[kind];
+    const key = PUBLIC_RULE_STATE_KEYS[kind];
     if (publicRuleState[key].indexOf(raw) !== -1) {
       if (!silent) alert('该条目已存在，自动去重：' + raw);
       return false;
     }
-    if (kind === 'domain-black' && isWildcardDomain(raw)) {
-      const wildcards = publicRuleState.domainBlack.filter(isWildcardDomain).length;
+    if ((kind === 'domain-black' || kind === 'domain-white') && isWildcardDomain(raw)) {
+      const wildcards = publicRuleState[PUBLIC_RULE_STATE_KEYS[kind]].filter(isWildcardDomain).length;
       if (wildcards >= 50) {
         if (!silent) alert('泛域名规则已达上限 50 条');
         return false;
@@ -2629,15 +2685,17 @@
     if (!PUBLIC_RULE_LIMITS[kind]) return;
     const container = document.getElementById('public-rule-entries');
     if (!container) return;
-    const emptyTip = document.getElementById('public-rule-empty-tip');
-    if (emptyTip) emptyTip.style.display = 'none';
     const row = document.createElement('div');
     row.className = 'public-rule-entry';
     row.dataset.kind = kind;
+    row.dataset.mode = publicRuleModeForKind(kind);
     const placeholder = {
-      'ip-black': '请输入 IP 地址，如 10.0.0.1',
+      'ip-black': '请输入 IP 或 IP+端口，如 10.0.0.1 或 10.0.0.1:80,443',
+      'ip-white': '请输入 IP 或 IP+端口，如 10.0.0.1 或 10.0.0.1:80,443',
       'cidr-black': '请输入 CIDR 网段，如 192.168.1.0/24',
-      'domain-black': '请输入域名，如 api.example.com 或 *.example.com'
+      'cidr-white': '请输入 CIDR 网段，如 192.168.1.0/24',
+      'domain-black': '请输入域名，如 api.example.com 或 *.example.com',
+      'domain-white': '请输入域名，如 api.example.com 或 *.example.com'
     }[kind] || '请输入';
     row.innerHTML = '<span class="public-rule-entry-label">' + PUBLIC_RULE_TITLES[kind] + '</span>' +
       '<input type="text" class="form-input public-rule-entry-input" placeholder="' + placeholder + '">' +
@@ -2645,6 +2703,7 @@
     const input = row.querySelector('.public-rule-entry-input');
     if (typeof value === 'string' && value) input.value = value;
     container.appendChild(row);
+    updatePublicRuleEmptyTip();
   }
 
   function removePublicRuleEntry(btn) {
@@ -2652,28 +2711,29 @@
     if (!row) return;
     const container = document.getElementById('public-rule-entries');
     row.remove();
-    if (container && !container.querySelector('.public-rule-entry')) {
-      const tip = document.getElementById('public-rule-empty-tip');
-      if (tip) tip.style.display = '';
-    }
+    updatePublicRuleEmptyTip();
   }
 
   function collectPublicRuleEntries() {
     const entries = document.querySelectorAll('#public-rule-entries .public-rule-entry');
-    publicRuleState = emptyPublicRules();
+    const mode = publicRuleMode();
+    PUBLIC_RULE_KINDS.forEach(function(kind) {
+      if (publicRuleModeForKind(kind) === mode) publicRuleState[PUBLIC_RULE_STATE_KEYS[kind]] = [];
+    });
     let valid = true;
     entries.forEach(function(entry) {
       const kind = entry.dataset.kind;
+      if (publicRuleModeForKind(kind) !== mode) return;
+      const key = PUBLIC_RULE_STATE_KEYS[kind];
       const input = entry.querySelector('.public-rule-entry-input');
       const raw = input ? input.value.trim() : '';
       if (!raw) { valid = false; input && (input.style.borderColor = '#e02020'); return; }
       input && (input.style.borderColor = '');
       let ok = true;
-      if (kind === 'ip-black') ok = isValidIp(raw);
-      else if (kind === 'cidr-black') ok = isValidCidr(raw);
-      else if (kind === 'domain-black') ok = isValidDomain(raw);
+      if (kind === 'ip-black' || kind === 'ip-white') ok = isValidIpEntry(raw);
+      else if (kind === 'cidr-black' || kind === 'cidr-white') ok = isValidCidr(raw);
+      else ok = isValidDomain(raw);
       if (!ok) { valid = false; input.style.borderColor = '#e02020'; return; }
-      const key = { 'ip-black': 'ipBlack', 'cidr-black': 'cidrBlack', 'domain-black': 'domainBlack' }[kind];
       if (publicRuleState[key].indexOf(raw) === -1) publicRuleState[key].push(raw);
     });
     return valid;
@@ -2682,10 +2742,12 @@
   function renderPublicRuleEntriesFromState() {
     const container = document.getElementById('public-rule-entries');
     if (!container) return;
+    const mode = publicRuleMode();
     container.innerHTML = '';
     let total = 0;
     PUBLIC_RULE_KINDS.forEach(function(kind) {
-      const key = { 'ip-black': 'ipBlack', 'cidr-black': 'cidrBlack', 'domain-black': 'domainBlack' }[kind];
+      if (publicRuleModeForKind(kind) !== mode) return;
+      const key = PUBLIC_RULE_STATE_KEYS[kind];
       publicRuleState[key].forEach(function(value) {
         addPublicRuleEntry(kind, value);
         total++;
@@ -2698,17 +2760,38 @@
   }
 
   function removePublicRuleTag(kind, index) {
-    const key = { 'ip-black': 'ipBlack', 'cidr-black': 'cidrBlack', 'domain-black': 'domainBlack' }[kind];
+    const key = PUBLIC_RULE_STATE_KEYS[kind];
     if (!key) return;
     publicRuleState[key].splice(index, 1);
     renderPublicRuleTags(kind);
   }
 
   function togglePublicSubRules() {
-    const checkbox = document.getElementById('policy-form-public-outbound');
+    setPublicRuleMode(publicRuleMode());
+  }
+
+  function setPublicRuleMode(mode) {
     const panel = document.getElementById('policy-form-public-subpanel');
-    if (!checkbox || !panel) return;
-    panel.classList.toggle('hidden', !checkbox.checked);
+    if (!panel) return;
+    panel.classList.remove('hidden');
+    panel.querySelectorAll('.public-rule-button-group').forEach(function(group) {
+      group.style.display = group.dataset.mode === mode ? '' : 'none';
+    });
+    document.querySelectorAll('#public-rule-entries .public-rule-entry').forEach(function(row) {
+      row.style.display = row.dataset.mode === mode ? '' : 'none';
+    });
+    updatePublicRuleEmptyTip();
+  }
+
+  function updatePublicRuleEmptyTip() {
+    const container = document.getElementById('public-rule-entries');
+    const tip = document.getElementById('public-rule-empty-tip');
+    if (!container || !tip) return;
+    const mode = publicRuleMode();
+    const hasVisibleRows = Array.prototype.some.call(container.querySelectorAll('.public-rule-entry'), function(row) {
+      return row.dataset.mode === mode;
+    });
+    tip.style.display = hasVisibleRows ? 'none' : '';
   }
 
   function clearAllPublicRules() {
@@ -2724,8 +2807,11 @@
 
   const PUBLIC_RULE_TITLES = {
     'ip-black': 'IP 黑名单',
+    'ip-white': 'IP 白名单',
     'cidr-black': '网段黑名单',
-    'domain-black': '域名黑名单（支持泛域名）'
+    'cidr-white': '网段白名单',
+    'domain-black': '域名黑名单（支持泛域名）',
+    'domain-white': '域名白名单（支持泛域名）'
   };
 
   function openPublicRuleImport(kind) {
@@ -2749,7 +2835,7 @@
     if (!lines.length) { alert('请输入至少一条名单记录'); return; }
     const mode = document.querySelector('input[name="public-import-mode"]:checked');
     if (mode && mode.value === 'replace') {
-      const key = { 'ip-black': 'ipBlack', 'cidr-black': 'cidrBlack', 'domain-black': 'domainBlack' }[publicRuleImportTarget];
+      const key = PUBLIC_RULE_STATE_KEYS[publicRuleImportTarget];
       publicRuleState[key] = [];
     }
     let added = 0, failed = 0;
@@ -2771,6 +2857,16 @@
       if (ipRules) chips.push('<span class="access-chip">IP 名单 ' + ipRules + ' 条</span>');
       if (cidrRules) chips.push('<span class="access-chip">网段名单 ' + cidrRules + ' 条</span>');
       if ((policy.domainBlacklist || []).length) chips.push('<span class="access-chip">域名黑名单 ' + policy.domainBlacklist.length + ' 条</span>');
+    } else {
+      const ipRules = (policy.ipWhitelist || []).length;
+      const cidrRules = (policy.cidrWhitelist || []).length;
+      const domainRules = (policy.domainWhitelist || []).length;
+      if (ipRules || cidrRules || domainRules) {
+        chips.push('<span class="access-chip">禁止访问公网（白名单放行）</span>');
+        if (ipRules) chips.push('<span class="access-chip">IP 白名单 ' + ipRules + ' 条</span>');
+        if (cidrRules) chips.push('<span class="access-chip">网段白名单 ' + cidrRules + ' 条</span>');
+        if (domainRules) chips.push('<span class="access-chip">域名白名单 ' + domainRules + ' 条</span>');
+      }
     }
     if (!chips.length) chips.push('<span class="access-chip muted">未选择公网访问方向</span>');
     return '<td><div class="access-summary"><div class="access-chip-row">' + chips.join('') + '</div></div></td>';
@@ -2805,6 +2901,16 @@
       if (ipRules) chips.push('<span class="access-chip">IP 名单 ' + ipRules + ' 条</span>');
       if (cidrRules) chips.push('<span class="access-chip">网段名单 ' + cidrRules + ' 条</span>');
       if ((policy.domainBlacklist || []).length) chips.push('<span class="access-chip">域名黑名单 ' + policy.domainBlacklist.length + ' 条</span>');
+    } else {
+      const ipRules = (policy.ipWhitelist || []).length;
+      const cidrRules = (policy.cidrWhitelist || []).length;
+      const domainRules = (policy.domainWhitelist || []).length;
+      if (ipRules || cidrRules || domainRules) {
+        chips.push('<span class="access-chip">禁止访问公网（白名单放行）</span>');
+        if (ipRules) chips.push('<span class="access-chip">IP 白名单 ' + ipRules + ' 条</span>');
+        if (cidrRules) chips.push('<span class="access-chip">网段白名单 ' + cidrRules + ' 条</span>');
+        if (domainRules) chips.push('<span class="access-chip">域名白名单 ' + domainRules + ' 条</span>');
+      }
     }
     return '<td><div class="access-view-cell"><button type="button" class="access-view-btn" onclick="openPolicyDetailModal(this)">查看</button><div class="access-chip-row">' + chips.join('') + '</div></div></td>';
   }
@@ -2845,14 +2951,18 @@
         securityGroup: row.dataset.securitygroup || '',
         ipBlacklist: (parseRowJson(row.dataset.publicrules).ipBlacklist) || [],
         cidrBlacklist: (parseRowJson(row.dataset.publicrules).cidrBlacklist) || [],
-        domainBlacklist: (parseRowJson(row.dataset.publicrules).domainBlacklist) || []
+        domainBlacklist: (parseRowJson(row.dataset.publicrules).domainBlacklist) || [],
+        ipWhitelist: (parseRowJson(row.dataset.publicrules).ipWhitelist) || [],
+        cidrWhitelist: (parseRowJson(row.dataset.publicrules).cidrWhitelist) || [],
+        domainWhitelist: (parseRowJson(row.dataset.publicrules).domainWhitelist) || []
       });
       cells[3].innerHTML = wrapper.children[0].innerHTML;
     });
   }
 
   function getRowPolicy(row) {
-    return {
+    const publicRules = parseRowJson(row.dataset.publicrules);
+    return Object.assign({}, publicRules, {
       region: row.dataset.region || 'beijing',
       accessType: row.dataset.accesstype || 'sandbox-intranet',
       allowPublicOutbound: row.dataset.allowpublicoutbound === 'true',
@@ -2866,8 +2976,8 @@
       vpcnetwork: row.dataset.vpcnetwork || '',
       subnet: row.dataset.subnet || '',
       securityGroup: row.dataset.securitygroup || '',
-      publicRules: parseRowJson(row.dataset.publicrules)
-    };
+      publicRules: publicRules
+    });
   }
 
   function renderVpcDetailList(policies, includeSecurityGroup, includePolicyType) {
@@ -2879,7 +2989,7 @@
       rows.push('<div class="policy-detail-label">VPC 网络</div><div class="policy-detail-value">' + escapeHtml(item.vpcNetwork || '未配置') + '</div>');
       rows.push('<div class="policy-detail-label">子网</div><div class="policy-detail-value">' + escapeHtml(item.subnet || '未配置') + '</div>');
       if (includeSecurityGroup) {
-        rows.push('<div class="policy-detail-label">安全组</div><div class="policy-detail-value">' + escapeHtml(item.securityGroup || '未配置') + '</div>');
+        rows.push('<div class="policy-detail-label">IP白名单</div><div class="policy-detail-value">' + escapeHtml(item.securityGroup || '未配置') + '</div>');
       }
       return '<div class="policy-detail-card">' +
         '<div class="policy-detail-title">规则 ' + (index + 1) + '</div>' +
@@ -2947,8 +3057,11 @@
   function renderPublicRulesDetailHtml(policy) {
     const groups = [
       { title: 'IP 黑名单', items: policy.ipBlacklist || [] },
+      { title: 'IP 白名单', items: policy.ipWhitelist || [] },
       { title: '网段黑名单', items: policy.cidrBlacklist || [] },
-      { title: '域名黑名单', items: policy.domainBlacklist || [] }
+      { title: '网段白名单', items: policy.cidrWhitelist || [] },
+      { title: '域名黑名单', items: policy.domainBlacklist || [] },
+      { title: '域名白名单', items: policy.domainWhitelist || [] }
     ].filter(function(group) { return group.items.length; });
     if (!groups.length) return '';
     return '<div class="policy-detail-card"><div class="policy-detail-title">公网管控名单</div><div class="policy-detail-grid">' +
@@ -3230,60 +3343,7 @@
         '<option value="subnet-02">subnet-02 (172.16.1.0/24)</option>' +
         '<option value="subnet-03">subnet-03 (192.168.1.0/24)</option>' +
       '</select></td>' +
-      (includeSecurityGroup ? '<td><select class="form-select policy-form-vpc-sg">' +
-        '<option value="">请选择安全组</option>' +
-        '<option value="sg-01">sg-01 (默认安全组)</option>' +
-        '<option value="sg-02">sg-02 (Web 安全组)</option>' +
-        '<option value="sg-03">sg-03 (数据库安全组)</option>' +
-      '</select></td>' : '') +
-      '<td><a href="#" class="action-link" onclick="removePolicyFormRule(event, this)">删除</a></td>';
-    tr.querySelector('.policy-form-vpc-network').value = item.vpcNetwork;
-    tr.querySelector('.policy-form-vpc-subnet').value = item.subnet;
-    if (includeSecurityGroup && tr.querySelector('.policy-form-vpc-sg')) {
-      tr.querySelector('.policy-form-vpc-sg').value = item.securityGroup || '';
-    }
-    return tr;
-  }
-
-  function createPolicyFormPrivateRow(values) {
-    const item = Object.assign({ targetService: '', serviceDomain: '' }, values || {});
-    const tr = document.createElement('tr');
-    tr.innerHTML =
-      '<td><select class="form-select policy-form-private-service">' +
-        '<option value="">请选择 hulk 终端节点服务</option>' +
-        '<option value="endpoint-service-01">endpoint-service-01</option>' +
-        '<option value="endpoint-service-02">endpoint-service-02</option>' +
-        '<option value="endpoint-service-03">endpoint-service-03</option>' +
-      '</select></td>' +
-      '<td><input type="text" class="form-input policy-form-private-domain" placeholder="如 mysql.private.qihoo.net, kafka.partner.qihoo.net"></td>' +
-      '<td><a href="#" class="action-link" onclick="removePolicyFormRule(event, this)">删除</a></td>';
-    tr.querySelector('.policy-form-private-service').value = item.targetService;
-    tr.querySelector('.policy-form-private-domain').value = item.serviceDomain;
-    return tr;
-  }
-
-  function createPolicyFormVpcRow(includeSecurityGroup, values) {
-    const item = Object.assign({ vpcNetwork: '', subnet: '', securityGroup: '' }, values || {});
-    const tr = document.createElement('tr');
-    tr.innerHTML =
-      '<td><select class="form-select policy-form-vpc-network">' +
-        '<option value="">请选择 VPC</option>' +
-        '<option value="vpc-01">vpc-01 (10.0.0.0/16)</option>' +
-        '<option value="vpc-02">vpc-02 (172.16.0.0/16)</option>' +
-        '<option value="vpc-03">vpc-03 (192.168.0.0/16)</option>' +
-      '</select></td>' +
-      '<td><select class="form-select policy-form-vpc-subnet">' +
-        '<option value="">请选择子网</option>' +
-        '<option value="subnet-01">subnet-01 (10.0.1.0/24)</option>' +
-        '<option value="subnet-02">subnet-02 (172.16.1.0/24)</option>' +
-        '<option value="subnet-03">subnet-03 (192.168.1.0/24)</option>' +
-      '</select></td>' +
-      (includeSecurityGroup ? '<td><select class="form-select policy-form-vpc-sg">' +
-        '<option value="">请选择安全组</option>' +
-        '<option value="sg-01">sg-01 (默认安全组)</option>' +
-        '<option value="sg-02">sg-02 (Web 安全组)</option>' +
-        '<option value="sg-03">sg-03 (数据库安全组)</option>' +
-      '</select></td>' : '') +
+      (includeSecurityGroup ? '<td><input type="text" class="form-input policy-form-vpc-sg" placeholder="请输入目标 IP+端口，多个用逗号分隔，如 10.0.0.1:80,443"></td>' : '') +
       '<td><a href="#" class="action-link" onclick="removePolicyFormRule(event, this)">删除</a></td>';
     tr.querySelector('.policy-form-vpc-network').value = item.vpcNetwork;
     tr.querySelector('.policy-form-vpc-subnet').value = item.subnet;
@@ -3343,6 +3403,37 @@
     });
   }
 
+  function isValidVpcTargetList(value) {
+    if (!value || !value.trim()) return false;
+    const parts = value.split(',').map(function(part) { return part.trim(); }).filter(Boolean);
+    if (!parts.length) return false;
+    const entries = [];
+    for (let i = 0; i < parts.length; i++) {
+      const part = parts[i];
+      if (/^\d{1,5}$/.test(part) && entries.length) {
+        entries[entries.length - 1].ports.push(part);
+        continue;
+      }
+      let m = part.match(/^(\d{1,3}(?:\.\d{1,3}){3}):(.+)$/);
+      if (m) {
+        const ports = parsePortList(m[2]);
+        if (!ports || !isValidIp(m[1])) return false;
+        entries.push({ ports: ports });
+        continue;
+      }
+      m = part.match(/^\[(.+)\]:(.+)$/);
+      if (m) {
+        const ports = parsePortList(m[2]);
+        if (!ports || !isValidIp(m[1])) return false;
+        entries.push({ ports: ports });
+        continue;
+      }
+      if (!isValidIp(part)) return false;
+      entries.push({ ports: [] });
+    }
+    return true;
+  }
+
   function collectPolicyFormVpcRules(listId, includeSecurityGroup, title) {
     const rows = document.querySelectorAll('#' + listId + ' tr');
     const result = [];
@@ -3351,11 +3442,12 @@
       const vpcNetwork = row.querySelector('.policy-form-vpc-network').value;
       const subnet = row.querySelector('.policy-form-vpc-subnet').value;
       const securityGroup = includeSecurityGroup && row.querySelector('.policy-form-vpc-sg')
-        ? row.querySelector('.policy-form-vpc-sg').value
+        ? row.querySelector('.policy-form-vpc-sg').value.trim()
         : '';
       if (!vpcNetwork) { alert('请选择第 ' + (i + 1) + ' 组' + title + '的 VPC 网络'); return null; }
       if (!subnet) { alert('请选择第 ' + (i + 1) + ' 组' + title + '的子网'); return null; }
-      if (includeSecurityGroup && !securityGroup) { alert('请选择第 ' + (i + 1) + ' 组' + title + '的安全组'); return null; }
+      if (includeSecurityGroup && !securityGroup) { alert('请输入第 ' + (i + 1) + ' 组' + title + '的访问目标（IP+端口）'); return null; }
+      if (includeSecurityGroup && !isValidVpcTargetList(securityGroup)) { alert('第 ' + (i + 1) + ' 组' + title + '的访问目标格式不合法（示例：10.0.0.1:80,443 或 10.0.0.1:80,10.0.0.2:443）'); return null; }
       result.push({ vpcNetwork: vpcNetwork, subnet: subnet, securityGroup: securityGroup });
     }
     return result;
@@ -3405,8 +3497,11 @@
     togglePolicyFormSection('private');
     const savedPublicRules = parseRowJson(row.dataset.publicrules);
     publicRuleState.ipBlack = (savedPublicRules.ipBlacklist || []).slice();
+    publicRuleState.ipWhite = (savedPublicRules.ipWhitelist || []).slice();
     publicRuleState.cidrBlack = (savedPublicRules.cidrBlacklist || []).slice();
+    publicRuleState.cidrWhite = (savedPublicRules.cidrWhitelist || []).slice();
     publicRuleState.domainBlack = (savedPublicRules.domainBlacklist || []).slice();
+    publicRuleState.domainWhite = (savedPublicRules.domainWhitelist || []).slice();
     togglePublicSubRules();
     renderAllPublicRuleTags();
     renderPublicRuleEntriesFromState();
@@ -3484,10 +3579,21 @@
       payload.ipBlacklist = publicRuleState.ipBlack.slice();
       payload.cidrBlacklist = publicRuleState.cidrBlack.slice();
       payload.domainBlacklist = publicRuleState.domainBlack.slice();
+      payload.ipWhitelist = [];
+      payload.cidrWhitelist = [];
+      payload.domainWhitelist = [];
     } else {
+      const hadRules = collectPublicRuleEntries();
+      if (!hadRules) {
+        alert('公网白名单存在空值或格式不合法的记录，请修正后再保存');
+        return null;
+      }
       payload.ipBlacklist = [];
       payload.cidrBlacklist = [];
       payload.domainBlacklist = [];
+      payload.ipWhitelist = publicRuleState.ipWhite.slice();
+      payload.cidrWhitelist = publicRuleState.cidrWhite.slice();
+      payload.domainWhitelist = publicRuleState.domainWhite.slice();
     }
     payload.accessType = inferPolicyAccessType(payload);
     payload.vpcPolicies = outboundVpcPolicies.map(function(item) {
@@ -3558,7 +3664,10 @@
     row.dataset.publicrules = JSON.stringify({
       ipBlacklist: payload.ipBlacklist || [],
       cidrBlacklist: payload.cidrBlacklist || [],
-      domainBlacklist: payload.domainBlacklist || []
+      domainBlacklist: payload.domainBlacklist || [],
+      ipWhitelist: payload.ipWhitelist || [],
+      cidrWhitelist: payload.cidrWhitelist || [],
+      domainWhitelist: payload.domainWhitelist || []
     });
 
     const accessObjCell = renderAccessObjectCell({
@@ -3625,6 +3734,9 @@
       ipBlacklist: payload.ipBlacklist || [],
       cidrBlacklist: payload.cidrBlacklist || [],
       domainBlacklist: payload.domainBlacklist || [],
+      ipWhitelist: payload.ipWhitelist || [],
+      cidrWhitelist: payload.cidrWhitelist || [],
+      domainWhitelist: payload.domainWhitelist || [],
       boundSandboxes: []
     });
     localStorage.setItem('sandboxPolicies', JSON.stringify(policies));
@@ -3655,6 +3767,9 @@
         policy.ipBlacklist = payload.ipBlacklist || [];
         policy.cidrBlacklist = payload.cidrBlacklist || [];
         policy.domainBlacklist = payload.domainBlacklist || [];
+        policy.ipWhitelist = payload.ipWhitelist || [];
+        policy.cidrWhitelist = payload.cidrWhitelist || [];
+        policy.domainWhitelist = payload.domainWhitelist || [];
       }
     });
     if (!updated) {
@@ -3678,6 +3793,9 @@
         ipBlacklist: payload.ipBlacklist || [],
         cidrBlacklist: payload.cidrBlacklist || [],
         domainBlacklist: payload.domainBlacklist || [],
+        ipWhitelist: payload.ipWhitelist || [],
+        cidrWhitelist: payload.cidrWhitelist || [],
+        domainWhitelist: payload.domainWhitelist || [],
         boundSandboxes: parseRowJson(row.dataset.boundsandboxes)
       });
     }
