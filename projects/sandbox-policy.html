@@ -1249,6 +1249,14 @@
                 <td>数据同步私网连接策略</td>
                 <td><a href="#" class="action-link edit-btn">编辑</a> <a href="#" class="action-link delete-btn">删除</a></td>
               </tr>
+              <tr data-id="policy-006" data-name="公网黑白名单策略" data-accesstype="public-network" data-domain="" data-service="" data-vpcnetwork="" data-subnet="" data-allowpublicoutbound="true" data-allowpublicinbound="false" data-publicrules='{"ipBlacklist":["10.0.0.1","10.0.0.2"],"ipWhitelist":["172.16.0.5","172.16.0.6"]}' data-desc="公网访问黑白名单示例策略">
+                <td>policy-006</td>
+                <td>公网黑白名单策略</td>
+                <td>公网</td>
+                <td>-</td>
+                <td>公网访问黑白名单示例策略</td>
+                <td><a href="#" class="action-link edit-btn">编辑</a> <a href="#" class="action-link delete-btn">删除</a></td>
+              </tr>
             </tbody>
           </table>
           </div>
@@ -1256,7 +1264,7 @@
         
         <!-- 翻页组件 -->
         <div class="pagination-bar" id="policy-list-pagination">
-          <div class="pagination-left">共4条记录 第1/1页</div>
+          <div class="pagination-left">共6条记录 第1/1页</div>
           <div class="pagination-right">
             <div class="page-size-select">
               10条/页
@@ -2114,7 +2122,8 @@
       { id: 'policy-001', name: '开发环境访问策略', accessType: 'sandbox-intranet', domain: '', service: '', vpcnetwork: '', subnet: '', desc: '开发环境网络策略' },
       { id: 'policy-002', name: '生产环境访问策略', accessType: 'public-network', domain: '', service: '', vpcnetwork: '', subnet: '', desc: '生产环境网络策略' },
       { id: 'policy-003', name: '测试环境访问策略', accessType: 'vpc-network', domain: '', service: '', vpcnetwork: 'vpc-01', subnet: 'subnet-01', desc: '测试环境网络策略' },
-      { id: 'policy-004', name: '数据同步访问策略', accessType: 'private-connection', domain: 'vpce-01.vpce-svc.cn-north-1a', service: 'endpoint-service-01', vpcnetwork: '', subnet: '', desc: '数据同步私网连接策略' }
+      { id: 'policy-004', name: '数据同步访问策略', accessType: 'private-connection', domain: 'vpce-01.vpce-svc.cn-north-1a', service: 'endpoint-service-01', vpcnetwork: '', subnet: '', desc: '数据同步私网连接策略' },
+      { id: 'policy-006', name: '公网黑白名单策略', accessType: 'public-network', allowPublicOutbound: true, allowPublicInbound: false, domain: '', service: '', vpcnetwork: '', subnet: '', desc: '公网访问黑白名单示例策略', ipBlacklist: ['10.0.0.1', '10.0.0.2'], ipWhitelist: ['172.16.0.5', '172.16.0.6'] }
     ];
     const existing = JSON.parse(localStorage.getItem('sandboxPolicies') || '[]');
     // 合并：保留已有的动态策略，补充静态策略
@@ -2241,12 +2250,32 @@
     });
   }
 
+  function getPublicRules(policy) {
+    return policy.publicRules || {
+      ipBlacklist: policy.ipBlacklist || [],
+      cidrBlacklist: policy.cidrBlacklist || [],
+      domainBlacklist: policy.domainBlacklist || [],
+      ipWhitelist: policy.ipWhitelist || [],
+      cidrWhitelist: policy.cidrWhitelist || [],
+      domainWhitelist: policy.domainWhitelist || []
+    };
+  }
+
+  function hasPublicRules(policy) {
+    const rules = getPublicRules(policy);
+    return ['ipBlacklist', 'cidrBlacklist', 'domainBlacklist', 'ipWhitelist', 'cidrWhitelist', 'domainWhitelist']
+      .some(function(key) { return (rules[key] || []).length > 0; });
+  }
+
   function renderPublicSummary(policy) {
+    if (hasPublicRules(policy)) {
+      return '<td><div class="access-summary"><div class="access-view-cell"><button type="button" class="access-view-btn" onclick="openPolicyDetailModal(this)">查看</button></div></div></td>';
+    }
     const chips = [];
     if (policy.allowPublicOutbound) chips.push('<span class="access-chip">允许访问公网</span>');
     if (policy.allowPublicInbound) chips.push('<span class="access-chip">允许被公网访问</span>');
     if (!chips.length) chips.push('<span class="access-chip muted">未选择公网访问方向</span>');
-    return '<td><div class="access-summary"><div class="access-chip-row">' + chips.join('') + '</div></div></td>';
+    return '<td><div class="access-summary"><div class="access-view-cell"><button type="button" class="access-view-btn" onclick="openPolicyDetailModal(this)">查看</button></div><div class="access-chip-row">' + chips.join('') + '</div></div></td>';
   }
 
   function renderVpcSummary(policy) {
@@ -2303,6 +2332,7 @@
         accessType: row.dataset.accesstype || 'sandbox-intranet',
         allowPublicOutbound: row.dataset.allowpublicoutbound === 'true',
         allowPublicInbound: row.dataset.allowpublicinbound === 'true',
+        publicRules: parseRowJson(row.dataset.publicrules),
         outboundVpcPolicies: parseRowJson(row.dataset.vpcoutpolicies),
         inboundVpcPolicies: parseRowJson(row.dataset.vpcinpolicies),
         privatePolicies: parseRowJson(row.dataset.privatepolicies),
@@ -2334,7 +2364,8 @@
       vpcPolicies: parseRowJson(row.dataset.vpcpolicies),
       vpcnetwork: row.dataset.vpcnetwork || '',
       subnet: row.dataset.subnet || '',
-      securityGroup: row.dataset.securitygroup || ''
+      securityGroup: row.dataset.securitygroup || '',
+      publicRules: parseRowJson(row.dataset.publicrules)
     };
   }
 
@@ -2366,6 +2397,23 @@
         '</div>' +
       '</div>';
     }).join('') + '</div>';
+  }
+
+  function renderPublicRulesDetailHtml(policy) {
+    const rules = policy.publicRules || policy || {};
+    const groups = [
+      { title: 'IP 黑名单', items: rules.ipBlacklist || [] },
+      { title: 'IP 白名单', items: rules.ipWhitelist || [] },
+      { title: '网段黑名单', items: rules.cidrBlacklist || [] },
+      { title: '网段白名单', items: rules.cidrWhitelist || [] },
+      { title: '域名黑名单', items: rules.domainBlacklist || [] },
+      { title: '域名白名单', items: rules.domainWhitelist || [] }
+    ].filter(function(group) { return group.items.length; });
+    if (!groups.length) return '';
+    return '<div class="policy-detail-grid">' +
+      groups.map(function(group) {
+        return '<div class="policy-detail-label">' + group.title + '</div><div class="policy-detail-value">' + escapeHtml(group.items.join('、')) + '</div>';
+      }).join('') + '</div>';
   }
 
   function renderPolicyDetailHtml(policy) {
@@ -2557,7 +2605,13 @@
           subnet: p.subnet || '',
           securityGroup: p.securityGroup || '',
           service: p.service || '',
-          domain: p.domain || ''
+          domain: p.domain || '',
+          ipBlacklist: p.ipBlacklist || [],
+          cidrBlacklist: p.cidrBlacklist || [],
+          domainBlacklist: p.domainBlacklist || [],
+          ipWhitelist: p.ipWhitelist || [],
+          cidrWhitelist: p.cidrWhitelist || [],
+          domainWhitelist: p.domainWhitelist || []
         });
         tr.dataset.boundsandboxes = JSON.stringify(p.boundSandboxes || []);
         tbody.appendChild(tr);
@@ -2913,6 +2967,14 @@
     row.dataset.securitygroup = payload.securityGroup || '';
     row.dataset.service = payload.service || '';
     row.dataset.domain = payload.domain || '';
+    row.dataset.publicrules = JSON.stringify({
+      ipBlacklist: payload.ipBlacklist || [],
+      cidrBlacklist: payload.cidrBlacklist || [],
+      domainBlacklist: payload.domainBlacklist || [],
+      ipWhitelist: payload.ipWhitelist || [],
+      cidrWhitelist: payload.cidrWhitelist || [],
+      domainWhitelist: payload.domainWhitelist || []
+    });
     row.dataset.boundsandboxes = row.dataset.boundsandboxes || '[]';
 
     const accessObjCell = renderAccessObjectCell({
@@ -2980,6 +3042,12 @@
       securityGroup: payload.securityGroup || '',
       service: payload.service || '',
       domain: payload.domain || '',
+      ipBlacklist: payload.ipBlacklist || [],
+      cidrBlacklist: payload.cidrBlacklist || [],
+      domainBlacklist: payload.domainBlacklist || [],
+      ipWhitelist: payload.ipWhitelist || [],
+      cidrWhitelist: payload.cidrWhitelist || [],
+      domainWhitelist: payload.domainWhitelist || [],
       boundSandboxes: []
     });
     localStorage.setItem('sandboxPolicies', JSON.stringify(policies));
@@ -3007,6 +3075,12 @@
         policy.securityGroup = payload.securityGroup || '';
         policy.service = payload.service || '';
         policy.domain = payload.domain || '';
+        policy.ipBlacklist = payload.ipBlacklist || policy.ipBlacklist || [];
+        policy.cidrBlacklist = payload.cidrBlacklist || policy.cidrBlacklist || [];
+        policy.domainBlacklist = payload.domainBlacklist || policy.domainBlacklist || [];
+        policy.ipWhitelist = payload.ipWhitelist || policy.ipWhitelist || [];
+        policy.cidrWhitelist = payload.cidrWhitelist || policy.cidrWhitelist || [];
+        policy.domainWhitelist = payload.domainWhitelist || policy.domainWhitelist || [];
       }
     });
     localStorage.setItem('sandboxPolicies', JSON.stringify(policies));
@@ -3884,11 +3958,13 @@
         : (policy.service || policy.domain ? [{ targetService: policy.service || '', serviceDomain: policy.domain || '' }] : []);
 
       const visitCapabilities = [
-        renderPolicyCapability('公网访问', '<div class="access-chip-row">' + (
-          policy.allowPublicOutbound
-            ? renderPolicyStatusChip('允许访问公网', false)
-            : renderPolicyStatusChip('未开启', true)
-        ) + '</div>'),
+        renderPolicyCapability('访问公网', hasPublicRules(policy)
+          ? (renderPublicRulesDetailHtml(policy) || '<div class="policy-detail-capability-empty">未配置</div>')
+          : '<div class="access-chip-row">' + (
+              policy.allowPublicOutbound
+                ? renderPolicyStatusChip('允许访问公网', false)
+                : renderPolicyStatusChip('未开启', true)
+            ) + '</div>'),
         renderPolicyCapability('访问 VPC', normalized.outbound.length
           ? renderVpcDetailList(normalized.outbound, true, false)
           : '<div class="policy-detail-capability-empty">未开启</div>'),

@@ -2646,7 +2646,7 @@
     const raw = valueOverride !== undefined ? String(valueOverride) : (input ? input.value.trim() : '');
     if (!raw) return false;
     let valid = true;
-    if (kind === 'ip-black' || kind === 'ip-white') valid = isValidIpEntry(raw);
+    if (kind === 'ip-black' || kind === 'ip-white') valid = isValidIp(raw);
     else if (kind === 'cidr-black' || kind === 'cidr-white') valid = isValidCidr(raw);
     else valid = isValidDomain(raw);
     if (!valid) {
@@ -2690,8 +2690,8 @@
     row.dataset.kind = kind;
     row.dataset.mode = publicRuleModeForKind(kind);
     const placeholder = {
-      'ip-black': '请输入 IP 或 IP+端口，如 10.0.0.1 或 10.0.0.1:80,443',
-      'ip-white': '请输入 IP 或 IP+端口，如 10.0.0.1 或 10.0.0.1:80,443',
+      'ip-black': '请输入单个 IP 地址，如 10.0.0.1，不支持 IP+端口',
+      'ip-white': '请输入单个 IP 地址，如 10.0.0.1，不支持 IP+端口',
       'cidr-black': '请输入 CIDR 网段，如 192.168.1.0/24',
       'cidr-white': '请输入 CIDR 网段，如 192.168.1.0/24',
       'domain-black': '请输入域名，如 api.example.com 或 *.example.com',
@@ -2730,7 +2730,7 @@
       if (!raw) { valid = false; input && (input.style.borderColor = '#e02020'); return; }
       input && (input.style.borderColor = '');
       let ok = true;
-      if (kind === 'ip-black' || kind === 'ip-white') ok = isValidIpEntry(raw);
+      if (kind === 'ip-black' || kind === 'ip-white') ok = isValidIp(raw);
       else if (kind === 'cidr-black' || kind === 'cidr-white') ok = isValidCidr(raw);
       else ok = isValidDomain(raw);
       if (!ok) { valid = false; input.style.borderColor = '#e02020'; return; }
@@ -3343,7 +3343,7 @@
         '<option value="subnet-02">subnet-02 (172.16.1.0/24)</option>' +
         '<option value="subnet-03">subnet-03 (192.168.1.0/24)</option>' +
       '</select></td>' +
-      (includeSecurityGroup ? '<td><input type="text" class="form-input policy-form-vpc-sg" placeholder="请输入目标 IP+端口，多个用逗号分隔，如 10.0.0.1:80,443"></td>' : '') +
+      (includeSecurityGroup ? '<td><input type="text" class="form-input policy-form-vpc-sg" placeholder="输入IP地址，多个用逗号隔开"></td>' : '') +
       '<td><a href="#" class="action-link" onclick="removePolicyFormRule(event, this)">删除</a></td>';
     tr.querySelector('.policy-form-vpc-network').value = item.vpcNetwork;
     tr.querySelector('.policy-form-vpc-subnet').value = item.subnet;
@@ -3407,29 +3407,9 @@
     if (!value || !value.trim()) return false;
     const parts = value.split(',').map(function(part) { return part.trim(); }).filter(Boolean);
     if (!parts.length) return false;
-    const entries = [];
     for (let i = 0; i < parts.length; i++) {
       const part = parts[i];
-      if (/^\d{1,5}$/.test(part) && entries.length) {
-        entries[entries.length - 1].ports.push(part);
-        continue;
-      }
-      let m = part.match(/^(\d{1,3}(?:\.\d{1,3}){3}):(.+)$/);
-      if (m) {
-        const ports = parsePortList(m[2]);
-        if (!ports || !isValidIp(m[1])) return false;
-        entries.push({ ports: ports });
-        continue;
-      }
-      m = part.match(/^\[(.+)\]:(.+)$/);
-      if (m) {
-        const ports = parsePortList(m[2]);
-        if (!ports || !isValidIp(m[1])) return false;
-        entries.push({ ports: ports });
-        continue;
-      }
       if (!isValidIp(part)) return false;
-      entries.push({ ports: [] });
     }
     return true;
   }
@@ -3446,8 +3426,8 @@
         : '';
       if (!vpcNetwork) { alert('请选择第 ' + (i + 1) + ' 组' + title + '的 VPC 网络'); return null; }
       if (!subnet) { alert('请选择第 ' + (i + 1) + ' 组' + title + '的子网'); return null; }
-      if (includeSecurityGroup && !securityGroup) { alert('请输入第 ' + (i + 1) + ' 组' + title + '的访问目标（IP+端口）'); return null; }
-      if (includeSecurityGroup && !isValidVpcTargetList(securityGroup)) { alert('第 ' + (i + 1) + ' 组' + title + '的访问目标格式不合法（示例：10.0.0.1:80,443 或 10.0.0.1:80,10.0.0.2:443）'); return null; }
+      if (includeSecurityGroup && !securityGroup) { alert('请输入第 ' + (i + 1) + ' 组' + title + '的IP白名单'); return null; }
+      if (includeSecurityGroup && !isValidVpcTargetList(securityGroup)) { alert('第 ' + (i + 1) + ' 组' + title + '的IP白名单格式不合法（输入IP地址，多个用逗号隔开）'); return null; }
       result.push({ vpcNetwork: vpcNetwork, subnet: subnet, securityGroup: securityGroup });
     }
     return result;
