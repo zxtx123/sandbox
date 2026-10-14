@@ -2681,6 +2681,32 @@
 
   let publicRuleEntrySeq = 0;
 
+  const PUBLIC_RULE_KIND_ORDER = {
+    'ip-black': 0,
+    'ip-white': 1,
+    'cidr-black': 2,
+    'cidr-white': 3,
+    'domain-black': 4,
+    'domain-white': 5
+  };
+
+  function insertPublicRuleEntryOrdered(container, row) {
+    const kindOrder = PUBLIC_RULE_KIND_ORDER[row.dataset.kind];
+    if (kindOrder === undefined) {
+      container.appendChild(row);
+      return;
+    }
+    const rows = container.querySelectorAll('.public-rule-entry');
+    for (let i = 0; i < rows.length; i++) {
+      const otherOrder = PUBLIC_RULE_KIND_ORDER[rows[i].dataset.kind];
+      if (otherOrder === undefined || otherOrder > kindOrder) {
+        container.insertBefore(row, rows[i]);
+        return;
+      }
+    }
+    container.appendChild(row);
+  }
+
   function addPublicRuleEntry(kind, value) {
     if (!PUBLIC_RULE_LIMITS[kind]) return;
     const container = document.getElementById('public-rule-entries');
@@ -2702,7 +2728,7 @@
       '<button type="button" class="public-rule-entry-remove" onclick="removePublicRuleEntry(this)">删除</button>';
     const input = row.querySelector('.public-rule-entry-input');
     if (typeof value === 'string' && value) input.value = value;
-    container.appendChild(row);
+    insertPublicRuleEntryOrdered(container, row);
     updatePublicRuleEmptyTip();
   }
 
