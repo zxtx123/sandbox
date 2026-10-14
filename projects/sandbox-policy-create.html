@@ -1926,10 +1926,7 @@
     display: flex;
     align-items: center;
     gap: 8px;
-    padding: 8px 10px;
-    border: 1px solid #e3ecf7;
-    border-radius: 4px;
-    background: #fff;
+    padding: 0;
   }
   .public-rule-entry-label {
     flex: 0 0 88px;
@@ -1956,6 +1953,25 @@
   }
   .public-rule-entry-remove:hover {
     background: #fff1f0;
+  }
+  .public-rule-group {
+    border: 1px solid #e3ecf7;
+    border-radius: 4px;
+    background: #fff;
+    padding: 10px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .public-rule-group-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: #1f2d3d;
+  }
+  .public-rule-group-body {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
   }
   .policy-switch input {
     position: absolute;
@@ -2690,21 +2706,53 @@
     'domain-white': 5
   };
 
+  function getPublicRuleGroupOrdered(container, kind) {
+    let group = container.querySelector('.public-rule-group[data-kind="' + kind + '"]');
+    if (group) return group;
+    group = document.createElement('div');
+    group.className = 'public-rule-group';
+    group.dataset.kind = kind;
+    const label = document.createElement('div');
+    label.className = 'public-rule-group-label';
+    label.textContent = PUBLIC_RULE_TITLES[kind] || '';
+    const body = document.createElement('div');
+    body.className = 'public-rule-group-body';
+    group.appendChild(label);
+    group.appendChild(body);
+    const kindOrder = PUBLIC_RULE_KIND_ORDER[kind];
+    if (kindOrder === undefined) {
+      container.appendChild(group);
+      return group;
+    }
+    const groups = container.querySelectorAll('.public-rule-group');
+    for (let i = 0; i < groups.length; i++) {
+      const otherOrder = PUBLIC_RULE_KIND_ORDER[groups[i].dataset.kind];
+      if (otherOrder === undefined || otherOrder > kindOrder) {
+        container.insertBefore(group, groups[i]);
+        return group;
+      }
+    }
+    container.appendChild(group);
+    return group;
+  }
+
   function insertPublicRuleEntryOrdered(container, row) {
+    const group = getPublicRuleGroupOrdered(container, row.dataset.kind);
+    const body = group.querySelector('.public-rule-group-body');
     const kindOrder = PUBLIC_RULE_KIND_ORDER[row.dataset.kind];
     if (kindOrder === undefined) {
-      container.appendChild(row);
+      body.appendChild(row);
       return;
     }
-    const rows = container.querySelectorAll('.public-rule-entry');
+    const rows = body.querySelectorAll('.public-rule-entry');
     for (let i = 0; i < rows.length; i++) {
       const otherOrder = PUBLIC_RULE_KIND_ORDER[rows[i].dataset.kind];
       if (otherOrder === undefined || otherOrder > kindOrder) {
-        container.insertBefore(row, rows[i]);
+        body.insertBefore(row, rows[i]);
         return;
       }
     }
-    container.appendChild(row);
+    body.appendChild(row);
   }
 
   function addPublicRuleEntry(kind, value) {
@@ -2723,7 +2771,7 @@
       'domain-black': '请输入域名，如 api.example.com 或 *.example.com',
       'domain-white': '请输入域名，如 api.example.com 或 *.example.com'
     }[kind] || '请输入';
-    row.innerHTML = '<span class="public-rule-entry-label">' + PUBLIC_RULE_TITLES[kind] + '</span>' +
+    row.innerHTML =
       '<input type="text" class="form-input public-rule-entry-input" placeholder="' + placeholder + '">' +
       '<button type="button" class="public-rule-entry-remove" onclick="removePublicRuleEntry(this)">删除</button>';
     const input = row.querySelector('.public-rule-entry-input');
@@ -2735,8 +2783,9 @@
   function removePublicRuleEntry(btn) {
     const row = btn && btn.closest ? btn.closest('.public-rule-entry') : null;
     if (!row) return;
-    const container = document.getElementById('public-rule-entries');
+    const group = row.closest('.public-rule-group');
     row.remove();
+    if (group && !group.querySelector('.public-rule-entry')) group.remove();
     updatePublicRuleEmptyTip();
   }
 
@@ -2805,6 +2854,13 @@
     });
     document.querySelectorAll('#public-rule-entries .public-rule-entry').forEach(function(row) {
       row.style.display = row.dataset.mode === mode ? '' : 'none';
+    });
+    document.querySelectorAll('#public-rule-entries .public-rule-group').forEach(function(group) {
+      const rows = group.querySelectorAll('.public-rule-entry');
+      const hasVisibleRows = Array.prototype.some.call(rows, function(row) {
+        return row.dataset.mode === mode;
+      });
+      group.style.display = hasVisibleRows ? '' : 'none';
     });
     updatePublicRuleEmptyTip();
   }
