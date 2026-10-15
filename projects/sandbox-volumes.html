@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>存储卷 - 360智汇云</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    a { text-decoration: none; }
+    body {
+      font-family: "Microsoft YaHei", "PingFang SC", -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #F0F5F7;
+      font-size: 14px;
+      color: #202020;
+      line-height: 1.5;
+      overflow: hidden;
+    }
+
+    /* 顶部导航栏 */
+    .header {
+      height: 50px;
+      background: #fff;
+      box-shadow: 0 2px 6px rgba(49, 49, 71, 0.26);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 20px;
+      position: relative;
+      z-index: 100;
+    }
+    .header-left { display: flex; align-items: center; gap: 16px; }
+    .logo { display: flex; align-items: center; gap: 8px; cursor: pointer; }
+    .logo-icon { width: 177px; height: 28px; }
+    .header-btn {
+      padding: 6px 12px;
+      border-radius: 4px;
+      background: #F8F9FA;
+      font-size: 14px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s;
+      color: #202020;
+      border: 1px #F8F9FA solid;
+    }
+    .header-btn.group { background: #fff; border-color: #D8E0E8; color: #202020; padding: 6px 10px; }
+    .header-btn.group:hover { background: #F8F9FA; }
+    .tag { background: #EEF6FF; color: #0066FF; padding: 2px 6px; border-radius: 2px; font-size: 14px; font-weight: 500; }
+    .dropdown-arrow { margin-left: 4px; display: flex; align-items: center; justify-content: center; }
+    .header-divider { width: 1px; height: 50px; background: #F5F5F5; }
+    .header-right { display: flex; align-items: center; gap: 16px; }
+    .header-link { color: #666; text-decoration: none; font-size: 14px; position: relative; cursor: pointer; transition: color 0.2s; }
+    .header-link:hover { color: #0066FF; }
+    .header-link .dot { position: absolute; top: -2px; right: -6px; width: 6px; height: 6px; background: #FF4D4F; border-radius: 50%; }
+    .user-info { display: flex; align-items: center; gap: 8px; cursor: pointer; padding: 4px 0px; border-radius: 4px; transition: background 0.2s; }
+    .user-info:hover { background: #F5F7FA; }
+    .user-avatar { width: 28px; height: 28px; border-radius: 50%; background: #0066FF; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 14px; }
+    .user-detail { display: flex; flex-direction: column; }
+    .user-name { font-size: 14px; color: #333; line-height: 1.3; }
+    .user-sub { font-size: 12px; color: #8C9AAE; line-height: 1.3; }
+
+    /* 主体容器 */
+    .container { display: flex; height: calc(100vh - 56px); }
+
+    .icon-bar {
+      width: 50px;
+      background: #2e8cff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+      flex-shrink: 0;
+    }
+    .icon-item {
+      width: 50px; height: 40px; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px; color: #E5EAF3; transition: all 0.2s;
+      background: transparent; position: relative; flex-direction: column;
+    }
+    .icon-item:nth-child(1), .icon-item:nth-child(2), .icon-item:nth-child(3) { height: 50px; }
+    .icon-item:hover { background: #0066FF; color: #fff; }
+    .icon-item.active { background: #0066FF; color: #fff; }
+    .icon-item .icon-svg { width: 18px; height: 18px; display: flex; align-items: center; justify-content: center; }
+    .icon-item:nth-child(1) .icon-svg, .icon-item:nth-child(2) .icon-svg, .icon-item:nth-child(3) .icon-svg { width: 20px; height: 20px; }
+    .icon-item .icon-label { display: block; font-size: 10px; font-weight: 400; margin-top: 2px; }
+
+    .sidebar { width: 200px; background: #ffffff; flex-direction: column; overflow: hidden; flex-shrink: 0; border-right: 1px solid #E6E6e6; color: #202020; }
+    .sidebar-menu { flex: 1; overflow-y: auto; overflow-x: hidden; }
+    .sidebar-menu::-webkit-scrollbar { width: 4px; }
+    .sidebar-menu::-webkit-scrollbar-thumb { background: rgba(0, 0, 0, 0.2); border-radius: 2px; }
+    .sidebar-menu::-webkit-scrollbar-thumb:hover { background: rgba(0, 0, 0, 0.4); }
+    .sidebar-menu::-webkit-scrollbar-track { background: transparent; }
+    .menu-level-1 { color: #202020; font-size: 14px; }
+    .menu-level-1 > .menu-item { border-bottom: 1px solid #E6E6e6; }
+    .menu-level-1 > .menu-item .menu-icon { display: none; }
+    .menu-level-1 > .menu-item .menu-arrow { pointer-events: none; }
+    .menu-level-1 > .menu-item .menu-arrow .star-icon { width: 18px; height: 18px; color: #999999; fill: transparent; transition: all 0.2s ease; }
+    .menu-level-1 > .menu-item.selected .menu-arrow .star-icon { color: #0066FF; fill: #0066FF; }
+    .menu-item {
+      display: flex; align-items: center; padding: 0 16px; height: 50px; line-height: 50px;
+      color: #202020; font-size: 16px; font-weight: 500; cursor: pointer; gap: 8px;
+      transition: all 0.2s; position: relative; color: inherit;
+    }
+    .menu-item:hover { background: rgba(255, 255, 255, 0.1); }
+    .menu-item.active { background: #0066FF; color: #fff; }
+    .menu-item.active::after { content: ''; position: absolute; right: 0; top: 4px; bottom: 4px; width: 2px; background: #fff; border-radius: 1px 0 0 1px; }
+    .menu-icon { width: 16px; height: 16px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; opacity: 0.8; }
+    .menu-item.active .menu-icon { opacity: 1; }
+    .menu-text { flex: 1; font-size: inherit; }
+    .menu-arrow { width: 16px; height: 16px; display: flex; align-items: center; justify-content: center; color: #202020; transition: transform 0.2s ease; }
+    .menu-item.collapsed .menu-arrow { transform: rotate(-90deg); }
+    .menu-level-2 { display: block; background: #F8F9FA; }
+    .menu-level-2.collapsed { display: none; }
+    .menu-level-2 .menu-item { padding-left: 32px; font-size: 15px; font-weight: 400; }
+    .submenu-expanded { display: block; }
+    .submenu-expanded.collapsed { display: none; }
+    .submenu-expanded .menu-item { padding-left: 32px; font-size: 15px; font-weight: 400; }
+    .submenu-expanded .menu-item:hover { background: #F0F5FF; }
+    .submenu-expanded .menu-item.active { background: #0066FF; color: #fff; }
+
+    /* 主内容区 */
+    .main-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      min-width: 0;
+    }
+    .breadcrumb {
+      height: 56px;
+      padding: 0 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #ffffff;
+    }
+    .breadcrumb-left { color: #202020; }
+    .breadcrumb-link { color: #0066FF; text-decoration: none; cursor: pointer; font-size: 12px; }
+    .breadcrumb-link:hover { text-decoration: none; }
+    .content-body {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      background: #ffffff;
+      margin: 20px;
+      box-shadow: 0 2px 3px rgba(0, 0, 0, 0.09);
+      overflow: hidden;
+    }
+    .product-list-page { flex: 1; display: flex; flex-direction: column; padding: 0; overflow: hidden; min-height: 0; }
+    .product-toolbar {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 16px 20px; border-bottom: 1px solid #E9ECEF; gap: 12px; flex-shrink: 0;
+    }
+    .toolbar-left { display: flex; align-items: center; gap: 8px; }
+    .toolbar-right { display: flex; align-items: center; gap: 8px; }
+    .btn {
+      height: 32px; padding: 0 12px; border-radius: 4px; font-size: 14px;
+      cursor: pointer; border: 1px solid transparent; display: flex; align-items: center; gap: 6px; transition: all 0.2s;
+    }
+    .btn-primary { background: #0066FF; color: #fff; border-color: #0066FF; }
+    .btn-primary:hover { background: #0052CC; }
+    .btn-default { background: #fff; color: #333; border-color: #D9D9D9; }
+    .btn-default:hover { border-color: #0066FF; color: #0066FF; }
+    .search-box { display: flex; align-items: center; border: 1px solid #D9D9D9; border-radius: 4px; padding: 0 12px; background: #fff; }
+    .search-box input { border: none; outline: none; padding: 8px 0; font-size: 14px; width: 220px; }
+    .search-box input::placeholder { color: #999; }
+    .search-btn { border: none; background: none; cursor: pointer; color: #999; display: flex; align-items: center; justify-content: center; padding: 0; margin-left: 8px; height: 32px; }
+    .search-btn:hover { color: #0066FF; }
+    .clear-btn { border: none; background: none; cursor: pointer; color: #999; font-size: 14px; padding: 0 0 0 8px; margin-left: 4px; height: 32px; display: flex; align-items: center; }
+    .clear-btn:hover { color: #666; }
+    .refresh-btn {
+      width: 34px; height: 34px; border: 1px solid #D9D9D9; background: #fff;
+      display: flex; align-items: center; justify-content: center; cursor: pointer;
+      color: #666; border-radius: 4px; margin-left: 8px;
+    }
+    .refresh-btn:hover { border-color: #0066FF; color: #0066FF; }
+
+    .product-table { flex: 1; overflow: hidden; display: flex; flex-direction: column; min-height: 0; }
+    .product-table .table-wrapper { flex: 1; overflow: auto; min-height: 0; }
+    .product-table table { width: 100%; border-collapse: collapse; }
+    .product-table thead { position: sticky; top: 0; z-index: 1; }
+    .product-table th {
+      background: #F8F9FA; padding: 12px 10px; text-align: left; font-size: 14px;
+      font-weight: 500; color: #333; border-bottom: 1px solid #E9ECEF; white-space: nowrap;
+    }
+    .product-table td { padding: 14px 10px; font-size: 14px; color: #333; border-bottom: 1px solid #F0F0F0; }
+    .product-table tbody tr:hover { background: #F8F9FA; }
+    .product-table th:nth-child(6), .product-table td:nth-child(6) { min-width: 140px; }
+    .id-cell { font-family: monospace; display: flex; align-items: center; gap: 4px; }
+    .copy-icon { cursor: pointer; opacity: 0.5; font-size: 12px; }
+    .copy-icon:hover { opacity: 1; }
+    .volume-name { color: #333; }
+    .size-badge { display: inline-block; padding: 2px 8px; background: #F0F5FF; color: #0066FF; border-radius: 4px; font-size: 12px; }
+    .action-link { color: #0066FF; text-decoration: none; margin-right: 12px; cursor: pointer; }
+    .action-link:hover { text-decoration: underline; }
+    .action-link.danger { color: #FF4D4F; }
+    .action-link.danger:hover { color: #FF7875; }
+    .empty-state { padding: 60px 0 !important; text-align: center; }
+    .empty-text { font-size: 14px; color: #999; }
+
+    .pagination-bar {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 12px 20px; border-top: 1px solid #E9ECEF; background: #fff; flex-shrink: 0;
+    }
+    .pagination-left { font-size: 14px; color: #666; }
+
+    /* 弹窗样式 */
+    .modal-overlay {
+      position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0, 0, 0, 0.5); display: none; align-items: center; justify-content: center; z-index: 1000;
+    }
+    .modal-overlay.active { display: flex; }
+    .modal-dialog {
+      background: #fff; border-radius: 8px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+      width: 460px; max-height: 85vh; display: flex; flex-direction: column; overflow: hidden;
+    }
+    .modal-header {
+      padding: 16px 20px; border-bottom: 1px solid #E9ECEF;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .modal-title { font-size: 16px; font-weight: 500; color: #333; }
+    .modal-close { border: none; background: none; font-size: 20px; cursor: pointer; color: #999; line-height: 1; }
+    .modal-close:hover { color: #333; }
+    .modal-body { padding: 20px; overflow-y: auto; flex: 1; }
+    .modal-footer {
+      padding: 12px 20px; border-top: 1px solid #E9ECEF;
+      display: flex; justify-content: flex-end; gap: 8px;
+    }
+    .form-group { display: flex; align-items: center; margin-bottom: 16px; gap: 12px; }
+    .form-group:last-child { margin-bottom: 0; }
+    .form-label { width: 100px; flex-shrink: 0; font-size: 14px; color: #333; text-align: right; }
+    .form-label .required { color: #FF4D4F; margin-left: 2px; }
+    .form-control { flex: 1; display: flex; align-items: center; }
+    .form-input {
+      width: 100%; height: 32px; padding: 0 10px;
+      border: 1px solid #D9D9D9; border-radius: 4px; font-size: 14px; color: #333; outline: none; transition: border-color 0.2s;
+    }
+    .form-input:focus { border-color: #0066FF; }
+    .form-input.invalid { border-color: #FF4D4F; }
+    .form-tip { font-size: 12px; color: #999; margin-top: 4px; }
+    .form-error { font-size: 12px; color: #FF4D4F; margin-top: 4px; display: none; }
+    .form-error.visible { display: block; }
+    .size-unit { margin-left: 8px; font-size: 14px; color: #666; flex-shrink: 0; }
+    .token-value {
+      font-family: monospace; font-size: 13px; word-break: break-all; background: #F8F9FA;
+      border: 1px solid #E9ECEF; border-radius: 4px; padding: 12px; color: #333;
+    }
+    #create-volume-modal .modal-dialog { width: 660px; }
+    #create-volume-modal .form-label { width: 88px; }
+    #create-volume-modal .modal-body { overflow-x: hidden; }
+  </style>
+  <link rel="stylesheet" href="styles/sandbox-shell.css">
+  <link rel="stylesheet" href="styles/ai-sandbox.css">
+</head>
+<body>
+
+<!-- 主体容器（三栏布局） -->
+<div class="container">
+  <div id="sandbox-shell" data-active="存储卷" data-breadcrumb="存储卷"></div>
+  <div class="main-content">
+    <div class="breadcrumb">
+      <span class="breadcrumb-left" id="menu-name-display">存储卷</span>
+      <a class="breadcrumb-link" id="menu-link-display">Sandbox 帮助文档</a>
+    </div>
+    <div class="content-body">
+      <div class="product-list-page">
+        <!-- 工具栏 -->
+        <div class="product-toolbar">
+          <div class="toolbar-left">
+            <button class="btn btn-primary" onclick="openCreateVolumeModal()">
+              <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+                <path d="M8 2v12M2 8h12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+              创建存储卷
+            </button>
+          </div>
+          <div class="toolbar-right">
+            <div class="search-box">
+              <input type="text" id="volume-search" placeholder="请输入存储卷名称或ID" oninput="filterVolumes()" onkeydown="if(event.key==='Enter')filterVolumes()">
+              <button class="search-btn" onclick="filterVolumes()">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                  <circle cx="7" cy="7" r="5" stroke="currentColor" stroke-width="1.5" fill="none"/>
+                  <path d="M11 11l3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                </svg>
+              </button>
+              <button class="clear-btn" onclick="document.getElementById('volume-search').value='';filterVolumes();" title="清除">C</button>
+            </div>
+            <button class="refresh-btn" title="刷新">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <path d="M14 8A6 6 0 118 2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                <path d="M14 2v4h-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- 表格 -->
+        <div class="product-table">
+          <div class="table-wrapper">
+            <table>
+            <thead>
+              <tr>
+                <th>存储卷ID</th>
+                <th>存储卷名称</th>
+                <th>存储卷大小</th>
+                <th>创建人</th>
+                <th>创建时间</th>
+                <th>操作</th>
+              </tr>
+            </thead>
+            <tbody id="volume-tbody">
+              <tr data-id="vol-8a2c4d6e" data-name="data-volume-01">
+                <td class="id-cell">vol-8a2c4d6e<span class="copy-icon" onclick="copyText('vol-8a2c4d6e')">📋</span></td>
+                <td class="volume-name">data-volume-01</td>
+                <td><span class="size-badge">100 GiB</span></td>
+                <td>zhangsan</td>
+                <td>2025-10-08 09:30:15</td>
+                <td>
+                  <a href="#" class="action-link view-token-btn">查看Token</a>
+                  <a href="#" class="action-link danger delete-volume-btn">删除</a>
+                </td>
+              </tr>
+              <tr data-id="vol-1b3d5f7a" data-name="model-cache">
+                <td class="id-cell">vol-1b3d5f7a<span class="copy-icon" onclick="copyText('vol-1b3d5f7a')">📋</span></td>
+                <td class="volume-name">model-cache</td>
+                <td><span class="size-badge">512 GiB</span></td>
+                <td>lisi</td>
+                <td>2025-10-10 14:22:40</td>
+                <td>
+                  <a href="#" class="action-link view-token-btn">查看Token</a>
+                  <a href="#" class="action-link danger delete-volume-btn">删除</a>
+                </td>
+              </tr>
+              <tr data-id="vol-9c4e6a8b" data-name="workspace-shared">
+                <td class="id-cell">vol-9c4e6a8b<span class="copy-icon" onclick="copyText('vol-9c4e6a8b')">📋</span></td>
+                <td class="volume-name">workspace-shared</td>
+                <td><span class="size-badge">2048 GiB</span></td>
+                <td>zhangsan</td>
+                <td>2025-10-12 11:05:33</td>
+                <td>
+                  <a href="#" class="action-link view-token-btn">查看Token</a>
+                  <a href="#" class="action-link danger delete-volume-btn">删除</a>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          </div>
+        </div>
+
+        <!-- 翻页组件 -->
+        <div class="pagination-bar">
+          <div class="pagination-left" id="volume-pagination">共3条记录 第1/1页</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 创建存储卷弹窗 -->
+<div class="modal-overlay" id="create-volume-modal">
+  <div class="modal-dialog">
+    <div class="modal-header">
+      <h3 class="modal-title">创建存储卷</h3>
+      <button class="modal-close" onclick="closeCreateVolumeModal()">&times;</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group" style="flex-direction:column;align-items:stretch;gap:4px;">
+        <div style="display:flex;align-items:center;gap:12px;">
+          <label class="form-label" style="text-align:left;">存储卷名称<span class="required">*</span></label>
+          <div class="form-control">
+            <input type="text" class="form-input" id="volume-name-input" placeholder="请输入存储卷名称" oninput="onVolumeNameInput()">
+          </div>
+        </div>
+        <div class="form-tip" style="white-space:nowrap;padding-left:100px;">仅支持小写字母、数字和连字符(-)，以字母开头，长度3-63个字符，不能以连字符结尾</div>
+        <div class="form-error" id="volume-name-error"></div>
+      </div>
+      <div class="form-group" style="flex-direction:column;align-items:stretch;gap:4px;">
+        <div style="display:flex;align-items:center;gap:12px;">
+          <label class="form-label" style="text-align:left;">存储卷大小<span class="required">*</span></label>
+          <div class="form-control">
+            <input type="number" class="form-input" id="volume-size-input" placeholder="请输入存储卷大小" min="1" oninput="onVolumeSizeInput()">
+            <span class="size-unit">GiB</span>
+          </div>
+        </div>
+        <div class="form-error" id="volume-size-error"></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-default" onclick="closeCreateVolumeModal()">取消</button>
+      <button class="btn btn-primary" onclick="createVolume()">创建</button>
+    </div>
+  </div>
+</div>
+
+<!-- 查看Token弹窗 -->
+<div class="modal-overlay" id="view-token-modal">
+  <div class="modal-dialog">
+    <div class="modal-header">
+      <h3 class="modal-title">存储卷Token</h3>
+      <button class="modal-close" onclick="closeViewTokenModal()">&times;</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label class="form-label">存储卷</label>
+        <div class="form-control" style="font-size:14px;color:#333;" id="token-volume-name"></div>
+      </div>
+      <div class="form-group" style="flex-direction:column;align-items:stretch;gap:8px;">
+        <label class="form-label" style="text-align:left;width:100%;">Token</label>
+        <div class="token-value" id="token-value"></div>
+        <button class="btn btn-default" style="width:fit-content;" onclick="copyToken()">复制Token</button>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-primary" onclick="closeViewTokenModal()">关闭</button>
+    </div>
+  </div>
+</div>
+
+<!-- 删除确认弹窗 -->
+<div class="modal-overlay" id="delete-volume-modal">
+  <div class="modal-dialog" style="width: 400px;">
+    <div class="modal-header">
+      <h3 class="modal-title">删除确认</h3>
+      <button class="modal-close" onclick="closeDeleteVolumeModal()">&times;</button>
+    </div>
+    <div class="modal-body" style="padding: 28px 20px;">
+      <p id="delete-volume-msg" style="margin: 0; font-size: 15px; color: #333; line-height: 1.6;"></p>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-default" onclick="closeDeleteVolumeModal()">取消</button>
+      <button class="btn btn-primary" style="background:#ff4d4f;border-color:#ff4d4f;" onclick="confirmDeleteVolume()">删除</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  function copyText(text) {
+    navigator.clipboard.writeText(text).then(() => {
+      alert('已复制: ' + text);
+    });
+  }
+
+  // 图标栏交互
+  document.querySelectorAll('.icon-item').forEach(item => {
+    item.addEventListener('click', function() {
+      document.querySelectorAll('.icon-item').forEach(i => i.classList.remove('active'));
+      this.classList.add('active');
+    });
+  });
+
+  // 一级菜单项点击切换图标状态
+  document.querySelectorAll('.menu-level-1 > .menu-item').forEach(item => {
+    item.addEventListener('click', function(e) {
+      e.stopPropagation();
+      this.classList.toggle('selected');
+    });
+  });
+
+  // 创建存储卷
+  function openCreateVolumeModal() {
+    document.getElementById('volume-name-input').value = '';
+    document.getElementById('volume-size-input').value = '';
+    hideError('volume-name-error');
+    hideError('volume-size-error');
+    document.getElementById('volume-name-input').classList.remove('invalid');
+    document.getElementById('volume-size-input').classList.remove('invalid');
+    document.getElementById('create-volume-modal').classList.add('active');
+  }
+
+  function closeCreateVolumeModal() {
+    document.getElementById('create-volume-modal').classList.remove('active');
+  }
+
+  function hideError(id) {
+    document.getElementById(id).classList.remove('visible');
+    document.getElementById(id).textContent = '';
+  }
+
+  function showError(id, msg) {
+    const el = document.getElementById(id);
+    el.textContent = msg;
+    el.classList.add('visible');
+  }
+
+  function validateVolumeName(name) {
+    if (!name) return '请输入存储卷名称';
+    if (name.length < 3) return '存储卷名称长度不能少于3个字符';
+    if (name.length > 63) return '存储卷名称长度不能超过63个字符';
+    if (!/^[a-z]/.test(name)) return '存储卷名称必须以小写字母开头';
+    if (!/^[a-z0-9-]+$/.test(name)) return '存储卷名称只能包含小写字母、数字和连字符(-)';
+    if (name.endsWith('-')) return '存储卷名称不能以连字符(-)结尾';
+    return '';
+  }
+
+  function onVolumeNameInput() {
+    const el = document.getElementById('volume-name-input');
+    const err = validateVolumeName(el.value.trim());
+    if (!err || el.value.trim() === '') {
+      el.classList.remove('invalid');
+      hideError('volume-name-error');
+    } else {
+      el.classList.add('invalid');
+      showError('volume-name-error', err);
+    }
+  }
+
+  function onVolumeSizeInput() {
+    const el = document.getElementById('volume-size-input');
+    const val = el.value;
+    if (val === '' || (Number(val) >= 1 && Number(val) <= 2048)) {
+      el.classList.remove('invalid');
+      hideError('volume-size-error');
+    } else {
+      el.classList.add('invalid');
+      showError('volume-size-error', '存储卷大小必须在1-2048 GiB之间（最大2 TiB）');
+    }
+  }
+
+  function createVolume() {
+    const nameEl = document.getElementById('volume-name-input');
+    const sizeEl = document.getElementById('volume-size-input');
+    const name = nameEl.value.trim();
+    const sizeVal = sizeEl.value;
+
+    const nameErr = validateVolumeName(name);
+    if (nameErr) {
+      nameEl.classList.add('invalid');
+      showError('volume-name-error', nameErr);
+      return;
+    }
+
+    if (!sizeVal || Number(sizeVal) < 1) {
+      sizeEl.classList.add('invalid');
+      showError('volume-size-error', '请输入有效的存储卷大小（最小1 GiB）');
+      return;
+    }
+    if (Number(sizeVal) > 2048) {
+      sizeEl.classList.add('invalid');
+      showError('volume-size-error', '存储卷大小不能超过2048 GiB（2 TiB）');
+      return;
+    }
+
+    const id = 'vol-' + Math.random().toString(16).slice(2, 10);
+    const now = new Date();
+    const time = now.getFullYear() + '-' +
+      String(now.getMonth() + 1).padStart(2, '0') + '-' +
+      String(now.getDate()).padStart(2, '0') + ' ' +
+      String(now.getHours()).padStart(2, '0') + ':' +
+      String(now.getMinutes()).padStart(2, '0') + ':' +
+      String(now.getSeconds()).padStart(2, '0');
+    const size = Number(sizeVal);
+    const sizeText = size + ' GiB';
+    const user = 'zhangsan';
+
+    const tr = document.createElement('tr');
+    tr.dataset.id = id;
+    tr.dataset.name = name;
+    tr.innerHTML =
+      '<td class="id-cell">' + id + '<span class="copy-icon" onclick="copyText(\'' + id + '\')">📋</span></td>' +
+      '<td class="volume-name">' + name + '</td>' +
+      '<td><span class="size-badge">' + sizeText + '</span></td>' +
+      '<td>' + user + '</td>' +
+      '<td>' + time + '</td>' +
+      '<td><a href="#" class="action-link view-token-btn">查看Token</a>' +
+      '<a href="#" class="action-link danger delete-volume-btn">删除</a></td>';
+    document.getElementById('volume-tbody').appendChild(tr);
+    bindRowActions(tr);
+    updatePagination();
+    closeCreateVolumeModal();
+    alert('存储卷「' + name + '」创建成功！');
+  }
+
+  // 查看Token
+  let currentTokenVolume = '';
+  function openViewTokenModal(name) {
+    currentTokenVolume = name;
+    document.getElementById('token-volume-name').textContent = name;
+    document.getElementById('token-value').textContent = 'sk-vol-' + name.replace(/[^a-z0-9]/g, '') + '-' + Math.random().toString(36).slice(2, 14);
+    document.getElementById('view-token-modal').classList.add('active');
+  }
+
+  function closeViewTokenModal() {
+    document.getElementById('view-token-modal').classList.remove('active');
+    currentTokenVolume = '';
+  }
+
+  function copyToken() {
+    const token = document.getElementById('token-value').textContent;
+    navigator.clipboard.writeText(token).then(() => {
+      alert('Token已复制');
+    });
+  }
+
+  // 删除存储卷
+  let deletingVolumeRow = null;
+  function openDeleteVolumeModal(row) {
+    deletingVolumeRow = row;
+    const name = row.dataset.name || '';
+    document.getElementById('delete-volume-msg').textContent = '确认要删除存储卷「' + name + '」吗？删除后不可恢复。';
+    document.getElementById('delete-volume-modal').classList.add('active');
+  }
+
+  function closeDeleteVolumeModal() {
+    document.getElementById('delete-volume-modal').classList.remove('active');
+    deletingVolumeRow = null;
+  }
+
+  function confirmDeleteVolume() {
+    if (deletingVolumeRow) {
+      deletingVolumeRow.remove();
+      updatePagination();
+    }
+    closeDeleteVolumeModal();
+  }
+
+  // 绑定行内操作按钮
+  function bindRowActions(row) {
+    row.querySelector('.view-token-btn').addEventListener('click', function(e) {
+      e.preventDefault();
+      openViewTokenModal(row.dataset.name);
+    });
+    row.querySelector('.delete-volume-btn').addEventListener('click', function(e) {
+      e.preventDefault();
+      openDeleteVolumeModal(row);
+    });
+  }
+
+  document.querySelectorAll('#volume-tbody tr').forEach(bindRowActions);
+
+  // 更新分页信息
+  function updatePagination() {
+    const count = document.querySelectorAll('#volume-tbody tr').length;
+    document.getElementById('volume-pagination').textContent = '共' + count + '条记录 第1/1页';
+  }
+
+  // 按名称或ID查询
+  function filterVolumes() {
+    const keyword = document.getElementById('volume-search').value.trim().toLowerCase();
+    let visible = 0;
+    document.querySelectorAll('#volume-tbody tr').forEach(row => {
+      const matchId = (row.dataset.id || '').toLowerCase().includes(keyword);
+      const matchName = (row.dataset.name || '').toLowerCase().includes(keyword);
+      const show = !keyword || matchId || matchName;
+      row.style.display = show ? '' : 'none';
+      if (show) visible++;
+    });
+    document.getElementById('volume-pagination').textContent = '共' + visible + '条记录 第1/1页';
+  }
+
+  // 弹窗点击遮罩关闭
+  document.getElementById('create-volume-modal').addEventListener('click', function(e) {
+    if (e.target === this) closeCreateVolumeModal();
+  });
+  document.getElementById('view-token-modal').addEventListener('click', function(e) {
+    if (e.target === this) closeViewTokenModal();
+  });
+  document.getElementById('delete-volume-modal').addEventListener('click', function(e) {
+    if (e.target === this) closeDeleteVolumeModal();
+  });
+</script>
+
+<script src="styles/sandbox-shell.js"></script>
+<script src="styles/ai-sandbox.js"></script>
+</body>
+</html>

@@ -19,6 +19,8 @@
       icon: '<svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M3 4.5C3 3.7 4.8 3 8 3s5 0.7 5 1.5S11.2 6 8 6 3 5.3 3 4.5z" stroke="currentColor" stroke-width="1.5" fill="none"/><path d="M3 4.5v7C3 12.3 4.8 13 8 13s5-0.7 5-1.5v-7" stroke="currentColor" stroke-width="1.5" fill="none"/><path d="M3 8c0 0.8 1.8 1.5 5 1.5s5-0.7 5-1.5" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>' },
     { text: "沙箱模板", href: "sandbox-template.html",
       icon: '<svg width="12" height="12" viewBox="0 0 16 16" fill="none"><rect x="2" y="2" width="12" height="12" rx="2" stroke="currentColor" stroke-width="1.5" fill="none"/><path d="M6 6l2 2 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>' },
+    { text: "存储卷", href: "sandbox-volumes.html",
+      icon: '<svg width="12" height="12" viewBox="0 0 16 16" fill="none"><ellipse cx="8" cy="4" rx="5.5" ry="2" stroke="currentColor" stroke-width="1.5" fill="none"/><path d="M2.5 4v8c0 1.1 2.5 2 5.5 2s5.5-.9 5.5-2V4" stroke="currentColor" stroke-width="1.5" fill="none"/><path d="M2.5 8c0 1.1 2.5 2 5.5 2s5.5-.9 5.5-2" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>' },
     { text: "网络策略", href: "sandbox-policy.html",
       icon: '<svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M3 12l3-3 3 3 4-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>' },
     { text: "试验场", href: "sandbox-playground.html",

@@ -685,6 +685,65 @@
       color: #999;
       margin-top: 6px;
     }
+
+    .advanced-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .advanced-card {
+      border: 1px solid #E9ECEF;
+      border-radius: 6px;
+      background: #fff;
+      overflow: hidden;
+    }
+
+    .advanced-card-header {
+      height: 44px;
+      padding: 0 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      user-select: none;
+      background: #fff;
+      transition: background-color .2s;
+    }
+
+    .advanced-card-header:hover {
+      background: #F8F9FA;
+    }
+
+    .advanced-card-title {
+      font-size: 14px;
+      font-weight: 500;
+      color: #333;
+    }
+
+    .advanced-card-chevron {
+      width: 16px;
+      height: 16px;
+      color: #999;
+      transform: rotate(-90deg);
+      transition: transform .2s ease;
+    }
+
+    .advanced-card.open .advanced-card-chevron {
+      transform: rotate(0deg);
+    }
+
+    .advanced-card-body {
+      padding: 16px;
+      border-top: 1px solid #F0F0F0;
+      background: #fff;
+    }
+
+    .advanced-empty {
+      font-size: 13px;
+      color: #999;
+      padding: 6px 0;
+    }
   </style>
   <link rel="stylesheet" href="styles/sandbox-shell.css">
   <link rel="stylesheet" href="styles/ai-sandbox.css">
@@ -711,16 +770,6 @@
           <div class="form-section-title">基本信息</div>
 
           <div class="form-group" style="margin-bottom: 24px; display: flex; align-items: flex-start; width: 100%;">
-            <label class="form-label" style="width: 140px; flex-shrink: 0; margin-bottom: 0; font-weight: 500; line-height: 32px;">沙箱类型 <span class="required">*</span></label>
-            <div class="form-control" style="flex: 1; max-width: 100%; min-height: 32px;">
-              <label style="display: inline-flex; align-items: center; gap: 6px; cursor: pointer; line-height: 32px;">
-                <input type="radio" name="sandboxType" value="code" checked>
-                <span>代码沙箱</span>
-              </label>
-            </div>
-          </div>
-
-          <div class="form-group" style="margin-bottom: 24px; display: flex; align-items: flex-start; width: 100%;">
             <label class="form-label" style="width: 140px; flex-shrink: 0; margin-bottom: 0; font-weight: 500; line-height: 32px;">模板 <span class="required">*</span></label>
             <div class="form-control" style="flex: 1; max-width: 100%;">
               <select id="sandbox-template-select" class="form-input" style="width: 100%; appearance: auto; background: #fff;">
@@ -730,33 +779,93 @@
           </div>
 
           <div class="form-group" style="margin-bottom: 24px; display: flex; align-items: flex-start; width: 100%;">
-            <label class="form-label" style="width: 140px; flex-shrink: 0; margin-bottom: 0; font-weight: 500; line-height: 32px;">CPU <span class="required">*</span></label>
-            <div class="form-control" style="flex: 1; max-width: 100%;">
-              <select id="sandbox-cpu-select" class="form-input" style="width: 100%; appearance: auto; background: #fff;">
-                <option value="2" selected>2 核</option>
-                <option value="4">4 核</option>
-                <option value="8">8 核</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="form-group" style="margin-bottom: 24px; display: flex; align-items: flex-start; width: 100%;">
-            <label class="form-label" style="width: 140px; flex-shrink: 0; margin-bottom: 0; font-weight: 500; line-height: 32px;">内存 <span class="required">*</span></label>
-            <div class="form-control" style="flex: 1; max-width: 100%;">
-              <select id="sandbox-memory-select" class="form-input" style="width: 100%; appearance: auto; background: #fff;">
-                <option value="1024" selected>1024 MB</option>
-                <option value="2048">2048 MB</option>
-                <option value="4096">4096 MB</option>
-                <option value="8192">8192 MB</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="form-group" style="margin-bottom: 24px; display: flex; align-items: flex-start; width: 100%;">
             <label class="form-label" style="width: 140px; flex-shrink: 0; margin-bottom: 0; font-weight: 500; line-height: 32px;">超时时间 <span class="required">*</span></label>
             <div class="form-control" style="flex: 1; max-width: 100%;">
               <input type="number" id="sandbox-timeout-input" class="form-input" value="600" min="1" style="width: 200px;">
               <span class="input-suffix">秒（沙箱最长运行时间）</span>
+            </div>
+          </div>
+
+          <div class="form-group" style="margin-bottom: 24px; display: flex; align-items: flex-start; width: 100%;">
+            <label class="form-label" style="width: 140px; flex-shrink: 0; margin-bottom: 0; font-weight: 500; line-height: 32px;">超时自动销毁</label>
+            <div class="form-control" style="flex: 1; max-width: 100%; display: flex; align-items: center; gap: 32px; height: 32px;">
+              <label style="display: inline-flex; align-items: center; gap: 6px; font-size: 14px; color: #333; cursor: pointer;">
+                <input type="radio" name="sandbox-auto-destroy" value="yes" checked> 是
+              </label>
+              <label style="display: inline-flex; align-items: center; gap: 6px; font-size: 14px; color: #333; cursor: pointer;">
+                <input type="radio" name="sandbox-auto-destroy" value="no"> 否
+              </label>
+            </div>
+          </div>
+
+          <div class="form-section-title" style="margin-top: 32px;">高级设置</div>
+          <div class="advanced-stack">
+            <div class="advanced-card">
+              <div class="advanced-card-header" onclick="toggleAdvancedCard(this)">
+                <span class="advanced-card-title">网络策略</span>
+                <svg class="advanced-card-chevron" viewBox="0 0 16 16" fill="none">
+                  <path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+              <div class="advanced-card-body" style="display: none;">
+                <div class="advanced-empty">暂无网络策略</div>
+              </div>
+            </div>
+
+            <div class="advanced-card">
+              <div class="advanced-card-header" onclick="toggleAdvancedCard(this)">
+                <span class="advanced-card-title">存储配置</span>
+                <svg class="advanced-card-chevron" viewBox="0 0 16 16" fill="none">
+                  <path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+              <div class="advanced-card-body" style="display: none;">
+                <div style="display: flex; flex-direction: column; gap: 16px;">
+                  <div class="form-group" style="margin-bottom: 0; display: flex; align-items: center;">
+                    <label class="form-label" style="width: 120px; flex-shrink: 0; margin-bottom: 0; font-weight: 500;">挂载卷</label>
+                    <select id="sandbox-mount-volume-select" class="form-input" style="width: 280px; appearance: auto; background: #fff;">
+                      <option value="">请选择挂载卷</option>
+                      <option value="data-volume-01">data-volume-01</option>
+                      <option value="model-cache">model-cache</option>
+                      <option value="workspace-shared">workspace-shared</option>
+                    </select>
+                  </div>
+                  <div class="form-group" style="margin-bottom: 0; display: flex; align-items: center;">
+                    <label class="form-label" style="width: 120px; flex-shrink: 0; margin-bottom: 0; font-weight: 500;">挂载目录</label>
+                    <input type="text" id="sandbox-mount-dir-input" class="form-input" placeholder="如 /data/temp" style="width: 280px;">
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="advanced-card">
+              <div class="advanced-card-header" onclick="toggleAdvancedCard(this)">
+                <span class="advanced-card-title">环境变量</span>
+                <svg class="advanced-card-chevron" viewBox="0 0 16 16" fill="none">
+                  <path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+              <div class="advanced-card-body" style="display: none;">
+                <div style="display: flex; flex-direction: column; gap: 12px;">
+                  <div>
+                    <button type="button" class="btn btn-default" onclick="addEnvVarRow()">添加环境变量</button>
+                  </div>
+                  <div id="env-var-empty" class="advanced-empty">暂无环境变量</div>
+                  <div id="env-var-list" style="display: flex; flex-direction: column; gap: 8px;"></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="advanced-card">
+              <div class="advanced-card-header" onclick="toggleAdvancedCard(this)">
+                <span class="advanced-card-title">凭证注入</span>
+                <svg class="advanced-card-chevron" viewBox="0 0 16 16" fill="none">
+                  <path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+              <div class="advanced-card-body" style="display: none;">
+                <div class="advanced-empty">暂无凭证注入</div>
+              </div>
             </div>
           </div>
         </div>
@@ -858,6 +967,35 @@
     }
     alert('沙箱实例创建成功！');
     window.location.href = 'index.html';
+  }
+
+  function toggleAdvancedCard(header) {
+    const card = header.closest('.advanced-card');
+    const body = card.querySelector('.advanced-card-body');
+    card.classList.toggle('open');
+    body.style.display = card.classList.contains('open') ? '' : 'none';
+  }
+
+  function addEnvVarRow() {
+    const list = document.getElementById('env-var-list');
+    const row = document.createElement('div');
+    row.style.cssText = 'display: flex; align-items: center; gap: 12px;';
+    row.innerHTML =
+      '<input type="text" class="form-input env-var-name" placeholder="变量名" style="width: 220px;">' +
+      '<input type="text" class="form-input env-var-value" placeholder="变量值" style="width: 280px;">' +
+      '<button type="button" class="btn btn-default env-var-remove" style="color: #ff4d4f; border-color: #ffccc7;">删除</button>';
+    row.querySelector('.env-var-remove').addEventListener('click', function() {
+      row.remove();
+      refreshEnvVarEmpty();
+    });
+    list.appendChild(row);
+    refreshEnvVarEmpty();
+    row.querySelector('.env-var-name').focus();
+  }
+
+  function refreshEnvVarEmpty() {
+    const count = document.querySelectorAll('#env-var-list > div').length;
+    document.getElementById('env-var-empty').style.display = count > 0 ? 'none' : '';
   }
 
   // 菜单折叠交互
