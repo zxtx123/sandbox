@@ -1258,7 +1258,9 @@
         <div class="form-control">
           <div class="credential-select" id="credential-select">
             <button type="button" class="credential-select-header" id="credential-select-header" onclick="toggleCredentialDropdown(event)">
-              <span class="credential-select-placeholder" id="credential-select-placeholder">请选择注入规则</span>
+              <span class="multi-select-tags" id="credential-select-tags">
+                <span class="credential-select-placeholder" id="credential-select-placeholder">请选择注入规则</span>
+              </span>
               <span class="credential-select-arrow" id="credential-select-arrow">▲</span>
             </button>
             <div class="credential-select-dropdown" id="credential-select-dropdown">
@@ -1442,16 +1444,19 @@
   #polefs-access-modal .form-label { width: 100px; white-space: nowrap; justify-content: flex-end; }
   #polefs-access-modal .form-group { align-items: center; }
   .credential-select { position: relative; max-width: 100%; }
-  .credential-select-header { display: flex; align-items: center; justify-content: space-between; width: 100%; height: 36px; padding: 0 12px; border: 1px solid #D8E0E8; border-radius: 4px; background: #fff; cursor: pointer; font-size: 14px; color: #333; }
+  .credential-select-header { display: flex; align-items: center; justify-content: space-between; width: 100%; min-height: 36px; padding: 4px 12px; border: 1px solid #D8E0E8; border-radius: 4px; background: #fff; cursor: pointer; font-size: 14px; color: #333; text-align: left; }
   .credential-select-header:hover { border-color: #0066FF; }
   .credential-select-placeholder { color: #999; }
   .credential-select-arrow { font-size: 10px; color: #666; transition: transform 0.2s; }
   .credential-select.open .credential-select-arrow { transform: rotate(180deg); }
   .credential-select-dropdown { display: none; position: absolute; top: 40px; left: 0; right: 0; z-index: 40; max-height: 240px; overflow-y: auto; background: #fff; border: 1px solid #e5e7eb; border-radius: 4px; box-shadow: 0 4px 12px rgba(0,0,0,0.12); padding: 4px 0; }
   .credential-select.open .credential-select-dropdown { display: block; }
-  .credential-option { display: block; width: 100%; padding: 8px 12px; border: none; background: none; text-align: left; font-size: 14px; color: #333; cursor: pointer; }
+  .credential-option { display: flex; align-items: center; width: 100%; padding: 8px 12px; border: none; background: none; text-align: left; font-size: 14px; color: #333; cursor: pointer; }
   .credential-option:hover { background: #f0f5ff; }
   .credential-option.selected { color: #0066FF; background: #e6f0ff; }
+  .credential-option .checkbox { width: 16px; height: 16px; border: 1px solid #ccc; border-radius: 3px; margin-right: 10px; display: inline-flex; align-items: center; justify-content: center; background: #fff; flex-shrink: 0; }
+  .credential-option.selected .checkbox { background: #0066FF; border-color: #0066FF; }
+  .credential-option.selected .checkbox::after { content: '✓'; color: #fff; font-size: 12px; }
   .credential-option-empty { padding: 8px 12px; font-size: 13px; color: #999; }
   #credential-injection-modal .modal-body { overflow: visible; max-height: none; }
   #credential-injection-modal .modal-dialog { overflow: visible; }
@@ -2173,7 +2178,7 @@
     { id: 'inject-8c3d-005', name: 'custom-http-token' }
   ];
   let currentCredentialSandbox = '';
-  let selectedCredentialRuleId = null;
+  let selectedCredentialRuleIds = [];
 
   function getCredentialRuleOptions() {
     try {
@@ -2198,16 +2203,41 @@
       return;
     }
     listEl.innerHTML = rules.map(r =>
-      '<button type="button" class="credential-option' + (selectedCredentialRuleId === r.id ? ' selected' : '') + '" onclick="pickCredentialRule(\'' + r.id + '\', \'' + String(r.name).replace(/'/g, "\\'") + '\')">' + r.name + '</button>'
+      '<button type="button" class="credential-option' + (selectedCredentialRuleIds.includes(r.id) ? ' selected' : '') + '" onclick="toggleCredentialRule(\'' + r.id + '\', event)"><span class="checkbox"></span>' + r.name + '</button>'
     ).join('');
   }
 
-  function pickCredentialRule(ruleId, ruleName) {
-    selectedCredentialRuleId = ruleId;
+  function renderCredentialTags() {
+    const tagsEl = document.getElementById('credential-select-tags');
     const placeholder = document.getElementById('credential-select-placeholder');
-    placeholder.textContent = ruleName;
-    placeholder.style.color = '#333';
-    document.getElementById('credential-select').classList.remove('open');
+    if (!tagsEl) return;
+    const rules = getCredentialRuleOptions();
+    const selected = rules.filter(r => selectedCredentialRuleIds.includes(r.id));
+    tagsEl.querySelectorAll('.multi-select-tag').forEach(node => node.remove());
+    if (!selected.length) {
+      if (placeholder) placeholder.style.display = '';
+      return;
+    }
+    if (placeholder) placeholder.style.display = 'none';
+    const tagsHtml = selected.map(r =>
+      '<span class="multi-select-tag">' + r.name + '<span class="tag-close" onclick="removeCredentialRule(\'' + r.id + '\', event)">×</span></span>'
+    ).join('');
+    placeholder ? placeholder.insertAdjacentHTML('afterend', tagsHtml) : (tagsEl.innerHTML = tagsHtml);
+  }
+
+  function toggleCredentialRule(ruleId, e) {
+    if (e) e.stopPropagation();
+    const index = selectedCredentialRuleIds.indexOf(ruleId);
+    if (index === -1) selectedCredentialRuleIds.push(ruleId);
+    else selectedCredentialRuleIds.splice(index, 1);
+    renderCredentialTags();
+    renderCredentialOptions();
+  }
+
+  function removeCredentialRule(ruleId, e) {
+    if (e) e.stopPropagation();
+    selectedCredentialRuleIds = selectedCredentialRuleIds.filter(id => id !== ruleId);
+    renderCredentialTags();
     renderCredentialOptions();
   }
 
@@ -2219,10 +2249,8 @@
   function openCredentialInjectionModal(sandboxName) {
     currentCredentialSandbox = sandboxName;
     document.getElementById('credential-injection-sandbox').textContent = sandboxName;
-    selectedCredentialRuleId = null;
-    const placeholder = document.getElementById('credential-select-placeholder');
-    placeholder.textContent = '请选择注入规则';
-    placeholder.style.color = '#999';
+    selectedCredentialRuleIds = [];
+    renderCredentialTags();
     renderCredentialOptions();
     document.getElementById('credential-injection-modal').classList.add('active');
   }
@@ -2231,17 +2259,17 @@
     document.getElementById('credential-injection-modal').classList.remove('active');
     document.getElementById('credential-select').classList.remove('open');
     currentCredentialSandbox = '';
-    selectedCredentialRuleId = null;
+    selectedCredentialRuleIds = [];
   }
 
   function saveCredentialInjection() {
-    if (!selectedCredentialRuleId) { alert('请选择注入规则'); return; }
-    const rule = getCredentialRuleOptions().find(r => r.id === selectedCredentialRuleId);
+    if (!selectedCredentialRuleIds.length) { alert('请选择注入规则'); return; }
+    const rules = getCredentialRuleOptions().filter(r => selectedCredentialRuleIds.includes(r.id));
     const store = JSON.parse(sessionStorage.getItem('sandboxCredentialInjection') || '{}');
-    store[currentCredentialSandbox] = rule ? rule.id : null;
+    store[currentCredentialSandbox] = rules.map(r => r.id);
     sessionStorage.setItem('sandboxCredentialInjection', JSON.stringify(store));
     closeCredentialInjectionModal();
-    alert('已为沙箱「' + currentCredentialSandbox + '」设置注入规则「' + (rule ? rule.name : '') + '」。');
+    alert('已为沙箱「' + currentCredentialSandbox + '」设置注入规则「' + rules.map(r => r.name).join('、') + '」。');
   }
 
   refreshCredentialBindings();
