@@ -877,6 +877,15 @@
       background: #F8F9FA;
     }
 
+    .sandbox-id-link {
+      color: #0066FF;
+      cursor: pointer;
+    }
+
+    .sandbox-id-link:hover {
+      text-decoration: underline;
+    }
+
     /* 空状态样式 */
     .empty-state {
       padding: 60px 0 !important;
@@ -1134,7 +1143,7 @@
             <tbody id="sandbox-instance-table-body">
               <tr>
                 <td><input type="checkbox" class="product-checkbox"></td>
-                <td>sandbox-dev-python</td>
+                <td><a class="sandbox-id-link" onclick="viewInstanceDetail('sandbox-dev-python')">sandbox-dev-python</a></td>
                 <td>Python 3.11</td>
                 <td><span class="status-badge status-normal"><span class="status-dot"></span>运行中</span></td>
                 <td>2核</td>
@@ -1145,7 +1154,7 @@
               </tr>
               <tr>
                 <td><input type="checkbox" class="product-checkbox"></td>
-                <td>sandbox-prod-java</td>
+                <td><a class="sandbox-id-link" onclick="viewInstanceDetail('sandbox-prod-java')">sandbox-prod-java</a></td>
                 <td>Java 17</td>
                 <td><span class="status-badge status-normal"><span class="status-dot"></span>运行中</span></td>
                 <td>4核</td>
@@ -1156,7 +1165,7 @@
               </tr>
               <tr>
                 <td><input type="checkbox" class="product-checkbox"></td>
-                <td>sandbox-test-node</td>
+                <td><a class="sandbox-id-link" onclick="viewInstanceDetail('sandbox-test-node')">sandbox-test-node</a></td>
                 <td>Node.js 20</td>
                 <td><span class="status-badge status-normal"><span class="status-dot"></span>运行中</span></td>
                 <td>2核</td>
@@ -1167,7 +1176,7 @@
               </tr>
               <tr data-status="paused">
                 <td><input type="checkbox" class="product-checkbox"></td>
-                <td>sandbox-paused-go</td>
+                <td><a class="sandbox-id-link" onclick="viewInstanceDetail('sandbox-paused-go')">sandbox-paused-go</a></td>
                 <td>Go 1.22</td>
                 <td><span class="status-badge status-paused"><span class="status-dot"></span>已暂停</span></td>
                 <td>2核</td>
@@ -1839,7 +1848,7 @@
     if (!body || instances.length === 0) return;
     const rows = instances.map(instance => `<tr>
       <td><input type="checkbox" class="product-checkbox"></td>
-      <td>${instance.id}</td>
+      <td><a class="sandbox-id-link" onclick="viewInstanceDetail('${instance.id}')">${instance.id}</a></td>
       <td>${instance.template}</td>
       <td><span class="status-badge status-normal"><span class="status-dot"></span>运行中</span></td>
       <td>${instance.cpu}</td>
@@ -1852,6 +1861,11 @@
   }
 
   renderSnapshotInstances();
+
+  // 查看沙箱实例详情
+  function viewInstanceDetail(id) {
+    window.location.href = 'sandbox-instance-detail.html?id=' + encodeURIComponent(id);
+  }
 
   // 删除沙箱实例
   let deletingInstanceRow = null;

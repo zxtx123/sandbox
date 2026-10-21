@@ -186,7 +186,7 @@
     }
     .product-table td { padding: 14px 10px; font-size: 14px; color: #333; border-bottom: 1px solid #F0F0F0; }
     .product-table tbody tr:hover { background: #F8F9FA; }
-    .product-table th:nth-child(6), .product-table td:nth-child(6) { min-width: 140px; }
+    .product-table th:nth-child(7), .product-table td:nth-child(7) { min-width: 140px; }
     .id-cell { font-family: monospace; display: flex; align-items: center; gap: 4px; }
     .copy-icon { cursor: pointer; opacity: 0.5; font-size: 12px; }
     .copy-icon:hover { opacity: 1; }
@@ -247,8 +247,14 @@
       border: 1px solid #E9ECEF; border-radius: 4px; padding: 12px; color: #333;
     }
     #create-volume-modal .modal-dialog { width: 660px; }
-    #create-volume-modal .form-label { width: 88px; }
+    #create-volume-modal .form-label { width: 88px; white-space: nowrap; }
     #create-volume-modal .modal-body { overflow-x: hidden; }
+    .delete-msg { margin: 0 0 12px; font-size: 14px; color: #333; line-height: 1.6; }
+    .delete-ref-box { background: #fff7e6; border: 1px solid #ffe58f; border-radius: 4px; padding: 10px 12px; font-size: 13px; color: #ad6800; }
+    .delete-ref-box .ref-title { font-weight: 600; margin-bottom: 6px; }
+    .delete-ref-box ul { margin: 0; padding-left: 20px; }
+    .btn-danger { background: #ff4d4f !important; color: #fff !important; border-color: #ff4d4f !important; }
+    .btn-danger:hover { background: #ff7875 !important; }
   </style>
   <link rel="stylesheet" href="styles/sandbox-shell.css">
   <link rel="stylesheet" href="styles/ai-sandbox.css">
@@ -302,6 +308,7 @@
             <thead>
               <tr>
                 <th>存储卷ID</th>
+                <th>存储卷显示名</th>
                 <th>存储卷名称</th>
                 <th>存储卷大小</th>
                 <th>创建人</th>
@@ -310,8 +317,9 @@
               </tr>
             </thead>
             <tbody id="volume-tbody">
-              <tr data-id="vol-8a2c4d6e" data-name="data-volume-01">
+              <tr data-id="vol-8a2c4d6e" data-name="data-volume-01" data-display-name="数据卷-01">
                 <td class="id-cell">vol-8a2c4d6e<span class="copy-icon" onclick="copyText('vol-8a2c4d6e')">📋</span></td>
+                <td class="volume-name">数据卷-01</td>
                 <td class="volume-name">data-volume-01</td>
                 <td><span class="size-badge">100 GiB</span></td>
                 <td>zhangsan</td>
@@ -321,8 +329,9 @@
                   <a href="#" class="action-link danger delete-volume-btn">删除</a>
                 </td>
               </tr>
-              <tr data-id="vol-1b3d5f7a" data-name="model-cache">
+              <tr data-id="vol-1b3d5f7a" data-name="model-cache" data-display-name="模型缓存">
                 <td class="id-cell">vol-1b3d5f7a<span class="copy-icon" onclick="copyText('vol-1b3d5f7a')">📋</span></td>
+                <td class="volume-name">模型缓存</td>
                 <td class="volume-name">model-cache</td>
                 <td><span class="size-badge">512 GiB</span></td>
                 <td>lisi</td>
@@ -332,8 +341,9 @@
                   <a href="#" class="action-link danger delete-volume-btn">删除</a>
                 </td>
               </tr>
-              <tr data-id="vol-9c4e6a8b" data-name="workspace-shared">
+              <tr data-id="vol-9c4e6a8b" data-name="workspace-shared" data-display-name="共享工作区">
                 <td class="id-cell">vol-9c4e6a8b<span class="copy-icon" onclick="copyText('vol-9c4e6a8b')">📋</span></td>
+                <td class="volume-name">共享工作区</td>
                 <td class="volume-name">workspace-shared</td>
                 <td><span class="size-badge">2048 GiB</span></td>
                 <td>zhangsan</td>
@@ -367,13 +377,13 @@
     <div class="modal-body">
       <div class="form-group" style="flex-direction:column;align-items:stretch;gap:4px;">
         <div style="display:flex;align-items:center;gap:12px;">
-          <label class="form-label" style="text-align:left;">存储卷名称<span class="required">*</span></label>
+          <label class="form-label" style="text-align:left;">存储卷显示名<span class="required">*</span></label>
           <div class="form-control">
-            <input type="text" class="form-input" id="volume-name-input" placeholder="请输入存储卷名称" oninput="onVolumeNameInput()">
+            <input type="text" class="form-input" id="volume-display-name-input" placeholder="请输入存储卷显示名" oninput="onVolumeDisplayNameInput()">
           </div>
         </div>
-        <div class="form-tip" style="white-space:nowrap;padding-left:100px;">仅支持小写字母、数字和连字符(-)，以字母开头，长度3-63个字符，不能以连字符结尾</div>
-        <div class="form-error" id="volume-name-error"></div>
+        <div class="form-tip" style="white-space:nowrap;padding-left:100px;">存储卷名称将根据显示名自动生成，无需手动填写</div>
+        <div class="form-error" id="volume-display-name-error"></div>
       </div>
       <div class="form-group" style="flex-direction:column;align-items:stretch;gap:4px;">
         <div style="display:flex;align-items:center;gap:12px;">
@@ -425,11 +435,12 @@
       <button class="modal-close" onclick="closeDeleteVolumeModal()">&times;</button>
     </div>
     <div class="modal-body" style="padding: 28px 20px;">
-      <p id="delete-volume-msg" style="margin: 0; font-size: 15px; color: #333; line-height: 1.6;"></p>
+      <p class="delete-msg" id="delete-volume-msg"></p>
+      <div class="delete-ref-box" id="delete-volume-ref" style="display:none;"></div>
     </div>
     <div class="modal-footer">
       <button class="btn btn-default" onclick="closeDeleteVolumeModal()">取消</button>
-      <button class="btn btn-primary" style="background:#ff4d4f;border-color:#ff4d4f;" onclick="confirmDeleteVolume()">删除</button>
+      <button class="btn btn-danger" id="btn-confirm-delete-volume" onclick="confirmDeleteVolume()">确认删除</button>
     </div>
   </div>
 </div>
@@ -459,11 +470,11 @@
 
   // 创建存储卷
   function openCreateVolumeModal() {
-    document.getElementById('volume-name-input').value = '';
+    document.getElementById('volume-display-name-input').value = '';
     document.getElementById('volume-size-input').value = '';
-    hideError('volume-name-error');
+    hideError('volume-display-name-error');
     hideError('volume-size-error');
-    document.getElementById('volume-name-input').classList.remove('invalid');
+    document.getElementById('volume-display-name-input').classList.remove('invalid');
     document.getElementById('volume-size-input').classList.remove('invalid');
     document.getElementById('create-volume-modal').classList.add('active');
   }
@@ -487,46 +498,54 @@
     if (!name) return '请输入存储卷名称';
     if (name.length < 3) return '存储卷名称长度不能少于3个字符';
     if (name.length > 63) return '存储卷名称长度不能超过63个字符';
+    if (/\s/.test(name)) return '存储卷名称不允许包含空格';
     if (!/^[a-z]/.test(name)) return '存储卷名称必须以小写字母开头';
     if (!/^[a-z0-9-]+$/.test(name)) return '存储卷名称只能包含小写字母、数字和连字符(-)';
     if (name.endsWith('-')) return '存储卷名称不能以连字符(-)结尾';
     return '';
   }
 
-  function onVolumeNameInput() {
-    const el = document.getElementById('volume-name-input');
-    const err = validateVolumeName(el.value.trim());
+  function validateVolumeDisplayName(name) {
+    if (!name) return '请输入存储卷显示名';
+    if (name.length > 63) return '存储卷显示名长度不能超过63个字符';
+    if (/\s/.test(name)) return '存储卷显示名不允许包含空格';
+    return '';
+  }
+
+  function onVolumeDisplayNameInput() {
+    const el = document.getElementById('volume-display-name-input');
+    const err = validateVolumeDisplayName(el.value.trim());
     if (!err || el.value.trim() === '') {
       el.classList.remove('invalid');
-      hideError('volume-name-error');
+      hideError('volume-display-name-error');
     } else {
       el.classList.add('invalid');
-      showError('volume-name-error', err);
+      showError('volume-display-name-error', err);
     }
   }
 
   function onVolumeSizeInput() {
     const el = document.getElementById('volume-size-input');
     const val = el.value;
-    if (val === '' || (Number(val) >= 1 && Number(val) <= 2048)) {
+    if (val === '' || (Number(val) >= 1 && Number(val) <= 1024)) {
       el.classList.remove('invalid');
       hideError('volume-size-error');
     } else {
       el.classList.add('invalid');
-      showError('volume-size-error', '存储卷大小必须在1-2048 GiB之间（最大2 TiB）');
+      showError('volume-size-error', '存储卷大小必须在1-1024 GiB之间（最大1 TB）');
     }
   }
 
   function createVolume() {
-    const nameEl = document.getElementById('volume-name-input');
+    const displayNameEl = document.getElementById('volume-display-name-input');
     const sizeEl = document.getElementById('volume-size-input');
-    const name = nameEl.value.trim();
+    const displayName = displayNameEl.value.trim();
     const sizeVal = sizeEl.value;
 
-    const nameErr = validateVolumeName(name);
-    if (nameErr) {
-      nameEl.classList.add('invalid');
-      showError('volume-name-error', nameErr);
+    const displayNameErr = validateVolumeDisplayName(displayName);
+    if (displayNameErr) {
+      displayNameEl.classList.add('invalid');
+      showError('volume-display-name-error', displayNameErr);
       return;
     }
 
@@ -535,9 +554,9 @@
       showError('volume-size-error', '请输入有效的存储卷大小（最小1 GiB）');
       return;
     }
-    if (Number(sizeVal) > 2048) {
+    if (Number(sizeVal) > 1024) {
       sizeEl.classList.add('invalid');
-      showError('volume-size-error', '存储卷大小不能超过2048 GiB（2 TiB）');
+      showError('volume-size-error', '存储卷大小不能超过1024 GiB（1 TB）');
       return;
     }
 
@@ -552,12 +571,15 @@
     const size = Number(sizeVal);
     const sizeText = size + ' GiB';
     const user = 'zhangsan';
+    const name = generateVolumeName(displayName);
 
     const tr = document.createElement('tr');
     tr.dataset.id = id;
     tr.dataset.name = name;
+    tr.dataset.displayName = displayName;
     tr.innerHTML =
       '<td class="id-cell">' + id + '<span class="copy-icon" onclick="copyText(\'' + id + '\')">📋</span></td>' +
+      '<td class="volume-name">' + displayName + '</td>' +
       '<td class="volume-name">' + name + '</td>' +
       '<td><span class="size-badge">' + sizeText + '</span></td>' +
       '<td>' + user + '</td>' +
@@ -568,7 +590,20 @@
     bindRowActions(tr);
     updatePagination();
     closeCreateVolumeModal();
-    alert('存储卷「' + name + '」创建成功！');
+    alert('存储卷「' + displayName + '」创建成功，存储卷名称为 ' + name + '！');
+  }
+
+  // 根据显示名自动生成存储卷名称（符合现有输入规则）
+  function generateVolumeName(displayName) {
+    let base = displayName.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+    if (!/^[a-z]/.test(base)) base = '';
+    if (base.length > 50) base = base.slice(0, 50).replace(/-+$/g, '');
+    let name = '';
+    do {
+      const suffix = Date.now().toString(36).slice(-4) + Math.random().toString(36).slice(2, 6);
+      name = base ? base + '-' + suffix : 'vol-' + suffix;
+    } while (validateVolumeName(name));
+    return name;
   }
 
   // 查看Token
@@ -592,12 +627,30 @@
     });
   }
 
-  // 删除存储卷
+  // 删除存储卷（如被沙箱实例绑定，需先解绑再删除）
   let deletingVolumeRow = null;
+  let volumeSandboxBindings = {
+    'vol-8a2c4d6e': ['sandbox-demo-001', 'sandbox-demo-002'],
+    'vol-1b3d5f7a': ['sandbox-demo-003']
+  };
   function openDeleteVolumeModal(row) {
     deletingVolumeRow = row;
     const name = row.dataset.name || '';
     document.getElementById('delete-volume-msg').textContent = '确认要删除存储卷「' + name + '」吗？删除后不可恢复。';
+    const refBox = document.getElementById('delete-volume-ref');
+    const btn = document.getElementById('btn-confirm-delete-volume');
+    const bindings = volumeSandboxBindings[row.dataset.id || ''] || [];
+    if (bindings.length > 0) {
+      refBox.style.display = 'block';
+      refBox.innerHTML = '<div class="ref-title">该存储卷被 ' + bindings.length + ' 个沙箱实例绑定</div><ul>' +
+        bindings.map(b => '<li>' + b + '</li>').join('') +
+        '</ul><div style="margin-top:6px;">请先解绑后再删除。</div>';
+      btn.style.display = 'none';
+    } else {
+      refBox.style.display = 'none';
+      refBox.innerHTML = '';
+      btn.style.display = '';
+    }
     document.getElementById('delete-volume-modal').classList.add('active');
   }
 
@@ -641,7 +694,8 @@
     document.querySelectorAll('#volume-tbody tr').forEach(row => {
       const matchId = (row.dataset.id || '').toLowerCase().includes(keyword);
       const matchName = (row.dataset.name || '').toLowerCase().includes(keyword);
-      const show = !keyword || matchId || matchName;
+      const matchDisplayName = (row.dataset.displayName || '').toLowerCase().includes(keyword);
+      const show = !keyword || matchId || matchName || matchDisplayName;
       row.style.display = show ? '' : 'none';
       if (show) visible++;
     });

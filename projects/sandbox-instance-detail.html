@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>沙箱实例详情 - 360智汇云</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    a {
+      text-decoration: none;
+    }
+    body {
+      font-family: "Microsoft YaHei", "PingFang SC", -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #F0F5F7;
+      font-size: 14px;
+      color: #202020;
+      line-height: 1.5;
+      overflow: hidden;
+    }
+    /* ========== 主体容器（三栏布局） ========== */
+    .container {
+      display: flex;
+      height: calc(100vh - 56px);
+    }
+    /* ========== 第三栏：右侧主内容区 ========== */
+    .main-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      min-width: 0;
+    }
+    .breadcrumb {
+      padding: 0px 20px;
+      border-bottom: 1px solid #E6E6e6;
+      font-size: 14px;
+      display: flex;
+      height: 50px;
+      line-height: 50px;
+      justify-content: space-between;
+      align-items: center;
+      background: #ffffff;
+    }
+    .breadcrumb-left {
+      color: #202020;
+    }
+    .content-body {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      background: #ffffff;
+      margin: 20px;
+      box-shadow: 0 2px 3px rgba(0,0,0,0.09);
+      overflow: hidden;
+    }
+    .detail-page {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      padding: 24px;
+      background: #fff;
+      overflow-y: auto;
+      min-height: 0;
+    }
+    /* 详情头部 */
+    .detail-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-bottom: 20px;
+      border-bottom: 1px solid #F0F0F0;
+      margin-bottom: 24px;
+    }
+    .detail-title {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .detail-title h2 {
+      font-size: 20px;
+      font-weight: 600;
+      color: #202020;
+      margin: 0;
+    }
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 12px;
+    }
+    .status-normal {
+      background: #E6F7EE;
+      color: #52C41A;
+    }
+    .status-paused {
+      background: #FFF7E6;
+      color: #FA8C16;
+    }
+    .status-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+    }
+    .status-normal .status-dot {
+      background: #52C41A;
+    }
+    .status-paused .status-dot {
+      background: #FA8C16;
+    }
+    /* 区块 */
+    .detail-section {
+      margin-bottom: 24px;
+    }
+    .detail-section-title {
+      font-size: 15px;
+      font-weight: 600;
+      color: #202020;
+      margin-bottom: 16px;
+      padding-left: 10px;
+      border-left: 3px solid #0066FF;
+      line-height: 1.2;
+    }
+    .detail-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px 32px;
+      background: #F8F9FA;
+      border: 1px solid #E6E6E6;
+      border-radius: 4px;
+      padding: 20px 24px;
+    }
+    .detail-item {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .detail-item-label {
+      font-size: 12px;
+      color: #666;
+    }
+    .detail-item-value {
+      font-size: 14px;
+      color: #202020;
+      word-break: break-all;
+    }
+    .detail-item-value .id-cell {
+      font-family: monospace;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .copy-icon {
+      cursor: pointer;
+      opacity: 0.5;
+      font-size: 12px;
+    }
+    .copy-icon:hover {
+      opacity: 1;
+    }
+    .btn {
+      height: 32px;
+      padding: 0 12px;
+      border-radius: 4px;
+      font-size: 14px;
+      cursor: pointer;
+      border: 1px solid transparent;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+    .btn-default {
+      background: #fff;
+      color: #333;
+      border-color: #D9D9D9;
+    }
+    .btn-default:hover {
+      border-color: #0066FF;
+      color: #0066FF;
+    }
+  </style>
+  <link rel="stylesheet" href="styles/sandbox-shell.css">
+  <link rel="stylesheet" href="styles/ai-sandbox.css">
+</head>
+<body>
+
+<!-- 主体容器（三栏布局） -->
+<div class="container">
+  <div id="sandbox-shell" data-active="沙箱实例" data-breadcrumb="沙箱实例 / 实例详情"></div>
+  <div class="main-content">
+    <div class="breadcrumb">
+      <span class="breadcrumb-left" id="menu-name-display">
+        <a href="index.html" style="color: #666; text-decoration: none;">沙箱实例</a>
+        <span style="margin: 0 8px; color: #999;">&gt;</span>
+        <span id="detail-crumb-title" style="color: #333;">实例详情</span>
+      </span>
+    </div>
+    <div class="content-body">
+      <div class="detail-page">
+        <div class="detail-header">
+          <div class="detail-title">
+            <h2 id="detail-name">-</h2>
+            <span class="status-badge status-normal" id="detail-status-badge"><span class="status-dot"></span><span id="detail-status">运行中</span></span>
+          </div>
+          <a href="index.html" class="btn btn-default">返回列表</a>
+        </div>
+
+        <!-- 基本信息 -->
+        <div class="detail-section">
+          <div class="detail-section-title">基本信息</div>
+          <div class="detail-grid">
+            <div class="detail-item">
+              <span class="detail-item-label">沙箱ID</span>
+              <span class="detail-item-value"><span class="id-cell" id="detail-id">-</span><span class="copy-icon" onclick="copyText(document.getElementById('detail-id').textContent)">📋</span></span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-item-label">状态</span>
+              <span class="detail-item-value" id="detail-status2">运行中</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-item-label">模板</span>
+              <span class="detail-item-value" id="detail-template">-</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-item-label">启动时间</span>
+              <span class="detail-item-value" id="detail-created">-</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-item-label">超时自动销毁</span>
+              <span class="detail-item-value" id="detail-auto-destroy">-</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-item-label">超时时间</span>
+              <span class="detail-item-value" id="detail-timeout">-</span>
+            </div>
+            <div class="detail-item" style="grid-column: 1 / -1;">
+              <span class="detail-item-label">MetaData</span>
+              <span class="detail-item-value" id="detail-metadata">-</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 资源配置 -->
+        <div class="detail-section">
+          <div class="detail-section-title">资源配置</div>
+          <div class="detail-grid">
+            <div class="detail-item">
+              <span class="detail-item-label">CPU核数</span>
+              <span class="detail-item-value" id="detail-cpu">-</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-item-label">内存大小</span>
+              <span class="detail-item-value" id="detail-mem">-</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 网络与安全 -->
+        <div class="detail-section">
+          <div class="detail-section-title">网络与安全</div>
+          <div class="detail-grid">
+            <div class="detail-item">
+              <span class="detail-item-label">网络策略</span>
+              <span class="detail-item-value" id="detail-policy">-</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-item-label">凭证注入</span>
+              <span class="detail-item-value" id="detail-credentials">-</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 存储配置 -->
+        <div class="detail-section">
+          <div class="detail-section-title">存储配置</div>
+          <div class="detail-grid">
+            <div class="detail-item" style="grid-column: 1 / -1;">
+              <span class="detail-item-label">挂载卷</span>
+              <span class="detail-item-value" id="detail-volume">-</span>
+            </div>
+            <div class="detail-item" style="grid-column: 1 / -1;">
+              <span class="detail-item-label">挂载目录</span>
+              <span class="detail-item-value" id="detail-mount">-</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 环境变量 -->
+        <div class="detail-section">
+          <div class="detail-section-title">环境变量</div>
+          <div class="detail-grid">
+            <div class="detail-item" style="grid-column: 1 / -1;">
+              <span class="detail-item-label">变量列表</span>
+              <span class="detail-item-value" id="detail-envvars">-</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  function copyText(text) {
+    navigator.clipboard.writeText(text).then(function() {
+      alert('已复制: ' + text);
+    });
+  }
+
+  // 沙箱实例详情数据源（与列表页数据保持一致）
+  var INSTANCE_DETAILS = {
+    'sandbox-dev-python': {
+      id: 'sandbox-dev-python',
+      status: '运行中',
+      template: 'Python 3.11',
+      cpu: '2核',
+      mem: '4GB',
+      metadata: 'dev-env',
+      created: '2026-05-20 10:30:00',
+      policy: 'default-policy',
+      credentials: 'db-password',
+      volume: '数据卷-01',
+      mount: '/data/temp',
+      envvars: 'KEY=VALUE',
+      timeout: '3600秒',
+      autoDestroy: '是'
+    },
+    'sandbox-prod-java': {
+      id: 'sandbox-prod-java',
+      status: '运行中',
+      template: 'Java 17',
+      cpu: '4核',
+      mem: '8GB',
+      metadata: 'prod-env',
+      created: '2026-05-21 14:15:00',
+      policy: 'prod-policy',
+      credentials: 'api-key',
+      volume: '模型缓存',
+      mount: '/data/cache',
+      envvars: 'API_HOST=https://api.example.com',
+      timeout: '7200秒',
+      autoDestroy: '是'
+    },
+    'sandbox-test-node': {
+      id: 'sandbox-test-node',
+      status: '运行中',
+      template: 'Node.js 20',
+      cpu: '2核',
+      mem: '4GB',
+      metadata: 'test-env',
+      created: '2026-05-22 09:00:00',
+      policy: 'test-policy',
+      credentials: '-',
+      volume: '-',
+      mount: '-',
+      envvars: '-',
+      timeout: '1800秒',
+      autoDestroy: '否'
+    },
+    'sandbox-paused-go': {
+      id: 'sandbox-paused-go',
+      status: '已暂停',
+      template: 'Go 1.22',
+      cpu: '2核',
+      mem: '4GB',
+      metadata: 'pause-env',
+      created: '2026-05-23 11:00:00',
+      policy: '-',
+      credentials: '-',
+      volume: '-',
+      mount: '-',
+      envvars: '-',
+      timeout: '3600秒',
+      autoDestroy: '是'
+    }
+  };
+
+  function renderDetail() {
+    var params = new URLSearchParams(window.location.search);
+    var id = params.get('id') || '';
+    var inst = INSTANCE_DETAILS[id] || INSTANCE_DETAILS['sandbox-dev-python'];
+    document.getElementById('detail-name').textContent = inst.id;
+    var badge = document.getElementById('detail-status-badge');
+    var statusMap = {
+      '运行中': 'status-normal',
+      '已暂停': 'status-paused'
+    };
+    badge.classList.remove('status-normal');
+    badge.classList.remove('status-paused');
+    badge.classList.add(statusMap[inst.status] || 'status-normal');
+    document.getElementById('detail-status').textContent = inst.status;
+    document.getElementById('detail-status2').textContent = inst.status;
+    document.getElementById('detail-template').textContent = inst.template;
+    document.getElementById('detail-created').textContent = inst.created;
+    document.getElementById('detail-auto-destroy').textContent = inst.autoDestroy;
+    document.getElementById('detail-timeout').textContent = inst.timeout;
+    document.getElementById('detail-metadata').textContent = inst.metadata;
+    document.getElementById('detail-cpu').textContent = inst.cpu;
+    document.getElementById('detail-mem').textContent = inst.mem;
+    document.getElementById('detail-policy').textContent = inst.policy;
+    document.getElementById('detail-credentials').textContent = inst.credentials;
+    document.getElementById('detail-volume').textContent = inst.volume;
+    document.getElementById('detail-mount').textContent = inst.mount;
+    document.getElementById('detail-envvars').textContent = inst.envvars;
+    document.getElementById('detail-crumb-title').textContent = inst.id + ' 详情';
+  }
+
+  renderDetail();
+</script>
+
+<script src="styles/sandbox-shell.js"></script>
+<script src="styles/ai-sandbox.js"></script>
+</body>
+</html>
