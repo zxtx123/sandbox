@@ -1230,6 +1230,17 @@
               <div class="policy-rule-tip">开启后，沙箱可通过终端节点服务访问指定服务域名。</div>
               <div class="policy-rule-table-wrap" id="policy-form-private-wrap" style="display:none;"><table class="policy-rule-table"><thead><tr><th>终端节点服务</th><th>服务域名</th><th>操作</th></tr></thead><tbody id="policy-form-private-list"></tbody></table><button type="button" class="add-rule-btn" onclick="addPolicyFormPrivateRule()">+ 添加策略</button></div>
             </div>
+            <div class="policy-rule-section">
+              <div class="policy-rule-head">
+                <div class="policy-rule-title">访问经典网络 <span class="help-icon">?</span></div>
+                <label class="policy-switch"><input type="checkbox" id="policy-form-classic-enabled" onchange="togglePolicyFormSection('classic')"><span class="policy-switch-slider"></span><span class="policy-switch-text" id="policy-form-classic-text">关</span></label>
+              </div>
+              <div class="policy-rule-tip">开启后，沙箱可访问指定经典网络 IP 地址。</div>
+              <div class="policy-rule-table-wrap" id="policy-form-classic-wrap" style="display:none;">
+                <table class="policy-rule-table"><thead><tr><th>IP 地址</th><th>操作</th></tr></thead><tbody id="policy-form-classic-list"></tbody></table>
+                <button type="button" class="add-rule-btn" onclick="addPolicyFormClassicIpRule()">+ 添加 IP 地址</button>
+              </div>
+            </div>
           </div>
           <div class="policy-access-group policy-access-inbound">
             <div class="policy-access-group-title">允许被访问（入）</div>
@@ -1243,7 +1254,7 @@
             </div>
             <div class="policy-rule-section">
               <div class="policy-rule-head">
-                <div class="policy-rule-title">被IDC访问</div>
+                <div class="policy-rule-title">被经典网络访问</div>
                 <div class="classic-network-control">
                   <div class="classic-network-options">
                     <label class="classic-network-option"><input type="radio" name="policy-form-classic-access" value="all" checked onchange="toggleClassicNetworkIp()"><span>全通</span></label>
@@ -2972,11 +2983,13 @@
     const outboundVpcPolicies = policy.outboundVpcPolicies || [];
     const inboundVpcPolicies = policy.inboundVpcPolicies || [];
     const privatePolicies = policy.privatePolicies || [];
+    const classicNetworkIps = policy.classicNetworkIps || [];
     const chips = [];
     if (policy.allowPublicOutbound) chips.push('<span class="access-chip">允许访问公网</span>');
     if (outboundVpcPolicies.length) chips.push('<span class="access-chip">访问 VPC ' + outboundVpcPolicies.length + ' 组</span>');
     if (inboundVpcPolicies.length) chips.push('<span class="access-chip">被 VPC 访问 ' + inboundVpcPolicies.length + ' 组</span>');
     if (privatePolicies.length) chips.push('<span class="access-chip">终端节点服务 ' + privatePolicies.length + ' 组</span>');
+    if (classicNetworkIps.length) chips.push('<span class="access-chip">访问经典网络 ' + classicNetworkIps.length + ' 个 IP</span>');
     if (policy.allowPublicOutbound) {
       const ipRules = (policy.ipBlacklist || []).length;
       const cidrRules = (policy.cidrBlacklist || []).length;
@@ -3025,6 +3038,9 @@
         outboundVpcPolicies: parseRowJson(row.dataset.vpcoutpolicies),
         inboundVpcPolicies: parseRowJson(row.dataset.vpcinpolicies),
         privatePolicies: parseRowJson(row.dataset.privatepolicies),
+        classicNetworkAccess: row.dataset.classicnetworkaccess || 'all',
+        classicNetworkIp: row.dataset.classicnetworkip || '',
+        classicNetworkIps: parseRowJson(row.dataset.classicnetworkips),
         service: row.dataset.service || '',
         domain: row.dataset.domain || '',
         vpcPolicies: parseRowJson(row.dataset.vpcpolicies),
@@ -3052,6 +3068,9 @@
       outboundVpcPolicies: parseRowJson(row.dataset.vpcoutpolicies),
       inboundVpcPolicies: parseRowJson(row.dataset.vpcinpolicies),
       privatePolicies: parseRowJson(row.dataset.privatepolicies),
+      classicNetworkAccess: row.dataset.classicnetworkaccess || 'all',
+      classicNetworkIp: row.dataset.classicnetworkip || '',
+      classicNetworkIps: parseRowJson(row.dataset.classicnetworkips),
       service: row.dataset.service || '',
       domain: row.dataset.domain || '',
       vpcPolicies: parseRowJson(row.dataset.vpcpolicies),
@@ -3111,6 +3130,9 @@
       }
       if (policy.privatePolicies && policy.privatePolicies.length) {
         sections.push('<div class="policy-detail-card"><div class="policy-detail-title">终端节点服务</div>' + renderPrivateDetailList(policy.privatePolicies) + '</div>');
+      }
+      if (policy.classicNetworkIps && policy.classicNetworkIps.length) {
+        sections.push('<div class="policy-detail-card"><div class="policy-detail-title">访问经典网络</div><div class="policy-detail-grid"><div class="policy-detail-label">允许访问的 IP 地址</div><div class="policy-detail-value">' + escapeHtml(policy.classicNetworkIps.join('、')) + '</div></div></div>');
       }
       return sections.join('') || '<div class="access-chip muted">暂无策略内容</div>';
     }
@@ -3296,6 +3318,9 @@
           outboundVpcPolicies: p.outboundVpcPolicies || [],
           inboundVpcPolicies: p.inboundVpcPolicies || [],
           privatePolicies: p.privatePolicies || [],
+          classicNetworkAccess: p.classicNetworkAccess || 'all',
+          classicNetworkIp: p.classicNetworkIp || '',
+          classicNetworkIps: p.classicNetworkIps || [],
           vpcPolicies: p.vpcPolicies || [],
           vpcnetwork: p.vpcnetwork || '',
           subnet: p.subnet || '',
@@ -3359,19 +3384,20 @@
     document.getElementById('policy-form-vpc-out-enabled').checked = false;
     document.getElementById('policy-form-vpc-in-enabled').checked = false;
     document.getElementById('policy-form-private-enabled').checked = false;
+    document.getElementById('policy-form-classic-enabled').checked = false;
     document.getElementById('policy-form-vpc-out-list').innerHTML = '';
     document.getElementById('policy-form-vpc-in-list').innerHTML = '';
     document.getElementById('policy-form-private-list').innerHTML = '';
-    const classicAll = document.querySelector('input[name="policy-form-classic-access"][value="all"]');
-    if (classicAll) classicAll.checked = true;
-    const classicIp = document.getElementById('policy-form-classic-ip');
-    if (classicIp) classicIp.value = '';
-    if (typeof toggleClassicNetworkIp === 'function') toggleClassicNetworkIp();
+    document.getElementById('policy-form-classic-list').innerHTML = '';
+    document.querySelector('input[name="policy-form-classic-access"][value="all"]').checked = true;
+    document.getElementById('policy-form-classic-ip').value = '';
+    toggleClassicNetworkIp();
     clearAllPublicRules();
     togglePublicSubRules();
     togglePolicyFormSection('vpc-out');
     togglePolicyFormSection('vpc-in');
     togglePolicyFormSection('private');
+    togglePolicyFormSection('classic');
   }
 
   function setPolicyFormSwitchText(id, checked) {
@@ -3398,15 +3424,18 @@
       setPolicyFormSwitchText('policy-form-private-text', enabled);
       if (enabled && !document.querySelector('#policy-form-private-list tr')) addPolicyFormPrivateRule();
     }
+    if (type === 'classic') {
+      const enabled = document.getElementById('policy-form-classic-enabled').checked;
+      document.getElementById('policy-form-classic-wrap').style.display = enabled ? 'block' : 'none';
+      setPolicyFormSwitchText('policy-form-classic-text', enabled);
+      if (enabled && !document.querySelector('#policy-form-classic-list tr')) addPolicyFormClassicIpRule();
+    }
   }
 
   function toggleClassicNetworkIp() {
-    const selected = document.querySelector('input[name="policy-form-classic-access"]:checked');
-    const wrap = document.getElementById('policy-form-classic-ip-wrap');
-    const input = document.getElementById('policy-form-classic-ip');
-    const showIp = selected && selected.value === 'ip';
-    if (wrap) wrap.style.display = showIp ? 'block' : 'none';
-    if (!showIp && input) input.value = '';
+    const showIp = document.querySelector('input[name="policy-form-classic-access"]:checked').value === 'ip';
+    document.getElementById('policy-form-classic-ip-wrap').style.display = showIp ? 'block' : 'none';
+    if (!showIp) document.getElementById('policy-form-classic-ip').value = '';
   }
 
   function createPolicyFormVpcRow(includeSecurityGroup, values) {
@@ -3465,6 +3494,19 @@
   function addPolicyFormPrivateRule(values) {
     document.getElementById('policy-form-private-list').appendChild(createPolicyFormPrivateRow(values));
     updatePolicyFormRemoveState('policy-form-private-list');
+  }
+
+  function createPolicyFormClassicIpRow(value) {
+    const tr = document.createElement('tr');
+    tr.innerHTML = '<td><input type="text" class="form-input policy-form-classic-ip" placeholder="请输入 IP 地址，如 192.168.1.10"></td>' +
+      '<td><a href="#" class="action-link" onclick="removePolicyFormRule(event, this)">删除</a></td>';
+    tr.querySelector('.policy-form-classic-ip').value = value || '';
+    return tr;
+  }
+
+  function addPolicyFormClassicIpRule(value) {
+    document.getElementById('policy-form-classic-list').appendChild(createPolicyFormClassicIpRow(value));
+    updatePolicyFormRemoveState('policy-form-classic-list');
   }
 
   function removePolicyFormRule(event, trigger) {
@@ -3529,6 +3571,20 @@
     return result;
   }
 
+  function collectPolicyFormClassicIps() {
+    const rows = document.querySelectorAll('#policy-form-classic-list tr');
+    const result = [];
+    for (let i = 0; i < rows.length; i++) {
+      const input = rows[i].querySelector('.policy-form-classic-ip');
+      const ip = input ? input.value.trim() : '';
+      if (!ip) { alert('请输入第 ' + (i + 1) + ' 个经典网络 IP 地址'); return null; }
+      if (!isValidIp(ip)) { alert('第 ' + (i + 1) + ' 个经典网络 IP 地址格式不合法'); return null; }
+      if (result.includes(ip)) { alert('经典网络 IP 地址不可重复'); return null; }
+      result.push(ip);
+    }
+    return result;
+  }
+
   function fillPolicyFormFromRow(row) {
     const policy = getRowPolicy(row);
     document.getElementById('policy-form-region').checked = (policy.region || 'beijing') === 'beijing';
@@ -3548,11 +3604,17 @@
     const privatePolicies = policy.privatePolicies && policy.privatePolicies.length
       ? policy.privatePolicies
       : (policy.service || policy.domain ? [{ targetService: policy.service || '', serviceDomain: policy.domain || '' }] : []);
+    const classicNetworkIps = policy.classicNetworkIps || [];
 
     document.getElementById('policy-form-public-outbound').checked = policy.allowPublicOutbound;
     document.getElementById('policy-form-vpc-out-enabled').checked = outboundPolicies.length > 0;
     document.getElementById('policy-form-vpc-in-enabled').checked = inboundPolicies.length > 0;
     document.getElementById('policy-form-private-enabled').checked = privatePolicies.length > 0;
+    document.getElementById('policy-form-classic-enabled').checked = classicNetworkIps.length > 0;
+    document.querySelector('input[name="policy-form-classic-access"][value="' + (policy.classicNetworkAccess === 'ip' ? 'ip' : 'all') + '"]').checked = true;
+    document.getElementById('policy-form-classic-ip').value = policy.classicNetworkIp || '';
+    toggleClassicNetworkIp();
+    togglePolicyFormSection('classic');
 
     togglePolicyFormSection('vpc-out');
     togglePolicyFormSection('vpc-in');
@@ -3571,24 +3633,29 @@
     document.getElementById('policy-form-vpc-out-list').innerHTML = '';
     document.getElementById('policy-form-vpc-in-list').innerHTML = '';
     document.getElementById('policy-form-private-list').innerHTML = '';
+    document.getElementById('policy-form-classic-list').innerHTML = '';
 
     if (outboundPolicies.length) outboundPolicies.forEach(addPolicyFormVpcOutRule);
     if (inboundPolicies.length) inboundPolicies.forEach(addPolicyFormVpcInRule);
     if (privatePolicies.length) privatePolicies.forEach(addPolicyFormPrivateRule);
+    if (classicNetworkIps.length) classicNetworkIps.forEach(addPolicyFormClassicIpRule);
 
     updatePolicyFormRemoveState('policy-form-vpc-out-list');
     updatePolicyFormRemoveState('policy-form-vpc-in-list');
     updatePolicyFormRemoveState('policy-form-private-list');
+    updatePolicyFormRemoveState('policy-form-classic-list');
   }
 
   function inferPolicyAccessType(payload) {
     const enabledCategories = [
       payload.allowPublicOutbound || payload.allowPublicInbound,
       payload.outboundVpcPolicies.length || payload.inboundVpcPolicies.length,
-      payload.privatePolicies.length
+      payload.privatePolicies.length,
+      payload.classicNetworkIps.length
     ].filter(Boolean).length;
     if (!enabledCategories) return 'sandbox-intranet';
     if (enabledCategories > 1) return 'composite-network';
+    if (payload.classicNetworkIps.length) return 'composite-network';
     if (payload.privatePolicies.length) return 'private-connection';
     if (payload.outboundVpcPolicies.length || payload.inboundVpcPolicies.length) return 'vpc-network';
     return 'public-network';
@@ -3612,8 +3679,11 @@
     if (inboundEnabled && !inboundVpcPolicies) return null;
     const privatePolicies = privateEnabled ? collectPolicyFormPrivateRules() : [];
     if (privateEnabled && !privatePolicies) return null;
-    const classicAccess = document.querySelector('input[name="policy-form-classic-access"]:checked')?.value || 'all';
-    const classicIp = document.getElementById('policy-form-classic-ip')?.value.trim() || '';
+    const classicEnabled = document.getElementById('policy-form-classic-enabled').checked;
+    const classicNetworkIps = classicEnabled ? collectPolicyFormClassicIps() : [];
+    if (classicEnabled && !classicNetworkIps) return null;
+    const classicAccess = document.querySelector('input[name="policy-form-classic-access"]:checked').value;
+    const classicIp = document.getElementById('policy-form-classic-ip').value.trim();
     if (classicAccess === 'ip' && !classicIp) {
       alert('请输入经典网络指定访问 IP');
       return null;
@@ -3635,7 +3705,8 @@
       inboundVpcPolicies: inboundVpcPolicies,
       privatePolicies: privatePolicies,
       classicNetworkAccess: classicAccess,
-      classicNetworkIp: classicIp
+      classicNetworkIp: classicIp,
+      classicNetworkIps: classicNetworkIps
     };
     if (allowPublicOutbound) {
       payload.ipBlacklist = publicRuleState.ipBlack.slice();
@@ -3716,6 +3787,9 @@
     row.dataset.vpcoutpolicies = JSON.stringify(payload.outboundVpcPolicies || []);
     row.dataset.vpcinpolicies = JSON.stringify(payload.inboundVpcPolicies || []);
     row.dataset.privatepolicies = JSON.stringify(payload.privatePolicies || []);
+    row.dataset.classicnetworkaccess = payload.classicNetworkAccess || 'all';
+    row.dataset.classicnetworkip = payload.classicNetworkIp || '';
+    row.dataset.classicnetworkips = JSON.stringify(payload.classicNetworkIps || []);
     row.dataset.vpcpolicies = JSON.stringify(payload.vpcPolicies || []);
     row.dataset.vpcnetwork = payload.vpcnetwork || '';
     row.dataset.subnet = payload.subnet || '';
@@ -3739,6 +3813,9 @@
       outboundVpcPolicies: payload.outboundVpcPolicies || [],
       inboundVpcPolicies: payload.inboundVpcPolicies || [],
       privatePolicies: payload.privatePolicies || [],
+      classicNetworkAccess: payload.classicNetworkAccess || 'all',
+      classicNetworkIp: payload.classicNetworkIp || '',
+      classicNetworkIps: payload.classicNetworkIps || [],
       service: payload.service || '',
       domain: payload.domain || '',
       vpcPolicies: payload.vpcPolicies || [],
@@ -3787,6 +3864,9 @@
       outboundVpcPolicies: payload.outboundVpcPolicies || [],
       inboundVpcPolicies: payload.inboundVpcPolicies || [],
       privatePolicies: payload.privatePolicies || [],
+      classicNetworkAccess: payload.classicNetworkAccess || 'all',
+      classicNetworkIp: payload.classicNetworkIp || '',
+      classicNetworkIps: payload.classicNetworkIps || [],
       vpcPolicies: payload.vpcPolicies || [],
       vpcnetwork: payload.vpcnetwork || '',
       subnet: payload.subnet || '',
@@ -3820,6 +3900,9 @@
         policy.outboundVpcPolicies = payload.outboundVpcPolicies || [];
         policy.inboundVpcPolicies = payload.inboundVpcPolicies || [];
         policy.privatePolicies = payload.privatePolicies || [];
+        policy.classicNetworkAccess = payload.classicNetworkAccess || 'all';
+        policy.classicNetworkIp = payload.classicNetworkIp || '';
+        policy.classicNetworkIps = payload.classicNetworkIps || [];
         policy.vpcPolicies = payload.vpcPolicies || [];
         policy.vpcnetwork = payload.vpcnetwork || '';
         policy.subnet = payload.subnet || '';
@@ -3846,6 +3929,9 @@
         outboundVpcPolicies: payload.outboundVpcPolicies || [],
         inboundVpcPolicies: payload.inboundVpcPolicies || [],
         privatePolicies: payload.privatePolicies || [],
+        classicNetworkAccess: payload.classicNetworkAccess || 'all',
+        classicNetworkIp: payload.classicNetworkIp || '',
+        classicNetworkIps: payload.classicNetworkIps || [],
         vpcPolicies: payload.vpcPolicies || [],
         vpcnetwork: payload.vpcnetwork || '',
         subnet: payload.subnet || '',
@@ -4666,6 +4752,9 @@
           outboundVpcPolicies: policy.outboundVpcPolicies || [],
           inboundVpcPolicies: policy.inboundVpcPolicies || [],
           privatePolicies: policy.privatePolicies || [],
+          classicNetworkAccess: policy.classicNetworkAccess || 'all',
+          classicNetworkIp: policy.classicNetworkIp || '',
+          classicNetworkIps: policy.classicNetworkIps || [],
           vpcPolicies: policy.vpcPolicies || [],
           vpcnetwork: policy.vpcnetwork || '',
           subnet: policy.subnet || '',
