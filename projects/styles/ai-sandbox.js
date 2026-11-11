@@ -1,6 +1,6 @@
 (function () {
   const pageLabels = {
-    "index.html": "沙箱实例",
+    "sandbox-instances.html": "沙箱实例",
     "sandbox-template.html": "沙箱模板",
     "sandbox-policy.html": "网络策略",
     "sandbox-policy-create.html": "网络策略",
@@ -9,7 +9,7 @@
 
   function currentFile() {
     const file = location.pathname.split("/").pop();
-    return file || "index.html";
+    return file || "sandbox-dashboard.html";
   }
 
   function setActiveSandboxMenu() {

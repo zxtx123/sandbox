@@ -13,7 +13,7 @@
   var SANDBOX_MENU = [
     { text: "概览", href: "sandbox-dashboard.html",
       icon: '<svg width="12" height="12" viewBox="0 0 16 16" fill="none"><rect x="2" y="2" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.5" fill="none"/><rect x="9" y="2" width="5" height="3" rx="1" stroke="currentColor" stroke-width="1.5" fill="none"/><rect x="9" y="7" width="5" height="7" rx="1" stroke="currentColor" stroke-width="1.5" fill="none"/><rect x="2" y="9" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>' },
-    { text: "沙箱实例", href: "index.html",
+    { text: "沙箱实例", href: "sandbox-instances.html",
       icon: '<svg width="12" height="12" viewBox="0 0 16 16" fill="none"><rect x="2" y="2" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.5" fill="none"/><rect x="9" y="2" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.5" fill="none"/><rect x="2" y="9" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.5" fill="none"/><rect x="9" y="9" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>' },
     { text: "沙箱快照", href: "sandbox-snapshots.html",
       icon: '<svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M3 4.5C3 3.7 4.8 3 8 3s5 0.7 5 1.5S11.2 6 8 6 3 5.3 3 4.5z" stroke="currentColor" stroke-width="1.5" fill="none"/><path d="M3 4.5v7C3 12.3 4.8 13 8 13s5-0.7 5-1.5v-7" stroke="currentColor" stroke-width="1.5" fill="none"/><path d="M3 8c0 0.8 1.8 1.5 5 1.5s5-0.7 5-1.5" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>' },
