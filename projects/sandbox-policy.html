@@ -2338,6 +2338,7 @@
         privatePolicies: parseRowJson(row.dataset.privatepolicies),
         classicNetworkAccess: row.dataset.classicnetworkaccess || 'all',
         classicNetworkIp: row.dataset.classicnetworkip || '',
+        classicNetworkIps: parseRowJson(row.dataset.classicnetworkips),
         service: row.dataset.service || '',
         domain: row.dataset.domain || '',
         vpcPolicies: parseRowJson(row.dataset.vpcpolicies),
@@ -2359,6 +2360,7 @@
       privatePolicies: parseRowJson(row.dataset.privatepolicies),
       classicNetworkAccess: row.dataset.classicnetworkaccess || 'all',
       classicNetworkIp: row.dataset.classicnetworkip || '',
+      classicNetworkIps: parseRowJson(row.dataset.classicnetworkips),
       service: row.dataset.service || '',
       domain: row.dataset.domain || '',
       vpcPolicies: parseRowJson(row.dataset.vpcpolicies),
@@ -2600,6 +2602,7 @@
           privatePolicies: p.privatePolicies || [],
           classicNetworkAccess: p.classicNetworkAccess || 'all',
           classicNetworkIp: p.classicNetworkIp || '',
+          classicNetworkIps: p.classicNetworkIps || [],
           vpcPolicies: p.vpcPolicies || [],
           vpcnetwork: p.vpcnetwork || '',
           subnet: p.subnet || '',
@@ -2961,6 +2964,7 @@
     row.dataset.privatepolicies = JSON.stringify(payload.privatePolicies || []);
     row.dataset.classicnetworkaccess = payload.classicNetworkAccess || 'all';
     row.dataset.classicnetworkip = payload.classicNetworkIp || '';
+    row.dataset.classicnetworkips = JSON.stringify(payload.classicNetworkIps || []);
     row.dataset.vpcpolicies = JSON.stringify(payload.vpcPolicies || []);
     row.dataset.vpcnetwork = payload.vpcnetwork || '';
     row.dataset.subnet = payload.subnet || '';
@@ -2986,6 +2990,7 @@
       privatePolicies: payload.privatePolicies || [],
       classicNetworkAccess: payload.classicNetworkAccess || 'all',
       classicNetworkIp: payload.classicNetworkIp || '',
+      classicNetworkIps: payload.classicNetworkIps || [],
       service: payload.service || '',
       domain: payload.domain || '',
       vpcPolicies: payload.vpcPolicies || [],
@@ -3036,6 +3041,7 @@
       privatePolicies: payload.privatePolicies || [],
       classicNetworkAccess: payload.classicNetworkAccess || 'all',
       classicNetworkIp: payload.classicNetworkIp || '',
+      classicNetworkIps: payload.classicNetworkIps || [],
       vpcPolicies: payload.vpcPolicies || [],
       vpcnetwork: payload.vpcnetwork || '',
       subnet: payload.subnet || '',
@@ -3069,6 +3075,7 @@
         policy.privatePolicies = payload.privatePolicies || [];
         policy.classicNetworkAccess = payload.classicNetworkAccess || 'all';
         policy.classicNetworkIp = payload.classicNetworkIp || '';
+        policy.classicNetworkIps = payload.classicNetworkIps || [];
         policy.vpcPolicies = payload.vpcPolicies || [];
         policy.vpcnetwork = payload.vpcnetwork || '';
         policy.subnet = payload.subnet || '';
@@ -3970,6 +3977,9 @@
           : '<div class="policy-detail-capability-empty">未开启</div>'),
         renderPolicyCapability('私网连接访问', privatePolicies.length
           ? renderPrivateDetailList(privatePolicies)
+          : '<div class="policy-detail-capability-empty">未开启</div>'),
+        renderPolicyCapability('访问IDC（经典网络）', policy.classicNetworkIps?.length
+          ? policy.classicNetworkIps.map(rule => renderPolicyStatusChip(typeof rule === 'string' ? rule : rule.resourceGroup + '：' + rule.ip, false)).join(' ')
           : '<div class="policy-detail-capability-empty">未开启</div>')
       ];
 

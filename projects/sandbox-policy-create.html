@@ -1173,15 +1173,6 @@
     <div class="content-body policy-create-content">
       <div class="policy-form-page" id="policy-form-page">
         <div class="policy-form-panel">
-          <div class="policy-form-row policy-region-row">
-            <label class="policy-form-label">地域 <span class="required">*</span></label>
-            <div class="policy-form-content">
-              <label class="region-radio-option">
-                <input type="radio" id="policy-form-region" name="policy-form-region" value="beijing" checked>
-                <span>北京</span>
-              </label>
-            </div>
-          </div>
           <div class="policy-form-row policy-name-row">
             <label class="policy-form-label">策略名称 <span class="required">*</span></label>
             <div class="policy-form-content"><input type="text" class="form-input" id="policy-form-name" placeholder="请输入策略名称"></div>
@@ -1232,12 +1223,12 @@
             </div>
             <div class="policy-rule-section">
               <div class="policy-rule-head">
-                <div class="policy-rule-title">访问经典网络 <span class="help-icon">?</span></div>
+                <div class="policy-rule-title">访问IDC（经典网络） <span class="help-icon">?</span></div>
                 <label class="policy-switch"><input type="checkbox" id="policy-form-classic-enabled" onchange="togglePolicyFormSection('classic')"><span class="policy-switch-slider"></span><span class="policy-switch-text" id="policy-form-classic-text">关</span></label>
               </div>
-              <div class="policy-rule-tip">开启后，沙箱可访问指定经典网络 IP 地址。</div>
+              <div class="policy-rule-tip">开启后，沙箱可访问所选资源组下的对应资源的IP地址。</div>
               <div class="policy-rule-table-wrap" id="policy-form-classic-wrap" style="display:none;">
-                <table class="policy-rule-table"><thead><tr><th>IP 地址</th><th>操作</th></tr></thead><tbody id="policy-form-classic-list"></tbody></table>
+                <table class="policy-rule-table"><thead><tr><th>资源组</th><th>IP 地址</th><th>操作</th></tr></thead><tbody id="policy-form-classic-list"></tbody></table>
                 <button type="button" class="add-rule-btn" onclick="addPolicyFormClassicIpRule()">+ 添加 IP 地址</button>
               </div>
             </div>
@@ -1253,16 +1244,11 @@
               <div class="policy-rule-table-wrap" id="policy-form-vpc-in-wrap" style="display:none;"><table class="policy-rule-table"><thead><tr><th>VPC 网络</th><th>子网</th><th>操作</th></tr></thead><tbody id="policy-form-vpc-in-list"></tbody></table><button type="button" class="add-rule-btn" onclick="addPolicyFormVpcInRule()">+ 添加策略</button></div>
             </div>
             <div class="policy-rule-section">
-              <div class="policy-rule-head">
+              <div class="policy-rule-head classic-network-control">
                 <div class="policy-rule-title">被经典网络访问</div>
-                <div class="classic-network-control">
-                  <div class="classic-network-options">
-                    <label class="classic-network-option"><input type="radio" name="policy-form-classic-access" value="all" checked onchange="toggleClassicNetworkIp()"><span>全通</span></label>
-                    <label class="classic-network-option"><input type="radio" name="policy-form-classic-access" value="ip" onchange="toggleClassicNetworkIp()"><span>指定IP访问</span></label>
-                  </div>
-                  <div class="classic-network-ip" id="policy-form-classic-ip-wrap" style="display:none;">
-                    <input type="text" class="form-input" id="policy-form-classic-ip" placeholder="请输入允许访问的 IP，如 192.168.1.10">
-                  </div>
+                <label class="classic-network-option"><input type="radio" name="policy-form-classic-access" value="ip" checked onchange="toggleClassicNetworkIp()"><span>指定IP/IP段访问</span></label>
+                <div class="classic-network-ip" id="policy-form-classic-ip-wrap">
+                  <input type="text" class="form-input" id="policy-form-classic-ip" placeholder="输入 IP 或 IP 段，如 10.0.0.1 或 10.0.0.0/24">
                 </div>
               </div>
             </div>
@@ -1537,11 +1523,8 @@
     overflow-y: auto;
     padding: 22px 20px 26px 40px;
   }
-  .policy-region-row {
-    order: 0;
-  }
   .policy-name-row {
-    order: 1;
+    order: 0;
   }
   .policy-access-inbound {
     order: 2;
@@ -1563,7 +1546,6 @@
     text-align: right;
     padding-right: 14px;
   }
-  .policy-region-row .policy-form-label,
   .policy-name-row .policy-form-label {
     width: 96px;
     text-align: left;
@@ -1575,26 +1557,6 @@
   #policy-form-name {
     width: 480px;
     max-width: 100%;
-  }
-  .region-radio-option {
-    min-height: 32px;
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    padding: 4px 10px;
-    border: 1px solid #dce8f5;
-    border-radius: 3px;
-    background: #f7fbff;
-    color: #1f3854;
-    cursor: pointer;
-    user-select: none;
-  }
-  .region-radio-option:hover {
-    border-color: #bcd6fb;
-    background: #eef6ff;
-  }
-  .region-radio-option input {
-    accent-color: #0066ff;
   }
   .policy-access-group {
     width: 100%;
@@ -1707,19 +1669,13 @@
   .policy-form-page .public-access-option input {
     accent-color: #0066ff;
   }
-  .classic-network-options {
-    display: inline-flex;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 10px;
-  }
   .classic-network-control {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 10px;
+    display: grid;
+    grid-template-columns: auto minmax(0, 360px);
+    row-gap: 10px;
   }
   .classic-network-option {
+    justify-self: start;
     min-height: 28px;
     display: inline-flex;
     align-items: center;
@@ -1741,6 +1697,7 @@
     accent-color: #0066ff;
   }
   .classic-network-ip {
+    grid-column: 2;
     margin: 0;
     padding-left: 0;
   }
@@ -2989,7 +2946,7 @@
     if (outboundVpcPolicies.length) chips.push('<span class="access-chip">访问 VPC ' + outboundVpcPolicies.length + ' 组</span>');
     if (inboundVpcPolicies.length) chips.push('<span class="access-chip">被 VPC 访问 ' + inboundVpcPolicies.length + ' 组</span>');
     if (privatePolicies.length) chips.push('<span class="access-chip">终端节点服务 ' + privatePolicies.length + ' 组</span>');
-    if (classicNetworkIps.length) chips.push('<span class="access-chip">访问经典网络 ' + classicNetworkIps.length + ' 个 IP</span>');
+    if (classicNetworkIps.length) chips.push('<span class="access-chip">访问IDC（经典网络） ' + classicNetworkIps.length + ' 个 IP</span>');
     if (policy.allowPublicOutbound) {
       const ipRules = (policy.ipBlacklist || []).length;
       const cidrRules = (policy.cidrBlacklist || []).length;
@@ -3132,7 +3089,8 @@
         sections.push('<div class="policy-detail-card"><div class="policy-detail-title">终端节点服务</div>' + renderPrivateDetailList(policy.privatePolicies) + '</div>');
       }
       if (policy.classicNetworkIps && policy.classicNetworkIps.length) {
-        sections.push('<div class="policy-detail-card"><div class="policy-detail-title">访问经典网络</div><div class="policy-detail-grid"><div class="policy-detail-label">允许访问的 IP 地址</div><div class="policy-detail-value">' + escapeHtml(policy.classicNetworkIps.join('、')) + '</div></div></div>');
+        const targets = policy.classicNetworkIps.map(rule => typeof rule === 'string' ? rule : rule.resourceGroup + '：' + rule.ip);
+        sections.push('<div class="policy-detail-card"><div class="policy-detail-title">访问IDC（经典网络）</div><div class="policy-detail-grid"><div class="policy-detail-label">允许访问的 IP 地址</div><div class="policy-detail-value">' + escapeHtml(targets.join('、')) + '</div></div></div>');
       }
       return sections.join('') || '<div class="access-chip muted">暂无策略内容</div>';
     }
@@ -3371,14 +3329,15 @@
     if (formTitle) formTitle.textContent = '编辑网络策略';
     document.getElementById('policy-form-submit-btn').textContent = '保存';
     document.getElementById('policy-form-page').style.display = 'flex';
-    document.getElementById('policy-list-table').style.display = 'none';
-    document.getElementById('policy-list-pagination').style.display = 'none';
+    const listTable = document.getElementById('policy-list-table');
+    const listPagination = document.getElementById('policy-list-pagination');
+    if (listTable) listTable.style.display = 'none';
+    if (listPagination) listPagination.style.display = 'none';
     resetPolicyFormPage();
     fillPolicyFormFromRow(row);
   }
 
   function resetPolicyFormPage() {
-    document.getElementById('policy-form-region').checked = true;
     document.getElementById('policy-form-name').value = '';
     document.getElementById('policy-form-public-outbound').checked = true;
     document.getElementById('policy-form-vpc-out-enabled').checked = false;
@@ -3389,7 +3348,7 @@
     document.getElementById('policy-form-vpc-in-list').innerHTML = '';
     document.getElementById('policy-form-private-list').innerHTML = '';
     document.getElementById('policy-form-classic-list').innerHTML = '';
-    document.querySelector('input[name="policy-form-classic-access"][value="all"]').checked = true;
+    document.querySelector('input[name="policy-form-classic-access"][value="ip"]').checked = true;
     document.getElementById('policy-form-classic-ip').value = '';
     toggleClassicNetworkIp();
     clearAllPublicRules();
@@ -3433,9 +3392,8 @@
   }
 
   function toggleClassicNetworkIp() {
-    const showIp = document.querySelector('input[name="policy-form-classic-access"]:checked').value === 'ip';
-    document.getElementById('policy-form-classic-ip-wrap').style.display = showIp ? 'block' : 'none';
-    if (!showIp) document.getElementById('policy-form-classic-ip').value = '';
+    const wrap = document.getElementById('policy-form-classic-ip-wrap');
+    if (wrap) wrap.style.display = 'block';
   }
 
   function createPolicyFormVpcRow(includeSecurityGroup, values) {
@@ -3498,9 +3456,19 @@
 
   function createPolicyFormClassicIpRow(value) {
     const tr = document.createElement('tr');
-    tr.innerHTML = '<td><input type="text" class="form-input policy-form-classic-ip" placeholder="请输入 IP 地址，如 192.168.1.10"></td>' +
+    tr.innerHTML = '<td><select class="form-select policy-form-classic-group" aria-label="资源组"><option value="">请选择资源组</option><option>BD奇麟大数据-系统部</option></select></td>' +
+      '<td><input type="text" class="form-input policy-form-classic-ip" aria-label="IP 地址"></td>' +
       '<td><a href="#" class="action-link" onclick="removePolicyFormRule(event, this)">删除</a></td>';
-    tr.querySelector('.policy-form-classic-ip').value = value || '';
+    const group = tr.querySelector('select');
+    const input = tr.querySelector('input');
+    group.value = value?.resourceGroup || '';
+    input.value = typeof value === 'string' ? value : value?.ip || '';
+    function syncIpInput() {
+      input.disabled = !group.value;
+      input.placeholder = group.value ? '请输入 IP 地址，如 192.168.1.10' : '请先选择资源组';
+    }
+    group.addEventListener('change', syncIpInput);
+    syncIpInput();
     return tr;
   }
 
@@ -3575,19 +3543,21 @@
     const rows = document.querySelectorAll('#policy-form-classic-list tr');
     const result = [];
     for (let i = 0; i < rows.length; i++) {
+      const group = rows[i].querySelector('.policy-form-classic-group');
+      const resourceGroup = group.value;
+      if (!resourceGroup) { alert('请选择第 ' + (i + 1) + ' 行的资源组'); group.focus(); return null; }
       const input = rows[i].querySelector('.policy-form-classic-ip');
       const ip = input ? input.value.trim() : '';
       if (!ip) { alert('请输入第 ' + (i + 1) + ' 个经典网络 IP 地址'); return null; }
       if (!isValidIp(ip)) { alert('第 ' + (i + 1) + ' 个经典网络 IP 地址格式不合法'); return null; }
-      if (result.includes(ip)) { alert('经典网络 IP 地址不可重复'); return null; }
-      result.push(ip);
+      if (result.some(rule => rule.resourceGroup === resourceGroup && rule.ip === ip)) { alert('同一资源组下的 IP 地址不可重复'); return null; }
+      result.push({ resourceGroup, ip });
     }
     return result;
   }
 
   function fillPolicyFormFromRow(row) {
     const policy = getRowPolicy(row);
-    document.getElementById('policy-form-region').checked = (policy.region || 'beijing') === 'beijing';
     document.getElementById('policy-form-name').value = row.dataset.name || '';
 
     const legacyVpcPolicies = policy.vpcPolicies || [];
@@ -3611,7 +3581,7 @@
     document.getElementById('policy-form-vpc-in-enabled').checked = inboundPolicies.length > 0;
     document.getElementById('policy-form-private-enabled').checked = privatePolicies.length > 0;
     document.getElementById('policy-form-classic-enabled').checked = classicNetworkIps.length > 0;
-    document.querySelector('input[name="policy-form-classic-access"][value="' + (policy.classicNetworkAccess === 'ip' ? 'ip' : 'all') + '"]').checked = true;
+    document.querySelector('input[name="policy-form-classic-access"][value="ip"]').checked = true;
     document.getElementById('policy-form-classic-ip').value = policy.classicNetworkIp || '';
     toggleClassicNetworkIp();
     togglePolicyFormSection('classic');
@@ -3682,10 +3652,10 @@
     const classicEnabled = document.getElementById('policy-form-classic-enabled').checked;
     const classicNetworkIps = classicEnabled ? collectPolicyFormClassicIps() : [];
     if (classicEnabled && !classicNetworkIps) return null;
-    const classicAccess = document.querySelector('input[name="policy-form-classic-access"]:checked').value;
+    const classicAccess = 'ip';
     const classicIp = document.getElementById('policy-form-classic-ip').value.trim();
-    if (classicAccess === 'ip' && !classicIp) {
-      alert('请输入经典网络指定访问 IP');
+    if (!classicIp) {
+      alert('请输入允许访问的 IP 或 IP 段');
       return null;
     }
     if (allowPublicOutbound) {
@@ -3697,7 +3667,7 @@
     }
 
     const payload = {
-      region: document.getElementById('policy-form-region').value || 'beijing',
+      region: 'beijing',
       name: policyName,
       desc: '',
       allowPublicOutbound: allowPublicOutbound,
@@ -3752,10 +3722,6 @@
       alert('策略保存成功');
     } else {
       const newId = generatePolicyId();
-      const newRow = document.createElement('tr');
-      applyPayloadToRow(newRow, newId, payload);
-      document.getElementById('policy-tbody').appendChild(newRow);
-      bindRowActions(newRow);
       persistNewPolicy(newId, payload);
       alert('策略创建成功');
     }
@@ -3764,10 +3730,9 @@
   }
 
   function generatePolicyId() {
-    const existingIds = Array.from(document.querySelectorAll('#policy-tbody tr')).map(function(row) {
-      return row.dataset.id;
-    });
-    let seq = existingIds.length + 1;
+    const existingIds = JSON.parse(localStorage.getItem('sandboxPolicies') || '[]').map(policy => policy.id);
+    // The list page reserves policy-001 through policy-006 for its built-in policies.
+    let seq = Math.max(7, existingIds.length + 1);
     let nextId = 'policy-' + String(seq).padStart(3, '0');
     while (existingIds.includes(nextId)) {
       seq += 1;
